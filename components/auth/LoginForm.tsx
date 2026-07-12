@@ -1,4 +1,6 @@
 // components/auth/LoginForm.tsx
+// Notion-style LoginForm: clean input fields, Continue button, and OAuth grid.
+
 "use client";
 
 import { useState } from "react";
@@ -6,11 +8,10 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Github, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Github, Loader2, KeyRound, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { loginSchema, type LoginInput } from "@/lib/validators";
 import toast from "react-hot-toast";
 
@@ -49,77 +50,43 @@ export function LoginForm() {
   }
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-8 shadow-xl shadow-black/5 space-y-6">
-      {/* OAuth buttons */}
-      <div className="grid grid-cols-2 gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full gap-2 h-11"
-          onClick={() => handleOAuth("google")}
-          disabled={isGoogleLoading || isSubmitting}
-          id="google-signin"
-        >
-          {isGoogleLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <svg className="h-4 w-4" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-            </svg>
-          )}
-          Google
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full gap-2 h-11"
-          onClick={() => handleOAuth("github")}
-          disabled={isGithubLoading || isSubmitting}
-          id="github-signin"
-        >
-          {isGithubLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
-          GitHub
-        </Button>
-      </div>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <Separator />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or continue with email</span>
-        </div>
-      </div>
-
-      {/* Credentials form */}
+    <div className="space-y-6">
+      {/* Credentials Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Email Field */}
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-xs font-semibold text-muted-foreground/80">
+            Email
+          </Label>
           <Input
             id="email"
             type="email"
-            placeholder="you@company.com"
+            placeholder="Enter your email address..."
             autoComplete="email"
-            className="h-11"
+            className="h-10 border-border bg-background focus-visible:ring-1 focus-visible:ring-ring"
             {...register("email")}
           />
-          {errors.email && (
+          {errors.email ? (
             <p className="text-xs text-destructive">{errors.email.message}</p>
+          ) : (
+            <p className="text-[11px] text-muted-foreground/75 leading-normal">
+              Use an organization email to easily collaborate with teammates
+            </p>
           )}
         </div>
 
+        {/* Password Field */}
         <div className="space-y-1.5">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" className="text-xs font-semibold text-muted-foreground/80">
+            Password
+          </Label>
           <div className="relative">
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
+              placeholder="Enter your password..."
               autoComplete="current-password"
-              className="h-11 pr-10"
+              className="h-10 pr-10 border-border bg-background focus-visible:ring-1 focus-visible:ring-ring"
               {...register("password")}
             />
             <button
@@ -135,19 +102,109 @@ export function LoginForm() {
           )}
         </div>
 
+        {/* Submit/Continue Button */}
         <Button
           type="submit"
-          className="w-full h-11 text-sm font-semibold shadow-lg shadow-primary/25"
+          className="w-full h-11 bg-[#2383e2] hover:bg-[#1f75cb] text-white font-medium rounded-lg transition-colors border-none shadow-none text-sm"
           disabled={isSubmitting}
           id="submit-login"
         >
           {isSubmitting ? (
-            <><Loader2 className="h-4 w-4 animate-spin" /> Signing in…</>
+            <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Continuing…</>
           ) : (
-            "Sign in"
+            "Continue"
           )}
         </Button>
       </form>
+
+      {/* Or continue with Separator */}
+      <div className="relative flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-border" />
+        </div>
+        <span className="relative bg-background px-3 text-xs text-muted-foreground/80">
+          or continue with
+        </span>
+      </div>
+
+      {/* OAuth Social Buttons Grid */}
+      <div className="space-y-3">
+        {/* Row 1: Google, GitHub, Microsoft */}
+        <div className="grid grid-cols-3 gap-2.5">
+          {/* Google */}
+          <button
+            type="button"
+            onClick={() => handleOAuth("google")}
+            disabled={isGoogleLoading || isSubmitting}
+            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-border bg-background hover:bg-muted/40 transition-colors text-xs font-medium text-foreground disabled:opacity-50"
+          >
+            {isGoogleLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <svg className="h-5 w-5" viewBox="0 0 24 24">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+              </svg>
+            )}
+            <span>Google</span>
+          </button>
+
+          {/* GitHub */}
+          <button
+            type="button"
+            onClick={() => handleOAuth("github")}
+            disabled={isGithubLoading || isSubmitting}
+            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-border bg-background hover:bg-muted/40 transition-colors text-xs font-medium text-foreground disabled:opacity-50"
+          >
+            {isGithubLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Github className="h-5 w-5 text-foreground" />
+            )}
+            <span>GitHub</span>
+          </button>
+
+          {/* Microsoft */}
+          <button
+            type="button"
+            onClick={() => toast.success("Microsoft login coming soon!")}
+            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-border bg-background hover:bg-muted/40 transition-colors text-xs font-medium text-foreground"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 23 23" fill="none">
+              <rect x="0" y="0" width="10.5" height="10.5" fill="#F25022" />
+              <rect x="11.5" y="0" width="10.5" height="10.5" fill="#7FBA00" />
+              <rect x="0" y="11.5" width="10.5" height="10.5" fill="#00A4EF" />
+              <rect x="11.5" y="11.5" width="10.5" height="10.5" fill="#FFB900" />
+            </svg>
+            <span>Microsoft</span>
+          </button>
+        </div>
+
+        {/* Row 2: Passkey, SSO (Centered) */}
+        <div className="grid grid-cols-2 gap-2.5 max-w-[260px] mx-auto">
+          {/* Passkey */}
+          <button
+            type="button"
+            onClick={() => toast.success("Passkeys coming soon!")}
+            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-border bg-background hover:bg-muted/40 transition-colors text-xs font-medium text-foreground"
+          >
+            <KeyRound className="h-5 w-5 text-muted-foreground/80" />
+            <span>Passkey</span>
+          </button>
+
+          {/* SSO */}
+          <button
+            type="button"
+            onClick={() => toast.success("SSO login coming soon!")}
+            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-border bg-background hover:bg-muted/40 transition-colors text-xs font-medium text-foreground"
+          >
+            <Building2 className="h-5 w-5 text-muted-foreground/80" />
+            <span>SSO</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
