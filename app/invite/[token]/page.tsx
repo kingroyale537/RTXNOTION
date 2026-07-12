@@ -25,7 +25,7 @@ export default async function InvitePage({ params }: Props) {
           <div className="text-5xl mb-4">😕</div>
           <h1 className="text-2xl font-bold mb-2">Invalid invite</h1>
           <p className="text-muted-foreground">This invite link has expired or been revoked.</p>
-          <a href="/auth/login" className="text-primary underline mt-4 block">Sign in instead</a>
+          <a href="/login" className="text-primary underline mt-4 block">Sign in instead</a>
         </div>
       </div>
     );

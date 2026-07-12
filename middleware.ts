@@ -11,7 +11,7 @@ export default withAuth(
     const token = req.nextauth.token;
 
     // Redirect authenticated users away from auth pages
-    if (token && (pathname.startsWith("/auth/") || pathname === "/")) {
+    if (token && (pathname === "/login" || pathname === "/register" || pathname === "/")) {
       // Redirect to first workspace from token (handled client-side after redirect)
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
@@ -26,9 +26,9 @@ export default withAuth(
 
         // Always allow public paths
         const publicPaths = [
-          "/auth/login",
-          "/auth/register",
-          "/auth/error",
+          "/login",
+          "/register",
+          "/error",
           "/invite/",
           "/api/auth/",
           "/api/register",

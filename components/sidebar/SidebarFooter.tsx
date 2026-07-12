@@ -59,7 +59,7 @@ export function SidebarFooter({ currentUserId: _ }: Props) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="gap-2 text-destructive focus:text-destructive"
-            onClick={() => signOut({ callbackUrl: "/auth/login" })}
+            onClick={() => signOut({ callbackUrl: "/login" })}
           >
             <LogOut className="h-4 w-4" /> Sign out
           </DropdownMenuItem>

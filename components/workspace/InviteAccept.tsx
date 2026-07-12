@@ -91,7 +91,7 @@ export function InviteAccept({ token, workspace, invitedBy, role, isAuthenticate
             <div className="space-y-3">
               <Button
                 className="w-full h-12 text-sm font-semibold shadow-lg shadow-primary/25"
-                onClick={() => router.push(`/auth/login?callbackUrl=/invite/${token}`)}
+                onClick={() => router.push(`/login?callbackUrl=/invite/${token}`)}
                 id="login-to-join-btn"
               >
                 Sign in to join
@@ -99,7 +99,7 @@ export function InviteAccept({ token, workspace, invitedBy, role, isAuthenticate
               <Button
                 variant="outline"
                 className="w-full h-12 text-sm"
-                onClick={() => router.push(`/auth/register?callbackUrl=/invite/${token}`)}
+                onClick={() => router.push(`/register?callbackUrl=/invite/${token}`)}
               >
                 Create account & join
               </Button>

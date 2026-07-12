@@ -11,7 +11,7 @@ interface Props { params: { workspaceSlug: string } }
 
 export default async function WorkspacePage({ params }: Props) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect("/auth/login");
+  if (!session?.user) redirect("/login");
 
   const userId = (session.user as { id: string }).id;
 

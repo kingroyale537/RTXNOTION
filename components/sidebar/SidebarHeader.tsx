@@ -96,7 +96,7 @@ export function SidebarHeader({ workspace, currentUserRole }: Props) {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onClick={() => signOut({ callbackUrl: "/auth/login" })}
+            onClick={() => signOut({ callbackUrl: "/login" })}
             className={cn("gap-2 text-destructive focus:text-destructive")}
           >
             <LogOut className="h-4 w-4" />

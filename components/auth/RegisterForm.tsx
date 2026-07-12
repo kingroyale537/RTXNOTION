@@ -46,7 +46,7 @@ export function RegisterForm() {
 
       if (result?.error) {
         toast.error("Account created – please sign in");
-        router.push("/auth/login");
+        router.push("/login");
         return;
       }
 
