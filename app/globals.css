@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Design Tokens – Light mode
+   ─────────────────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 239 84% 67%;
+    --radius: 0.5rem;
+
+    /* Sidebar */
+    --sidebar-background: 240 5% 96%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 239 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 239 84% 67%;
+  }
+
+  /* ─── Dark mode ─────────────────────────────────────────────────────────── */
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 50.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 239 84% 67%;
+
+    /* Sidebar */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 239 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 239 84% 67%;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Base reset
+   ─────────────────────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Custom scrollbar
+   ─────────────────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/30;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TipTap Editor prose styles
+   ─────────────────────────────────────────────────────────────────────────── */
+.ProseMirror {
+  outline: none;
+  min-height: 300px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  @apply text-muted-foreground pointer-events-none float-left h-0;
+  content: attr(data-placeholder);
+}
+
+.ProseMirror h1 {
+  @apply text-4xl font-bold tracking-tight mb-2 mt-6;
+}
+.ProseMirror h2 {
+  @apply text-3xl font-semibold tracking-tight mb-2 mt-5;
+}
+.ProseMirror h3 {
+  @apply text-2xl font-semibold mb-1 mt-4;
+}
+.ProseMirror p {
+  @apply leading-7 mb-2;
+}
+.ProseMirror ul,
+.ProseMirror ol {
+  @apply ml-6 mb-2;
+}
+.ProseMirror ul {
+  @apply list-disc;
+}
+.ProseMirror ol {
+  @apply list-decimal;
+}
+.ProseMirror li {
+  @apply leading-7;
+}
+.ProseMirror blockquote {
+  @apply border-l-4 border-primary/50 pl-4 italic text-muted-foreground my-2;
+}
+.ProseMirror code {
+  @apply font-mono text-sm bg-muted px-1.5 py-0.5 rounded text-pink-500 dark:text-pink-400;
+}
+.ProseMirror pre {
+  @apply bg-zinc-900 text-zinc-100 rounded-lg p-4 my-4 overflow-x-auto font-mono text-sm;
+}
+.ProseMirror pre code {
+  @apply bg-transparent text-inherit p-0;
+}
+.ProseMirror hr {
+  @apply border-border my-6;
+}
+.ProseMirror img {
+  @apply max-w-full rounded-lg my-4;
+}
+.ProseMirror a {
+  @apply text-primary underline underline-offset-4 hover:opacity-80 transition-opacity;
+}
+.ProseMirror mark {
+  @apply bg-yellow-200 dark:bg-yellow-800 rounded px-0.5;
+}
+
+/* Task list */
+.ProseMirror ul[data-type="taskList"] {
+  @apply list-none ml-0 pl-0;
+}
+.ProseMirror ul[data-type="taskList"] li {
+  @apply flex items-start gap-2;
+}
+.ProseMirror ul[data-type="taskList"] li > label {
+  @apply flex-shrink-0 mt-1;
+}
+.ProseMirror ul[data-type="taskList"] li > div {
+  @apply flex-1;
+}
+
+/* Collaboration cursor */
+.collaboration-cursor__caret {
+  border-left: 2px solid;
+  border-right: 2px solid;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+.collaboration-cursor__label {
+  @apply text-xs font-semibold rounded px-1.5 py-0.5 whitespace-nowrap;
+  border-radius: 3px 3px 3px 0;
+  color: white;
+  font-size: 11px;
+  left: -1px;
+  line-height: normal;
+  padding: 2px 4px;
+  position: absolute;
+  top: -1.5em;
+  user-select: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Slash command menu
+   ─────────────────────────────────────────────────────────────────────────── */
+.slash-command-popup {
+  @apply bg-popover border border-border rounded-xl shadow-2xl overflow-hidden w-72;
+  animation: fade-in 0.15s ease-out;
+}

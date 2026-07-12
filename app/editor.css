@@ -1,0 +1,349 @@
+/* app/editor.css
+   Comprehensive styles for the TipTap editor:
+   – Prose typography (headings, paragraphs, lists, quotes, code)
+   – Task list checkboxes
+   – Table layout
+   – Slash command popup
+   – Collaboration cursor labels
+   – Placeholder text
+   – Image resize handles
+*/
+
+/* ─── Base prose ─────────────────────────────────────────────────────────────── */
+.ProseMirror {
+  outline: none;
+  min-height: 60vh;
+  caret-color: hsl(var(--primary));
+}
+
+.ProseMirror > * + * {
+  margin-top: 0.65em;
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────────────── */
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: hsl(var(--foreground));
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin-top: 1.25rem;
+  margin-bottom: 0.4rem;
+  color: hsl(var(--foreground));
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1rem;
+  margin-bottom: 0.35rem;
+  color: hsl(var(--foreground));
+}
+
+.ProseMirror p {
+  line-height: 1.75;
+  color: hsl(var(--foreground));
+}
+
+.ProseMirror strong { font-weight: 700; }
+.ProseMirror em { font-style: italic; }
+.ProseMirror u { text-decoration: underline; text-underline-offset: 3px; }
+.ProseMirror s { text-decoration: line-through; }
+
+/* Inline code */
+.ProseMirror code:not(pre code) {
+  font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
+  font-size: 0.85em;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  background: hsl(var(--muted));
+  color: hsl(var(--primary));
+  border: 1px solid hsl(var(--border));
+}
+
+/* ─── Blockquote / Callout ───────────────────────────────────────────────────── */
+.ProseMirror blockquote {
+  border-left: 3px solid hsl(var(--primary));
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+  background: hsl(var(--primary) / 0.04);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* ─── Code blocks ─────────────────────────────────────────────────────────────── */
+.ProseMirror pre {
+  background: hsl(220 13% 10%);
+  color: hsl(220 14% 96%);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-family: var(--font-jetbrains-mono, ui-monospace, monospace);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  border: 1px solid hsl(220 13% 18%);
+}
+
+.ProseMirror pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Lowlight syntax tokens */
+.hljs-comment, .hljs-meta { color: hsl(220 10% 52%); }
+.hljs-keyword, .hljs-selector-tag, .hljs-type { color: hsl(275 80% 75%); }
+.hljs-string, .hljs-attr { color: hsl(135 60% 68%); }
+.hljs-number, .hljs-literal { color: hsl(35 90% 70%); }
+.hljs-function, .hljs-title { color: hsl(210 80% 75%); }
+.hljs-variable, .hljs-name { color: hsl(15 80% 72%); }
+.hljs-built_in { color: hsl(190 60% 68%); }
+.hljs-tag { color: hsl(0 70% 70%); }
+
+/* ─── Lists ──────────────────────────────────────────────────────────────────── */
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror ul { list-style-type: disc; }
+.ProseMirror ol { list-style-type: decimal; }
+
+.ProseMirror li {
+  margin: 0.25rem 0;
+  line-height: 1.7;
+}
+
+.ProseMirror li > p {
+  margin: 0;
+}
+
+/* ─── Task lists ─────────────────────────────────────────────────────────────── */
+.ProseMirror .task-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ProseMirror .task-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.ProseMirror .task-list li[data-checked="true"] > div {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.ProseMirror .task-list li > label {
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ProseMirror .task-list li > label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 3px;
+  border: 1.5px solid hsl(var(--border));
+  cursor: pointer;
+  accent-color: hsl(var(--primary));
+}
+
+/* ─── Horizontal rule ────────────────────────────────────────────────────────── */
+.ProseMirror hr {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 1.5rem 0;
+}
+
+/* ─── Links ──────────────────────────────────────────────────────────────────── */
+.ProseMirror a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.ProseMirror a:hover { opacity: 0.75; }
+
+/* ─── Images ─────────────────────────────────────────────────────────────────── */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.ProseMirror img:hover,
+.ProseMirror img.ProseMirror-selectednode {
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.4), 0 4px 16px rgb(0 0 0 / 0.2);
+}
+
+/* ─── Tables ─────────────────────────────────────────────────────────────────── */
+.ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  table-layout: fixed;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+  border: 1px solid hsl(var(--border));
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  min-width: 4rem;
+  position: relative;
+}
+
+.ProseMirror th {
+  background: hsl(var(--muted));
+  font-weight: 600;
+  text-align: left;
+}
+
+.ProseMirror .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--primary) / 0.15);
+  pointer-events: none;
+}
+
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: hsl(var(--primary));
+  cursor: col-resize;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ProseMirror table:hover .column-resize-handle { opacity: 0.5; }
+
+/* ─── Highlight colors ───────────────────────────────────────────────────────── */
+.ProseMirror mark {
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ─── Placeholder ────────────────────────────────────────────────────────────── */
+.ProseMirror p.is-editor-empty:first-child::before,
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  color: hsl(var(--muted-foreground) / 0.5);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* ─── Collaboration cursors ──────────────────────────────────────────────────── */
+.collaboration-cursor__caret {
+  border-left: 2px solid var(--cursor-color, #6366f1);
+  border-right: none;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+
+.collaboration-cursor__label {
+  border-radius: 3px 3px 3px 0;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  left: -1px;
+  line-height: normal;
+  padding: 0.1rem 0.4rem;
+  position: absolute;
+  top: -1.4em;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ─── Slash command popup ────────────────────────────────────────────────────── */
+.slash-command-popup {
+  background: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgb(0 0 0 / 0.18), 0 2px 8px rgb(0 0 0 / 0.1);
+  width: 320px;
+  overflow: hidden;
+  animation: popupIn 0.12s ease-out;
+}
+
+@keyframes popupIn {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─── Dark mode adjustments ──────────────────────────────────────────────────── */
+.dark .ProseMirror pre {
+  background: hsl(220 13% 8%);
+  border-color: hsl(220 13% 16%);
+}
+
+/* ─── Focus ring on editable ─────────────────────────────────────────────────── */
+.ProseMirror:focus-visible {
+  outline: none;
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────────────── */
+.ProseMirror ::selection {
+  background: hsl(var(--primary) / 0.2);
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes animate-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: animate-fade-in 0.3s ease-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.8); }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ─── Sidebar tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --sidebar: hsl(var(--background));
+  --sidebar-foreground: hsl(var(--foreground));
+  --sidebar-border: hsl(var(--border));
+  --sidebar-accent: hsl(var(--accent));
+}

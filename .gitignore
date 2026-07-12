@@ -1,0 +1,13 @@
+.env.local
+.env
+node_modules/
+.next/
+dist/
+build/
+.DS_Store
+*.pem
+prisma/migrations/
+public/uploads/
+*.log
+.turbo/
+coverage/
