@@ -35,6 +35,7 @@ export default withAuth(
           "/api/invites/",
         ];
 
+        if (pathname === "/") return true;
         if (publicPaths.some((p) => pathname.startsWith(p))) return true;
 
         // Require auth for all other routes
