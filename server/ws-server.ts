@@ -18,9 +18,27 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const httpServer = createServer();
 
+const allowedOrigins = [
+  process.env.NEXTAUTH_URL,
+  "https://rtxnotion.vercel.app",
+  "http://localhost:3000",
+].filter(Boolean) as string[];
+
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.NEXTAUTH_URL ?? "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const isAllowed =
+        allowedOrigins.indexOf(origin) !== -1 ||
+        origin.startsWith("http://localhost:") ||
+        origin.endsWith(".vercel.app") ||
+        /^https:\/\/rtxnotion.*\.vercel\.app$/.test(origin);
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true,
   },

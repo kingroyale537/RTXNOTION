@@ -29,6 +29,7 @@ export const createWorkspaceSchema = z.object({
     .regex(/^[a-z0-9-]+$/, "Only lowercase letters, numbers, and hyphens"),
   description: z.string().max(500).optional(),
   logo: z.string().optional(),
+  usageType: z.enum(["work", "personal", "school"]).optional(),
 });
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
