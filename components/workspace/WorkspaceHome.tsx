@@ -52,7 +52,7 @@ export function WorkspaceHome({ workspace, recentPages, workspaceSlug }: Props) 
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-[#191919] text-[#f3f4f6]">
       <PageBreadcrumb workspaceId={workspace.id} workspaceSlug={workspaceSlug} />
 
       <div className="flex-1 overflow-auto">

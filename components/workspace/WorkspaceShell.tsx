@@ -70,7 +70,7 @@ export function WorkspaceShell({ workspace, currentUserId, currentUserRole, chil
 
         {/* ── Main content panel ─────────────────────────────────────────── */}
         <Panel defaultSize={mainSize} order={2} id="content-panel">
-          <main className="h-full overflow-auto flex flex-col">
+          <main className="h-full overflow-auto flex flex-col bg-[#191919] text-[#f3f4f6]">
             {children}
           </main>
         </Panel>
