@@ -1,0 +1,99 @@
+// app/api/ai/route.ts
+// Backend endpoint for RTX Notion AI. Supports both Q&A workspace chat and inline editing.
+
+import { NextRequest } from "next/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Res, getAuthUser } from "@/lib/api-helpers";
+import prisma from "@/lib/prisma";
+
+export async function POST(req: NextRequest) {
+  try {
+    const user = await getAuthUser();
+    if (!user) return Res.unauthorized();
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return Res.error("GEMINI_API_KEY is not configured. Please add it to your environment variables to enable Notion AI.", 400);
+    }
+
+    const body = await req.json();
+    const { mode, prompt, messages, workspaceId, text } = body;
+
+    if (!prompt) return Res.error("Prompt is required", 400);
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+
+    if (mode === "edit") {
+      if (!text) return Res.error("Text is required for editing mode", 400);
+
+      const systemPrompt = `You are an expert editor. You are given a selection of text and a command instructing you how to modify it.
+Your job is to apply the command precisely to the text.
+Output ONLY the final modified text. Do not include any introduction, explanations, wrapping quotes, backticks, or other formatting. Just output the raw edited text.
+
+Text to modify:
+"""
+${text}
+"""
+
+Command:
+${prompt}
+`;
+
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const result = await model.generateContent(systemPrompt);
+      const outputText = result.response.text();
+      return Res.ok({ text: outputText.trim() });
+    }
+
+    if (mode === "chat") {
+      // Fetch workspace context if workspaceId is provided
+      let workspaceContext = "";
+      if (workspaceId) {
+        const pages = await prisma.page.findMany({
+          where: { workspaceId, isArchived: false },
+          select: { title: true, contentText: true },
+        });
+
+        if (pages.length > 0) {
+          workspaceContext = "Here is the context of all pages in the user's workspace:\n";
+          pages.forEach((p) => {
+            workspaceContext += `---
+Page Title: ${p.title}
+Content:
+${p.contentText || "(Empty)"}
+`;
+          });
+          workspaceContext += "---\n\n";
+        }
+      }
+
+      const systemPrompt = `You are RTX Notion AI, a helpful AI assistant integrated into the user's collaborative workspace.
+You can answer questions, summarize pages, draft copy, or help brainstorm ideas.
+
+${workspaceContext}
+If the user asks questions about their workspace pages, consult the context above. If they ask about information not present in the workspace, use your general knowledge but mention that the information wasn't found in the workspace pages.
+Answer naturally in clean, brief Markdown formatting. Keep your formatting standard and readable.`;
+
+      const modelWithSystem = genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        systemInstruction: systemPrompt,
+      });
+
+      const chat = modelWithSystem.startChat({
+        history: (messages || []).map((m: { role: "user" | "model"; content: string }) => ({
+          role: m.role === "model" ? "model" as const : "user" as const,
+          parts: [{ text: m.content }],
+        })),
+      });
+
+      const result = await chat.sendMessage(prompt);
+      const outputText = result.response.text();
+      return Res.ok({ text: outputText });
+    }
+
+    return Res.error("Invalid mode. Must be 'chat' or 'edit'", 400);
+  } catch (err) {
+    console.error("[AI] Error:", err);
+    return Res.error(err instanceof Error ? err.message : "Internal Server Error", 500);
+  }
+}

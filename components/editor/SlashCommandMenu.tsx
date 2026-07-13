@@ -9,7 +9,7 @@ import type { Editor } from "@tiptap/react";
 import {
   Heading1, Heading2, Heading3, List, ListOrdered,
   CheckSquare, Code2, Quote, Minus, Image as ImageIcon,
-  Type, Table2, ChevronRight, StickyNote,
+  Type, Table2, ChevronRight, StickyNote, Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +25,16 @@ interface BlockItem {
 }
 
 const BLOCKS: BlockItem[] = [
+  // ── AI Tools ──────────────────────────────────────────────────────────────
+  {
+    id: "ai",
+    label: "Ask AI",
+    description: "Write with AI, summarize, or edit",
+    icon: Sparkles,
+    keywords: ["ai", "write", "generator", "ask", "gpt", "gemini", "sparkles"],
+    group: "AI Tools",
+    action: () => {},
+  },
   // ── Text ──────────────────────────────────────────────────────────────────
   {
     id: "paragraph",
@@ -240,9 +250,10 @@ interface Props {
   from: number;
   position: { top: number; left: number };
   onClose: () => void;
+  onTriggerAi?: (from: number, queryLen: number) => void;
 }
 
-export function SlashCommandMenu({ editor, query, from, position, onClose }: Props) {
+export function SlashCommandMenu({ editor, query, from, position, onClose, onTriggerAi }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -266,10 +277,15 @@ export function SlashCommandMenu({ editor, query, from, position, onClose }: Pro
 
   const handleSelect = useCallback(
     (item: BlockItem) => {
+      if (item.id === "ai" && onTriggerAi) {
+        onTriggerAi(from, query.length);
+        onClose();
+        return;
+      }
       item.action(editor, from, query.length);
       onClose();
     },
-    [editor, from, query, onClose]
+    [editor, from, query, onClose, onTriggerAi]
   );
 
   // Keyboard navigation

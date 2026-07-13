@@ -49,6 +49,7 @@ import { useUpload } from "@/hooks/useUpload";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
+import { Sparkles, Loader2 } from "lucide-react";
 
 const lowlight = createLowlight(common);
 
@@ -67,6 +68,23 @@ const DEFAULT_SLASH_STATE: SlashMenuState = {
   position: { top: 0, left: 0 },
 };
 
+// ─── Inline AI state ──────────────────────────────────────────────────────────
+interface InlineAiState {
+  open: boolean;
+  position: { top: number; left: number };
+  from: number;
+  to: number;
+  selectedText: string;
+}
+
+const DEFAULT_INLINE_AI_STATE: InlineAiState = {
+  open: false,
+  position: { top: 0, left: 0 },
+  from: 0,
+  to: 0,
+  selectedText: "",
+};
+
 // ─── Main Editor ──────────────────────────────────────────────────────────────
 interface Props {
   pageId: string;
@@ -82,6 +100,50 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
 
   // ── Slash command state ────────────────────────────────────────────────────
   const [slashMenu, setSlashMenu] = useState<SlashMenuState>(DEFAULT_SLASH_STATE);
+
+  // ── Inline AI state ────────────────────────────────────────────────────────
+  const [inlineAi, setInlineAi] = useState<InlineAiState>(DEFAULT_INLINE_AI_STATE);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [isAiLoading, setIsAiLoading] = useState(false);
+
+  async function runInlineAi(promptText: string) {
+    if (!promptText.trim() || isAiLoading || !editor) return;
+    setIsAiLoading(true);
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "edit",
+          prompt: promptText,
+          text: inlineAi.selectedText || " ",
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json.error ?? "Failed to get AI response");
+        return;
+      }
+
+      const resultText = json.data.text;
+      
+      // Replace text selection or insert at position
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from: inlineAi.from, to: inlineAi.to })
+        .insertContent(resultText)
+        .run();
+
+      setInlineAi(DEFAULT_INLINE_AI_STATE);
+      setAiPrompt("");
+    } catch {
+      toast.error("Could not generate AI response");
+    } finally {
+      setIsAiLoading(false);
+    }
+  }
 
   // ── Current word count ─────────────────────────────────────────────────────
   const [wordCount, setWordCount] = useState(0);
@@ -363,7 +425,19 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
   return (
     <div className="relative" ref={editorWrapperRef}>
       {/* ── Bubble toolbar ──────────────────────────────────────────────────── */}
-      <BubbleToolbar editor={editor} />
+      <BubbleToolbar
+        editor={editor}
+        onTriggerAi={(from, to, text) => {
+          const pos = resolveSlashPosition(from);
+          setInlineAi({
+            open: true,
+            position: pos,
+            from,
+            to,
+            selectedText: text,
+          });
+        }}
+      />
 
       {/* ── Collaboration cursors ───────────────────────────────────────────── */}
       <CollabCursors
@@ -393,7 +467,95 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
           from={slashMenu.from}
           position={slashMenu.position}
           onClose={() => setSlashMenu(DEFAULT_SLASH_STATE)}
+          onTriggerAi={(from, queryLen) => {
+            editor.chain().focus().deleteRange({ from, to: from + queryLen + 1 }).run();
+            const pos = resolveSlashPosition(from);
+            setInlineAi({
+              open: true,
+              position: pos,
+              from,
+              to: from,
+              selectedText: "",
+            });
+          }}
         />
+      )}
+
+      {/* ── Inline AI Command Palette ───────────────────────────────────────── */}
+      {inlineAi.open && (
+        <div
+          className="absolute z-50 w-80 bg-gray-900 border border-gray-700 rounded-xl p-3 shadow-2xl flex flex-col gap-2 text-white"
+          style={{
+            top: `${inlineAi.position.top}px`,
+            left: `${Math.max(10, Math.min(typeof window !== "undefined" ? window.innerWidth - 340 : 100, inlineAi.position.left))}px`,
+          }}
+        >
+          <div className="flex items-center gap-2 border border-gray-700 rounded-lg px-2 bg-gray-800 focus-within:border-primary">
+            <Sparkles className="h-4 w-4 text-purple-400 shrink-0" />
+            <input
+              autoFocus
+              type="text"
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  runInlineAi(aiPrompt);
+                } else if (e.key === "Escape") {
+                  setInlineAi(DEFAULT_INLINE_AI_STATE);
+                  setAiPrompt("");
+                }
+              }}
+              placeholder="Ask AI to write or edit..."
+              className="w-full h-9 bg-transparent outline-none border-none text-xs text-white placeholder-gray-500"
+            />
+            {isAiLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin text-purple-400 shrink-0" />
+            ) : (
+              <button
+                onClick={() => runInlineAi(aiPrompt)}
+                className="text-xs text-primary font-bold hover:text-primary/80"
+              >
+                Go
+              </button>
+            )}
+          </div>
+
+          {/* Quick preset AI options */}
+          <div className="flex flex-col text-[11px] text-gray-400 font-semibold border-t border-gray-800 pt-2 max-h-48 overflow-y-auto">
+            <span className="px-2 py-1 text-[9px] uppercase text-gray-500 tracking-wider">Predefined actions</span>
+            <button
+              onClick={() => runInlineAi("Summarize the text")}
+              className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-800 hover:text-white text-left transition"
+            >
+              📝 Summarize
+            </button>
+            <button
+              onClick={() => runInlineAi("Translate to Spanish")}
+              className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-800 hover:text-white text-left transition"
+            >
+              🌐 Translate to Spanish
+            </button>
+            <button
+              onClick={() => runInlineAi("Improve spelling and grammar")}
+              className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-800 hover:text-white text-left transition"
+            >
+              ✍️ Improve grammar & spelling
+            </button>
+            <button
+              onClick={() => runInlineAi("Make the tone professional")}
+              className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-800 hover:text-white text-left transition"
+            >
+              👔 Make professional tone
+            </button>
+            <button
+              onClick={() => runInlineAi("Make the tone casual")}
+              className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-800 hover:text-white text-left transition"
+            >
+              🍕 Make casual tone
+            </button>
+          </div>
+        </div>
       )}
 
       {/* ── Status bar ─────────────────────────────────────────────────────── */}

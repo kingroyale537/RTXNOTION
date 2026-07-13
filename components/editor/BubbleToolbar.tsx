@@ -6,7 +6,7 @@
 import { BubbleMenu, type Editor } from "@tiptap/react";
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough,
-  Code, Link2, Highlighter, AlignLeft, AlignCenter, AlignRight,
+  Code, Link2, Highlighter, AlignLeft, AlignCenter, AlignRight, Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCallback, useState } from "react";
@@ -55,9 +55,12 @@ const TEXT_COLORS = [
   { label: "Purple",  value: "#a855f7" },
 ];
 
-interface Props { editor: Editor }
+interface Props {
+  editor: Editor;
+  onTriggerAi?: (from: number, to: number, text: string) => void;
+}
 
-export function BubbleToolbar({ editor }: Props) {
+export function BubbleToolbar({ editor, onTriggerAi }: Props) {
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
   const [showHighlightPicker, setShowHighlightPicker] = useState(false);
@@ -166,6 +169,20 @@ export function BubbleToolbar({ editor }: Props) {
           </div>
         ) : (
           <>
+            {onTriggerAi && (
+              <button
+                onClick={() => {
+                  const { from, to } = editor.state.selection;
+                  const text = editor.state.doc.textBetween(from, to, " ");
+                  onTriggerAi(from, to, text);
+                }}
+                className="flex items-center gap-1 px-2.5 h-8 rounded-md text-xs font-bold transition-colors bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 mr-1.5 flex-shrink-0"
+                title="Ask Notion AI to write or edit"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                <span>Ask AI</span>
+              </button>
+            )}
             <ToolbarButton
               onClick={() => editor.chain().focus().toggleBold().run()}
               isActive={editor.isActive("bold")}
