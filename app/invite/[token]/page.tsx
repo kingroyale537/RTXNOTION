@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { InviteAccept } from "@/components/workspace/InviteAccept";
+import prisma from "@/lib/prisma";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Join Workspace" };
@@ -12,13 +13,23 @@ export const metadata: Metadata = { title: "Join Workspace" };
 interface Props { params: { token: string } }
 
 export default async function InvitePage({ params }: Props) {
-  // Fetch invite preview (public)
-  const res = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/invites/${params.token}`,
-    { cache: "no-store" }
-  );
+  // Fetch invite preview directly from database
+  const invite = await prisma.invite.findUnique({
+    where: { token: params.token },
+    include: {
+      workspace: { select: { id: true, name: true, logo: true, slug: true } },
+      invitedBy: { select: { name: true, image: true } },
+    },
+  });
 
-  if (!res.ok) {
+  // Basic validation checks
+  const isValid =
+    invite &&
+    invite.status === "PENDING" &&
+    invite.expiresAt > new Date() &&
+    (invite.maxUses === null || invite.useCount < invite.maxUses);
+
+  if (!isValid) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
@@ -31,15 +42,14 @@ export default async function InvitePage({ params }: Props) {
     );
   }
 
-  const { data } = await res.json();
   const session = await getServerSession(authOptions);
 
   return (
     <InviteAccept
       token={params.token}
-      workspace={data.workspace}
-      invitedBy={data.invitedBy}
-      role={data.role}
+      workspace={invite.workspace}
+      invitedBy={invite.invitedBy}
+      role={invite.role}
       isAuthenticated={!!session}
     />
   );

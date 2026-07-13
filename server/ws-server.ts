@@ -281,7 +281,7 @@ io.on("connection", (socket: Socket) => {
 });
 
 // ─── Start server ─────────────────────────────────────────────────────────────
-const PORT = Number(process.env.WS_PORT ?? 3001);
+const PORT = Number(process.env.PORT ?? process.env.WS_PORT ?? 3001);
 httpServer.listen(PORT, () => {
   console.log(`\n🔌 RTX Notion WebSocket server running on port ${PORT}`);
   console.log(`   Accepting connections from ${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}\n`);
