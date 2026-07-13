@@ -3,14 +3,16 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePageStore } from "@/store/pageStore";
 import { useSocket } from "@/hooks/useSocket";
 import { usePresence } from "@/hooks/usePresence";
 import { PageHeader } from "@/components/page/PageHeader";
 import { PageBreadcrumb } from "@/components/page/PageBreadcrumb";
+import { DatabaseView } from "@/components/page/DatabaseView";
 import type { PageWithRelations } from "@/types";
+import { cn } from "@/lib/utils";
 
 // Lazy-load the editor to avoid SSR issues with ProseMirror / Yjs
 const Editor = dynamic(
@@ -41,9 +43,13 @@ interface Props {
   canEdit: boolean;
 }
 
-export function PageView({ page, workspaceId, workspaceSlug, canEdit }: Props) {
+export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canEdit }: Props) {
   const { setCurrentPage } = usePageStore();
   const { socket } = useSocket(workspaceId);
+  
+  // Choose default view based on page properties
+  const isDefaultDatabase = page.title === "Notes" || page.title === "Team HQ" || (page._count?.children ?? 0) > 0;
+  const [viewMode, setViewMode] = useState<"editor" | "database">(isDefaultDatabase ? "database" : "editor");
 
   // Sync current page to Zustand
   useEffect(() => {
@@ -64,8 +70,8 @@ export function PageView({ page, workspaceId, workspaceSlug, canEdit }: Props) {
       />
 
       {/* Scrollable page content */}
-      <div className="flex-1 overflow-auto">
-        <div className="min-h-full">
+      <div className="flex-1 overflow-auto bg-[#191919] text-[#f3f4f6]">
+        <div className="min-h-full pb-16">
           {/* Cover image + emoji icon + editable title */}
           <PageHeader
             page={page}
@@ -74,15 +80,50 @@ export function PageView({ page, workspaceId, workspaceSlug, canEdit }: Props) {
             readOnly={!canEdit}
           />
 
-          {/* TipTap block editor — SSR-safe lazy load */}
-          <div className="max-w-4xl mx-auto">
-            <Editor
-              pageId={page.id}
-              workspaceId={workspaceId}
-              initialContent={page.content as object | null}
-              canEdit={canEdit}
-              socket={socket}
-            />
+          {/* View Mode Tabs */}
+          <div className="max-w-4xl mx-auto px-8 md:px-16 mb-6 flex items-center gap-1.5 border-b border-[#2a2a2a]/60 pb-2.5">
+            <button
+              onClick={() => setViewMode("editor")}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                viewMode === "editor"
+                  ? "bg-[#2c2c2c] text-white border border-[#3c3c3c]"
+                  : "text-gray-400 hover:bg-[#2c2c2c]/40 hover:text-white"
+              )}
+            >
+              📝 Page Editor
+            </button>
+            <button
+              onClick={() => setViewMode("database")}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                viewMode === "database"
+                  ? "bg-[#2c2c2c] text-white border border-[#3c3c3c]"
+                  : "text-gray-400 hover:bg-[#2c2c2c]/40 hover:text-white"
+              )}
+            >
+              📊 Database View ({page._count?.children ?? 0})
+            </button>
+          </div>
+
+          {/* View rendering */}
+          <div className="max-w-4xl mx-auto px-8 md:px-16">
+            {viewMode === "editor" ? (
+              <Editor
+                pageId={page.id}
+                workspaceId={workspaceId}
+                initialContent={page.content as object | null}
+                canEdit={canEdit}
+                socket={socket}
+              />
+            ) : (
+              <DatabaseView
+                pageId={page.id}
+                workspaceId={workspaceId}
+                workspaceSlug={workspaceSlug}
+                canEdit={canEdit}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import { useUIStore } from "@/store/uiStore";
 import { useSocket } from "@/hooks/useSocket";
 import { usePageTree } from "@/hooks/usePageTree";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import { AiSidebar } from "@/components/workspace/AiSidebar";
 import { CommandPalette } from "@/components/modals/CommandPalette";
 import type { WorkspaceWithMembers } from "@/types";
 import type { Role } from "@prisma/client";
@@ -23,7 +24,7 @@ interface Props {
 
 export function WorkspaceShell({ workspace, currentUserId, currentUserRole, children }: Props) {
   const { setCurrentWorkspace } = useWorkspaceStore();
-  const { sidebarOpen } = useUIStore();
+  const { sidebarOpen, aiSidebarOpen } = useUIStore();
 
   // Sync workspace into Zustand store
   useEffect(() => {
@@ -35,6 +36,11 @@ export function WorkspaceShell({ workspace, currentUserId, currentUserRole, chil
 
   // Fetch and sync page tree
   usePageTree(workspace.id);
+
+  // Calculate dynamic default sizes
+  let mainSize = 100;
+  if (sidebarOpen) mainSize -= 18;
+  if (aiSidebarOpen) mainSize -= 25;
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -63,11 +69,29 @@ export function WorkspaceShell({ workspace, currentUserId, currentUserRole, chil
         )}
 
         {/* ── Main content panel ─────────────────────────────────────────── */}
-        <Panel defaultSize={sidebarOpen ? 82 : 100} order={2} id="content-panel">
+        <Panel defaultSize={mainSize} order={2} id="content-panel">
           <main className="h-full overflow-auto flex flex-col">
             {children}
           </main>
         </Panel>
+
+        {/* ── AI Sidebar panel ───────────────────────────────────────────── */}
+        {aiSidebarOpen && (
+          <>
+            <PanelResizeHandle
+              className="w-1 bg-transparent hover:bg-primary/20 transition-colors"
+            />
+            <Panel
+              defaultSize={25}
+              minSize={20}
+              maxSize={40}
+              id="ai-sidebar-panel"
+              order={3}
+            >
+              <AiSidebar />
+            </Panel>
+          </>
+        )}
       </PanelGroup>
 
       {/* Global overlays */}

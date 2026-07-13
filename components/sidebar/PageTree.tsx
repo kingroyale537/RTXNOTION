@@ -11,12 +11,14 @@ import { FileText } from "lucide-react";
 interface Props {
   workspaceId: string;
   workspaceSlug: string;
+  pages?: PageTreeType[];
 }
 
-export function PageTree({ workspaceId, workspaceSlug }: Props) {
-  const { pageTree, isLoadingTree } = usePageStore();
+export function PageTree({ workspaceId, workspaceSlug, pages }: Props) {
+  const { pageTree: storeTree, isLoadingTree } = usePageStore();
+  const activeTree = pages ?? storeTree;
 
-  if (isLoadingTree) {
+  if (isLoadingTree && !pages) {
     return (
       <div className="space-y-1 px-1">
         {Array.from({ length: 5 }).map((_, i) => (
@@ -30,18 +32,13 @@ export function PageTree({ workspaceId, workspaceSlug }: Props) {
     );
   }
 
-  if (pageTree.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-8 gap-2 text-sidebar-foreground/40">
-        <FileText className="h-8 w-8" />
-        <p className="text-xs text-center">No pages yet.<br />Click + to create one.</p>
-      </div>
-    );
+  if (activeTree.length === 0) {
+    return null;
   }
 
   return (
     <nav aria-label="Page navigation" className="space-y-0.5">
-      {pageTree.map((page) => (
+      {activeTree.map((page) => (
         <PageTreeItem
           key={page.id}
           page={page}

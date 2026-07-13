@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { mode, prompt, messages, workspaceId, text } = body;
+    const { mode, prompt, messages, workspaceId, text, pageId } = body;
 
     if (!prompt) return Res.error("Prompt is required", 400);
 
@@ -46,6 +46,23 @@ ${prompt}
     }
 
     if (mode === "chat") {
+      // Fetch active page context if pageId is provided
+      let pageContext = "";
+      if (pageId) {
+        const page = await prisma.page.findUnique({
+          where: { id: pageId },
+          select: { title: true, contentText: true },
+        });
+        if (page) {
+          pageContext = `You are currently assisting the user with the active document page titled "${page.title}".
+Here is the current content of this active page:
+---
+${page.contentText || "(Empty)"}
+---
+Use this content to answer page-specific questions, explain terms, suggest edits, or draft custom summaries.\n\n`;
+        }
+      }
+
       // Fetch workspace context if workspaceId is provided
       let workspaceContext = "";
       if (workspaceId) {
@@ -70,8 +87,9 @@ ${p.contentText || "(Empty)"}
       const systemPrompt = `You are RTX Notion AI, a helpful AI assistant integrated into the user's collaborative workspace.
 You can answer questions, summarize pages, draft copy, or help brainstorm ideas.
 
+${pageContext}
 ${workspaceContext}
-If the user asks questions about their workspace pages, consult the context above. If they ask about information not present in the workspace, use your general knowledge but mention that the information wasn't found in the workspace pages.
+If the user asks questions about their workspace pages or the active page, consult the context above. If they ask about information not present in the workspace, use your general knowledge but mention that the information wasn't found in the workspace pages.
 Answer naturally in clean, brief Markdown formatting. Keep your formatting standard and readable.`;
 
       const modelWithSystem = genAI.getGenerativeModel({

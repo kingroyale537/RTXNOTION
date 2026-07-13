@@ -10,6 +10,13 @@ interface UIStore {
   setSidebarOpen: (open: boolean) => void;
   setSidebarWidth: (width: number) => void;
 
+  // AI Sidebar
+  aiSidebarOpen: boolean;
+  activeAgentId: string;
+  toggleAiSidebar: () => void;
+  setAiSidebarOpen: (open: boolean) => void;
+  setActiveAgentId: (id: string) => void;
+
   // Command palette (Ctrl+K)
   commandOpen: boolean;
   setCommandOpen: (open: boolean) => void;
@@ -38,6 +45,12 @@ export const useUIStore = create<UIStore>()(
         setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
         setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
 
+        aiSidebarOpen: false,
+        activeAgentId: "welcome-notion",
+        toggleAiSidebar: () => set((s) => ({ aiSidebarOpen: !s.aiSidebarOpen })),
+        setAiSidebarOpen: (aiSidebarOpen) => set({ aiSidebarOpen }),
+        setActiveAgentId: (activeAgentId) => set({ activeAgentId }),
+
         commandOpen: false,
         setCommandOpen: (commandOpen) => set({ commandOpen }),
         toggleCommand: () => set((s) => ({ commandOpen: !s.commandOpen })),
@@ -56,6 +69,8 @@ export const useUIStore = create<UIStore>()(
         partialize: (s) => ({
           sidebarOpen: s.sidebarOpen,
           sidebarWidth: s.sidebarWidth,
+          aiSidebarOpen: s.aiSidebarOpen,
+          activeAgentId: s.activeAgentId,
           theme: s.theme,
         }),
       }
