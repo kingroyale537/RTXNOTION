@@ -247,11 +247,6 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
 
       // Load initial content if Yjs doc is empty and we have saved content
       onCreate({ editor }) {
-        if (!ydoc) return;
-        const fragment = ydoc.getXmlFragment("default");
-        if (fragment.length === 0 && initialContent) {
-          editor.commands.setContent(initialContent);
-        }
         // Expose view for slash command positioning
         (window as unknown as Record<string, unknown>).__tiptapView = editor.view;
       },
@@ -274,6 +269,15 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
     },
     [ydoc, canEdit] // Re-create editor when Yjs doc is ready
   );
+
+  // Seed initial content after Yjs sync is complete
+  useEffect(() => {
+    if (!isSynced || !editor || !ydoc || !initialContent) return;
+    const fragment = ydoc.getXmlFragment("default");
+    if (fragment.length === 0) {
+      editor.commands.setContent(initialContent);
+    }
+  }, [isSynced, editor, ydoc, initialContent]);
 
   // ── Auto-save: debounce content → PATCH /api/pages/:id ───────────────────
   const [editorContent, setEditorContent] = useState<object | null>(null);

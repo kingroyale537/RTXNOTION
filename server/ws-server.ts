@@ -168,7 +168,7 @@ io.on("connection", (socket: Socket) => {
         // Forward base64 update to all other clients in the room
         socket.to(pageId).emit("yjs-update", {
           pageId,
-          update: fromUint8Array(Y.encodeStateAsUpdate(ydoc)),
+          update,
         });
         debouncedPersist(pageId, ydoc);
       } catch (err) {
