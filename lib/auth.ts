@@ -128,35 +128,23 @@ export const authOptions: NextAuthOptions = {
     }),
 
     // ── Google OAuth ───────────────────────────────────────────────────────
-    ...(process.env.GOOGLE_CLIENT_ID
-      ? [
-          GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-          }),
-        ]
-      : []),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "google-client-id-placeholder",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "google-client-secret-placeholder",
+    }),
 
     // ── GitHub OAuth ───────────────────────────────────────────────────────
-    ...(process.env.GITHUB_CLIENT_ID
-      ? [
-          GitHubProvider({
-            clientId: process.env.GITHUB_CLIENT_ID!,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-          }),
-        ]
-      : []),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID || "github-client-id-placeholder",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "github-client-secret-placeholder",
+    }),
 
     // ── Microsoft Azure AD OAuth ───────────────────────────────────────────
-    ...(process.env.MICROSOFT_CLIENT_ID
-      ? [
-          AzureADProvider({
-            clientId: process.env.MICROSOFT_CLIENT_ID!,
-            clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
-            tenantId: process.env.MICROSOFT_TENANT_ID,
-          }),
-        ]
-      : []),
+    AzureADProvider({
+      clientId: process.env.MICROSOFT_CLIENT_ID || "microsoft-client-id-placeholder",
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET || "microsoft-client-secret-placeholder",
+      tenantId: process.env.MICROSOFT_TENANT_ID || "common",
+    }),
   ],
 
   callbacks: {

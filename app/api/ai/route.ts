@@ -39,7 +39,7 @@ Command:
 ${prompt}
 `;
 
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const result = await model.generateContent(systemPrompt);
       const outputText = result.response.text();
       return Res.ok({ text: outputText.trim() });
@@ -93,7 +93,7 @@ If the user asks questions about their workspace pages or the active page, consu
 Answer naturally in clean, brief Markdown formatting. Keep your formatting standard and readable.`;
 
       const modelWithSystem = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         systemInstruction: systemPrompt,
       });
 

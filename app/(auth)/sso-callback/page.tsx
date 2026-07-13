@@ -1,14 +1,14 @@
 // app/(auth)/sso-callback/page.tsx
-// Corporate SSO authentication redirect screen.
+// Corporate SSO authentication redirect screen wrapped in Suspense boundary.
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Loader2, ShieldCheck, ArrowRightLeft } from "lucide-react";
 
-export default function SsoCallbackPage() {
+function SsoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const domain = searchParams.get("domain") || "enterprise";
@@ -81,5 +81,17 @@ export default function SsoCallbackPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function SsoCallbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#191919] text-[#f3f4f6]">
+        <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+      </div>
+    }>
+      <SsoCallbackContent />
+    </Suspense>
   );
 }
