@@ -178,7 +178,7 @@ export default function AiChatPage() {
             </div>
 
             {/* API Key Missing Instruction Box */}
-            {keyMissingError || messages.length === 0 && (
+            {keyMissingError && (
               <div className="mb-6 p-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5 flex items-start gap-3">
                 <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
                 <div className="text-xs text-gray-300">
