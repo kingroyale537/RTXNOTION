@@ -4,7 +4,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home as HomeIcon, Sparkles } from "lucide-react";
+import { Home as HomeIcon, Sparkles, Sliders } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useUIStore } from "@/store/uiStore";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -29,6 +29,7 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
 
   const homePath = `/${workspace.slug}`;
   const aiPath = `/${workspace.slug}/ai`;
+  const orchestrationPath = `/${workspace.slug}/ai-orchestration`;
 
   return (
     <aside className="flex flex-col h-full bg-sidebar border-r border-sidebar-border select-none">
@@ -65,6 +66,17 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
         >
           <Sparkles className="h-3.5 w-3.5 text-purple-400" />
           <span>Notion AI</span>
+        </Link>
+        <Link
+          href={orchestrationPath}
+          className={`flex items-center gap-2.5 px-2.5 h-8 rounded-md text-xs font-semibold transition-colors ${
+            pathname === orchestrationPath
+              ? "bg-sidebar-accent text-sidebar-foreground"
+              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          }`}
+        >
+          <Sliders className="h-3.5 w-3.5 text-blue-400" />
+          <span>AI Orchestration</span>
         </Link>
       </div>
 
