@@ -1,5 +1,5 @@
 // =============================================================================
-// RTX Notion – Prisma Schema
+// Voltaic – Prisma Schema
 // Database: PostgreSQL
 // Features: Multi-workspace, nested pages, real-time collab, RBAC, media
 // =============================================================================
@@ -411,7 +411,7 @@ model PageMedia {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// DATABASE (Notion-style inline databases / tables)
+// DATABASE (Voltaic-style inline databases / tables)
 // Lightweight structured data alongside pages.
 // ─────────────────────────────────────────────────────────────────────────────
 
