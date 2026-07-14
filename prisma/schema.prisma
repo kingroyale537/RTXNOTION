@@ -163,6 +163,7 @@ model Workspace {
   activities  Activity[]
   media       Media[]
   databases   Database[]
+  integrations Integration[]
 
   @@map("workspaces")
 }
@@ -487,3 +488,38 @@ model Notification {
   @@index([userId, isRead])
   @@map("notifications")
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTEGRATION
+// Connectors to third-party services (e.g., Slack, Google Workspace).
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Integration {
+  id          String   @id @default(cuid())
+  workspaceId String
+  provider    String   // "slack" | "google"
+  status      String   // "CONNECTED" | "DISCONNECTED"
+  accessToken String?  @db.Text
+  connectedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, provider])
+  @@map("integrations")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WAITLIST ENTRY
+// Stores early-adopter subscriptions.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("waitlist_entries")
+}
+

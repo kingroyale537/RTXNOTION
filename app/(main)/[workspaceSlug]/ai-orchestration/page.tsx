@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
+import { useWorkspaceStore } from "@/store/workspaceStore";
 
 type Tab = "gateway" | "agent" | "local";
 
@@ -84,6 +85,7 @@ const STREAMING_WORDS = [
 export default function AiOrchestrationPage() {
   const params = useParams();
   const { data: session } = useSession();
+  const { currentWorkspace } = useWorkspaceStore();
   
   // State variables
   const [activeTab, setActiveTab] = useState<Tab>("gateway");
@@ -132,23 +134,78 @@ export default function AiOrchestrationPage() {
     toast.success("Ollama integration active! Llama 3 unlocked.");
   }
 
-  // Streaming playground simulation
-  function runPlaygroundTest() {
+  // Streaming playground execution connecting to secure multi-app backend
+  async function runPlaygroundTest() {
     if (isStreaming) return;
+    if (!currentWorkspace?.id) {
+      toast.error("No active workspace detected.");
+      return;
+    }
     setIsStreaming(true);
     setStreamingText("");
-    
-    let wordIdx = 0;
-    const interval = setInterval(() => {
-      if (wordIdx < STREAMING_WORDS.length) {
-        setStreamingText((prev) => prev + " " + STREAMING_WORDS[wordIdx]);
-        wordIdx++;
-      } else {
-        clearInterval(interval);
-        setIsStreaming(false);
-        toast.success("Playground test query finished!");
+
+    try {
+      const response = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: testPrompt,
+          modelKey: selectedModel,
+          workspaceId: currentWorkspace.id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || response.statusText || "Request failed");
       }
-    }, 150);
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No readable stream in response");
+
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: streamDone } = await reader.read();
+        done = streamDone;
+        if (value) {
+          const chunk = decoder.decode(value);
+          // Split by newline and parse chunks of stream
+          const lines = chunk.split("\n");
+          let cleanText = "";
+          for (const line of lines) {
+            if (line.startsWith("0:")) {
+              try {
+                const parsed = JSON.parse(line.slice(2));
+                cleanText += parsed;
+              } catch {
+                cleanText += line.slice(2);
+              }
+            } else if (line.startsWith("e:")) {
+              // Format standard errors
+              try {
+                const parsed = JSON.parse(line.slice(2));
+                toast.error(parsed.message || "Model execution error");
+              } catch {
+                // Ignore parsing failure
+              }
+            } else if (line.trim() && !line.includes(":")) {
+              cleanText += line;
+            }
+          }
+          if (cleanText) {
+            setStreamingText((prev) => prev + cleanText);
+          }
+        }
+      }
+      toast.success("Orchestrator run completed!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err instanceof Error ? err.message : "Failed to run playground query");
+    } finally {
+      setIsStreaming(false);
+    }
   }
 
   return (

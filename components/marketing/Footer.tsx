@@ -30,32 +30,32 @@ export function Footer() {
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Product</h4>
           <ul className="space-y-2 text-xs font-medium text-muted-foreground">
-            <li><Link href="#features" className="hover:text-foreground transition-colors">Wikis</Link></li>
-            <li><Link href="#features" className="hover:text-foreground transition-colors">Docs</Link></li>
-            <li><Link href="#features" className="hover:text-foreground transition-colors">Projects</Link></li>
-            <li><Link href="#features" className="hover:text-foreground transition-colors">Calendar</Link></li>
+            <li><Link href="/product/wikis" className="hover:text-foreground transition-colors">Wikis</Link></li>
+            <li><Link href="/product/docs" className="hover:text-foreground transition-colors">Docs</Link></li>
+            <li><Link href="/product/projects" className="hover:text-foreground transition-colors">Projects</Link></li>
+            <li><Link href="/product/calendar" className="hover:text-foreground transition-colors">Calendar</Link></li>
           </ul>
         </div>
-
+ 
         {/* Resources Column */}
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Resources</h4>
           <ul className="space-y-2 text-xs font-medium text-muted-foreground">
-            <li><Link href="/help" className="hover:text-foreground transition-colors">Help Center</Link></li>
-            <li><Link href="https://academy.notion.com" className="hover:text-foreground transition-colors">Academy</Link></li>
-            <li><Link href="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
-            <li><Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
+            <li><Link href="/resources/help" className="hover:text-foreground transition-colors">Help Center</Link></li>
+            <li><Link href="/resources/academy" className="hover:text-foreground transition-colors">Academy</Link></li>
+            <li><Link href="/resources/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
+            <li><Link href="/resources/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
           </ul>
         </div>
-
+ 
         {/* Solutions Column */}
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Solutions</h4>
           <ul className="space-y-2 text-xs font-medium text-muted-foreground">
-            <li><Link href="/startups" className="hover:text-foreground transition-colors">Startups</Link></li>
-            <li><Link href="/personal" className="hover:text-foreground transition-colors">Personal</Link></li>
-            <li><Link href="/enterprise" className="hover:text-foreground transition-colors">Enterprise</Link></li>
-            <li><Link href="/solutions" className="hover:text-foreground transition-colors">By Team</Link></li>
+            <li><Link href="/solutions/startups" className="hover:text-foreground transition-colors">Startups</Link></li>
+            <li><Link href="/solutions/personal" className="hover:text-foreground transition-colors">Personal</Link></li>
+            <li><Link href="/solutions/enterprise" className="hover:text-foreground transition-colors">Enterprise</Link></li>
+            <li><Link href="/solutions/teams" className="hover:text-foreground transition-colors">By Team</Link></li>
           </ul>
         </div>
 
