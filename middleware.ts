@@ -33,6 +33,8 @@ export default withAuth(
           "/api/auth/",
           "/api/register",
           "/api/invites/",
+          "/waitlist",
+          "/api/waitlist",
         ];
 
         if (pathname === "/") return true;

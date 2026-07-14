@@ -47,7 +47,7 @@ export default function DocsPage() {
       badge="Product"
       title="Docs"
       subtitle="Better docs. Faster decisions."
-      description="Write documents, specs, and meeting notes with a clean, distraction-free markdown block editor. RTX Notion Docs combines editing speed with real-time multiplayer coordination."
+      description="Write documents, specs, and meeting notes with a clean, distraction-free markdown block editor. Voltaic Docs combines editing speed with real-time multiplayer coordination."
       gradientFrom="from-[#22c55e]"
       gradientTo="to-[#06b6d4]"
       features={features}

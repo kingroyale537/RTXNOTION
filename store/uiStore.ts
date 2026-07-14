@@ -46,7 +46,7 @@ export const useUIStore = create<UIStore>()(
         setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
 
         aiSidebarOpen: false,
-        activeAgentId: "welcome-notion",
+        activeAgentId: "welcome-voltaic",
         toggleAiSidebar: () => set((s) => ({ aiSidebarOpen: !s.aiSidebarOpen })),
         setAiSidebarOpen: (aiSidebarOpen) => set({ aiSidebarOpen }),
         setActiveAgentId: (activeAgentId) => set({ activeAgentId }),
@@ -65,7 +65,7 @@ export const useUIStore = create<UIStore>()(
         setTheme: (theme) => set({ theme }),
       }),
       {
-        name: "rtxnotion-ui",
+        name: "voltaic-ui",
         partialize: (s) => ({
           sidebarOpen: s.sidebarOpen,
           sidebarWidth: s.sidebarWidth,

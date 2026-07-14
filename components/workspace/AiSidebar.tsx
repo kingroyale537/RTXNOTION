@@ -1,5 +1,5 @@
 // components/workspace/AiSidebar.tsx
-// Right-side AI Agent Chat Sidebar matching Notion's agent pane with high mockup fidelity.
+// Right-side AI Agent Chat Sidebar matching Voltaic's agent pane with high mockup fidelity.
 
 "use client";
 
@@ -39,8 +39,8 @@ interface Message {
 
 const AGENTS = [
   {
-    id: "welcome-notion",
-    name: "Welcome to Notion",
+    id: "welcome-voltaic",
+    name: "Welcome to Voltaic",
     description: "These Notes are private to you. Nobody else can see what's here. Think of this as your personal scratchpad — dump quick thoughts, rough drafts, reminders, or anything you need to remember. I can help you search or summarize every note.",
   },
   {

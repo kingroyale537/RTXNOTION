@@ -45,9 +45,9 @@ export default function TeamsPage() {
   return (
     <MarketingPageLayout
       badge="Solutions"
-      title="RTX Notion for Teams"
+      title="Voltaic for Teams"
       subtitle="Tailored workflows for every department."
-      description="Connect every team inside your company. RTX Notion provides specialized templates and database layouts for engineering, design, marketing, and product management."
+      description="Connect every team inside your company. Voltaic provides specialized templates and database layouts for engineering, design, marketing, and product management."
       gradientFrom="from-[#06b6d4]"
       gradientTo="to-[#a855f7]"
       features={features}

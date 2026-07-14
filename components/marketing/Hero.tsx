@@ -77,7 +77,7 @@ export function Hero() {
         {/* Sparkle Badge */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted/60 text-xs font-semibold text-foreground/80 border border-border/40 select-none animate-pulse">
           <Sparkles className="h-3 w-3 text-yellow-500 fill-yellow-500" />
-          Introducing RTX Notion AI Workspace
+          Introducing Voltaic AI Workspace
         </div>
 
         {/* Headline */}
@@ -94,7 +94,7 @@ export function Hero() {
           ref={subRef}
           className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto font-medium"
         >
-          RTX Notion is the unified workspace that connects your docs, wikis, and project management with real-time sync and AI assistance.
+          Voltaic is the unified workspace that connects your docs, wikis, and project management with real-time sync and AI assistance.
         </p>
 
         {/* CTA Buttons */}
@@ -104,7 +104,7 @@ export function Hero() {
         >
           <Link href="/register" className="w-full sm:w-auto">
             <Button className="w-full h-11 text-base font-semibold bg-[#2383e2] hover:bg-[#1f75cb] text-white px-8 rounded-lg gap-2 shadow-none border-none">
-              Get RTX Notion free <ArrowRight className="h-5 w-5" />
+              Get Voltaic free <ArrowRight className="h-5 w-5" />
             </Button>
           </Link>
           <Link href="/login" className="w-full sm:w-auto">

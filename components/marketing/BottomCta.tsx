@@ -22,7 +22,7 @@ export function BottomCta() {
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link href="/register" className="w-full sm:w-auto">
             <Button className="w-full h-11 text-base font-semibold bg-[#2383e2] hover:bg-[#1f75cb] text-white px-8 rounded-lg gap-2 border-none shadow-none">
-              Get RTX Notion free <ArrowRight className="h-5 w-5" />
+              Get Voltaic free <ArrowRight className="h-5 w-5" />
             </Button>
           </Link>
           <Link href="/login" className="w-full sm:w-auto">

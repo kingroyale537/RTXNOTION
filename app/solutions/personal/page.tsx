@@ -45,7 +45,7 @@ export default function PersonalPage() {
   return (
     <MarketingPageLayout
       badge="Solutions"
-      title="RTX Notion for Personal Use"
+      title="Voltaic for Personal Use"
       subtitle="Organize your life. Clear your mind."
       description="Track your daily routines, list personal goals, and write meeting notes in a beautiful, customizable workspace designed for single-user productivity."
       gradientFrom="from-[#10b981]"

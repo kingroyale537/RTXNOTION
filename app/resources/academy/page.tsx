@@ -11,7 +11,7 @@ import { GraduationCap, Play, BookOpen, Star, HelpCircle } from "lucide-react";
 export default function AcademyPage() {
   const guides = [
     {
-      title: "Notion Basics: Getting Started",
+      title: "Voltaic Basics: Getting Started",
       duration: "10 mins video",
       level: "Beginner",
       desc: "Learn to write docs, insert slash commands, structure nesting hierarchy, and customize page layouts.",
@@ -26,7 +26,7 @@ export default function AcademyPage() {
       title: "Self-Hosting and Server Diagnostics",
       duration: "20 mins video",
       level: "Advanced",
-      desc: "Detailed guide to deploy RTX Notion via Docker, seed database tables, and scale WebSocket ports.",
+      desc: "Detailed guide to deploy Voltaic via Docker, seed database tables, and scale WebSocket ports.",
     },
     {
       title: "Co-Writing with AI Agents",
@@ -40,7 +40,7 @@ export default function AcademyPage() {
     <MarketingPageLayout
       badge="Resources"
       title="Academy"
-      subtitle="Master RTX Notion workflows."
+      subtitle="Master Voltaic workflows."
       description="Level up your workspace skills. Watch step-by-step video courses, read documentation tips, and explore advanced database structures from core contributors."
       gradientFrom="from-[#a855f7]"
       gradientTo="to-[#ec4899]"

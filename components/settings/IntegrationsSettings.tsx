@@ -127,7 +127,7 @@ export function IntegrationsSettings({ workspace, workspaceSlug }: Props) {
           <div className="mb-8">
             <h1 className="text-2xl font-bold tracking-tight text-white">Integrations</h1>
             <p className="text-[#94a3b8] mt-1 text-sm">
-              Connect RTX Notion with third-party tools to sync databases, files, and workspace messages.
+              Connect Voltaic with third-party tools to sync databases, files, and workspace messages.
             </p>
           </div>
 
@@ -173,7 +173,7 @@ export function IntegrationsSettings({ workspace, workspaceSlug }: Props) {
                 {/* ── Google Workspace Card ────────────────────────────── */}
                 <IntegrationCard
                   title="Google Workspace"
-                  description="Search your company files directly within RTX Notion and easily attach Drive folders inside your documents."
+                  description="Search your company files directly within Voltaic and easily attach Drive folders inside your documents."
                   logo={
                     <svg className="h-10 w-10 shrink-0" viewBox="0 0 24 24">
                       <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114A5.53 5.53 0 0 1 8.4 13a5.53 5.53 0 0 1 5.591-5.514c2.27 0 4.184 1.296 5.093 3.19l3.826-1.503C21.365 5.578 18.006 3.3 13.99 3.3 8.358 3.3 3.8 7.64 3.8 13s4.557 9.7 10.19 9.7c5.88 0 9.78-3.955 9.78-9.786 0-.648-.057-1.125-.13-1.629H12.24z" fill="#4285F4"/>

@@ -79,7 +79,7 @@ const STREAMING_WORDS = [
   "Running", "orchestration", "sequence:", "Model", "Gateway",
   "routed", "successfully.", "Tokens", "are", "streaming",
   "directly", "from", "the", "selected", "endpoint.",
-  "RTX", "Notion", "AI", "Engine", "is", "fully", "synchronized."
+  "RTX", "Voltaic", "AI", "Engine", "is", "fully", "synchronized."
 ];
 
 export default function AiOrchestrationPage() {

@@ -29,7 +29,7 @@ function SsoCallbackContent() {
       // Execute mock authentication callback
       const timer = setTimeout(async () => {
         const result = await signIn("credentials", {
-          email: `${domain.toLowerCase().replace(/[^a-z]/g, "")}-sso-mock@rtxnotion.com`,
+          email: `${domain.toLowerCase().replace(/[^a-z]/g, "")}-sso-mock@voltaic.com`,
           password: "mock-password-123",
           redirect: false,
         });
@@ -77,7 +77,7 @@ function SsoCallbackContent() {
         </div>
 
         <p className="text-[10px] text-gray-500">
-          RTX Notion SSO utilizes enterprise SAML 2.0 / OIDC integrations.
+          Voltaic SSO utilizes enterprise SAML 2.0 / OIDC integrations.
         </p>
       </div>
     </div>

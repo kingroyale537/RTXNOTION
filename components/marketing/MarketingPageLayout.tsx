@@ -37,7 +37,7 @@ export function MarketingPageLayout({
   gradientFrom = "from-[#4f46e5]",
   gradientTo = "from-[#06b6d4]",
   features = [],
-  ctaText = "Get RTX Notion free",
+  ctaText = "Get Voltaic free",
   ctaLink = "/register",
   children,
 }: Props) {
@@ -100,7 +100,7 @@ export function MarketingPageLayout({
         {features.length > 0 && (
           <section className="w-full max-w-6xl px-6 py-20 border-t border-[#1f1f1f]">
             <div className="text-center mb-16 space-y-2">
-              <h3 className="text-2xl sm:text-3xl font-black text-white">Why choose RTX Notion</h3>
+              <h3 className="text-2xl sm:text-3xl font-black text-white">Why choose Voltaic</h3>
               <p className="text-sm text-[#94a3b8]">Engineered for collaboration, speed, and clean documentation.</p>
             </div>
 

@@ -21,11 +21,11 @@ export function FeatureGrid() {
             A unified suite for every team.
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground">
-            No more jumping between docs, task trackers, and directories. RTX Notion brings it all into a single, clean workspace.
+            No more jumping between docs, task trackers, and directories. Voltaic brings it all into a single, clean workspace.
           </p>
         </div>
 
-        {/* Tab Selectors (Notion-style rounded grid buttons) */}
+        {/* Tab Selectors (Voltaic-style rounded grid buttons) */}
         <div className="grid grid-cols-3 gap-2.5 max-w-xl mx-auto p-1.5 bg-muted/50 rounded-xl border border-border/40 select-none">
           {(["wikis", "docs", "projects"] as TabId[]).map((tab) => {
             const isActive = activeTab === tab;
@@ -130,7 +130,7 @@ export function FeatureGrid() {
                 <div className="w-3 h-3 rounded-full bg-green-400/80" />
               </div>
               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                workspace://rtxnotion
+                workspace://voltaic
               </span>
               <div className="w-10" />
             </div>
@@ -160,7 +160,7 @@ export function FeatureGrid() {
               <div className="space-y-4 animate-fade-in">
                 <div className="text-xl font-extrabold text-foreground">🚀 Marketing Campaign Plan</div>
                 <p className="text-xs text-muted-foreground leading-normal">
-                  Collaborative plan for the RTX Notion product release. Written by the Marketing team.
+                  Collaborative plan for the Voltaic product release. Written by the Marketing team.
                 </p>
                 <div className="bg-muted/70 p-3 rounded-lg border border-border/20 text-xs font-mono text-foreground flex items-center gap-1.5 relative overflow-hidden">
                   <span className="text-blue-500 font-bold">@Sarah:</span>

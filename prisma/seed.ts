@@ -13,11 +13,11 @@ async function main() {
   const passwordHash = await bcrypt.hash("password123", 12);
 
   const admin = await prisma.user.upsert({
-    where: { email: "admin@rtxnotion.com" },
+    where: { email: "admin@voltaic.com" },
     update: {},
     create: {
       name: "Alex Admin",
-      email: "admin@rtxnotion.com",
+      email: "admin@voltaic.com",
       password: passwordHash,
       color: "#6366f1",
       emailVerified: new Date(),
@@ -25,11 +25,11 @@ async function main() {
   });
 
   const editor = await prisma.user.upsert({
-    where: { email: "editor@rtxnotion.com" },
+    where: { email: "editor@voltaic.com" },
     update: {},
     create: {
       name: "Emma Editor",
-      email: "editor@rtxnotion.com",
+      email: "editor@voltaic.com",
       password: passwordHash,
       color: "#ec4899",
       emailVerified: new Date(),
@@ -84,7 +84,7 @@ async function main() {
           {
             type: "heading",
             attrs: { level: 1 },
-            content: [{ type: "text", text: "Welcome to RTX Notion! 🚀" }],
+            content: [{ type: "text", text: "Welcome to Voltaic! 🚀" }],
           },
           {
             type: "paragraph",
@@ -179,8 +179,8 @@ async function main() {
   console.log("✅ Seed complete!");
   console.log("─────────────────────────────────────────");
   console.log("Demo credentials:");
-  console.log("  Admin  → admin@rtxnotion.com / password123");
-  console.log("  Editor → editor@rtxnotion.com / password123");
+  console.log("  Admin  → admin@voltaic.com / password123");
+  console.log("  Editor → editor@voltaic.com / password123");
   console.log("  Workspace slug: acme-team");
 }
 

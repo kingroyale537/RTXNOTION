@@ -18,7 +18,7 @@ export default function StartupsPage() {
     {
       icon: DollarSign,
       title: "Startups Credit Deal",
-      description: "Apply for early-stage credits. Startups under Series A get $1,000 in credits to run RTX Notion Workspace Pro free.",
+      description: "Apply for early-stage credits. Startups under Series A get $1,000 in credits to run Voltaic Workspace Pro free.",
     },
     {
       icon: Zap,
@@ -45,9 +45,9 @@ export default function StartupsPage() {
   return (
     <MarketingPageLayout
       badge="Solutions"
-      title="RTX Notion for Startups"
+      title="Voltaic for Startups"
       subtitle="Move fast. Keep context aligned."
-      description="In early-stage startups, speed is everything. RTX Notion consolidates your roadmaps, team wikis, and task lists into one environment, so you spend less time searching and more time shipping."
+      description="In early-stage startups, speed is everything. Voltaic consolidates your roadmaps, team wikis, and task lists into one environment, so you spend less time searching and more time shipping."
       gradientFrom="from-[#f59e0b]"
       gradientTo="to-[#ef4444]"
       features={features}

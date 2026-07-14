@@ -11,7 +11,7 @@ import { Calendar, User, ArrowRight } from "lucide-react";
 export default function BlogPage() {
   const posts = [
     {
-      title: "Introducing RTX Notion v1.2: Real-time Biometrics & Database Sorting",
+      title: "Introducing Voltaic v1.2: Real-time Biometrics & Database Sorting",
       date: "July 13, 2026",
       author: "Product Team",
       desc: "Our biggest release yet. Learn about the new native WebAuthn Passkeys biometric login options, custom columns sort and filter grids, and Azure AD Microsoft provider integration.",
@@ -23,7 +23,7 @@ export default function BlogPage() {
       desc: "A deep dive into our collaborative server architecture. Learn how we optimized Socket.io connection handshakes and resolved Prisma transaction bottlenecks for block elements.",
     },
     {
-      title: "Why Startups Choose RTX Notion for Document Management",
+      title: "Why Startups Choose Voltaic for Document Management",
       date: "May 15, 2026",
       author: "Workspace Success",
       desc: "Read customer stories from fast-growing startups on how nesting wikis and task checklists inside the same workspace accelerated release speeds and cut communication overhead.",
@@ -35,7 +35,7 @@ export default function BlogPage() {
       badge="Resources"
       title="Blog"
       subtitle="Latest updates & engineering logs."
-      description="Stay updated with our latest feature releases, design tutorials, and engineering articles written directly by the creators of RTX Notion."
+      description="Stay updated with our latest feature releases, design tutorials, and engineering articles written directly by the creators of Voltaic."
       gradientFrom="from-[#3b82f6]"
       gradientTo="to-[#22c55e]"
     >

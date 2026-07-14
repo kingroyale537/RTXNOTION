@@ -1,5 +1,5 @@
 // app/page.tsx
-// Root marketing page: authenticated users → /dashboard, guests → Notion-style animated landing page
+// Root marketing page: authenticated users → /dashboard, guests → Voltaic-style animated landing page
 
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";

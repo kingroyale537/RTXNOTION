@@ -50,7 +50,7 @@ export function RegisterForm() {
         return;
       }
 
-      toast.success("Welcome to RTX Notion! 🚀");
+      toast.success("Welcome to Voltaic! 🚀");
       router.push("/dashboard");
       router.refresh();
     } catch {

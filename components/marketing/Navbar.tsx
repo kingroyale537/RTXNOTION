@@ -4,7 +4,7 @@
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, ArrowRight, ChevronDown } from "lucide-react";
+import { Menu, X, ArrowRight, ChevronDown, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Navbar() {
@@ -32,11 +32,11 @@ export function Navbar() {
         {/* Logo and Name */}
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-foreground text-background font-bold text-lg select-none group-hover:scale-105 transition-transform">
-              N
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-400 text-black select-none group-hover:scale-105 transition-transform">
+              <Zap className="h-4 w-4 fill-current" />
             </div>
             <span className="font-bold tracking-tight text-lg text-foreground">
-              RTX Notion
+              Voltaic
             </span>
           </Link>
 
@@ -90,7 +90,7 @@ export function Navbar() {
               </Link>
               <Link href="/register">
                 <Button className="h-9 font-medium text-sm bg-[#2383e2] hover:bg-[#1f75cb] text-white rounded-lg px-4 border-none shadow-none">
-                  Get RTX Notion free
+                  Get Voltaic free
                 </Button>
               </Link>
             </>
@@ -169,7 +169,7 @@ export function Navbar() {
               </Link>
               <Link href="/register" onClick={() => setIsOpen(false)}>
                 <Button className="w-full bg-[#2383e2] hover:bg-[#1f75cb] text-white rounded-lg border-none shadow-none">
-                  Get RTX Notion free
+                  Get Voltaic free
                 </Button>
               </Link>
             </div>

@@ -20,7 +20,7 @@ const httpServer = createServer();
 
 const allowedOrigins = [
   process.env.NEXTAUTH_URL,
-  "https://rtxnotion.vercel.app",
+  "https://voltaic.vercel.app",
   "http://localhost:3000",
 ].filter(Boolean) as string[];
 
@@ -32,7 +32,7 @@ const io = new Server(httpServer, {
         allowedOrigins.indexOf(origin) !== -1 ||
         origin.startsWith("http://localhost:") ||
         origin.endsWith(".vercel.app") ||
-        /^https:\/\/rtxnotion.*\.vercel\.app$/.test(origin);
+        /^https:\/\/voltaic.*\.vercel\.app$/.test(origin);
       if (isAllowed) {
         callback(null, true);
       } else {
@@ -301,7 +301,7 @@ io.on("connection", (socket: Socket) => {
 // ─── Start server ─────────────────────────────────────────────────────────────
 const PORT = Number(process.env.PORT ?? process.env.WS_PORT ?? 3001);
 httpServer.listen(PORT, () => {
-  console.log(`\n🔌 RTX Notion WebSocket server running on port ${PORT}`);
+  console.log(`\n🔌 Voltaic WebSocket server running on port ${PORT}`);
   console.log(`   Accepting connections from ${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}\n`);
 });
 

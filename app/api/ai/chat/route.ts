@@ -12,7 +12,7 @@ import { Res, getAuthUser, requireWorkspaceMember } from "@/lib/api-helpers";
 import prisma from "@/lib/prisma";
 
 // ─── Token Decryption Helper ───────────────────────────────────────────────
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET || "default-32-char-encryption-key-for-rtxnotion";
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || process.env.NEXTAUTH_SECRET || "default-32-char-encryption-key-for-voltaic";
 const hashKey = crypto.createHash("sha256").update(ENCRYPTION_KEY).digest();
 
 function decryptToken(encryptedText: string): string {
@@ -186,7 +186,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 5. Wrap user input in a strict system prompt layer to prevent injection
-    const systemPrompt = `You are RTX Notion Orchestrator, a secure collaborative AI agent.
+    const systemPrompt = `You are Voltaic Orchestrator, a secure collaborative AI agent.
 You can query Slack messages and Google Drive files using your dynamic tools if they are registered and available.
 
 [SECURITY PERIMETER]

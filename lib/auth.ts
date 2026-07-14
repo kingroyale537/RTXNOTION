@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Mock Login Handler (e.g. for oauth/sso/passkey fallback when Client IDs aren't in .env)
-        if (credentials.email.endsWith("@rtxnotion.com") && credentials.password === "mock-password-123") {
+        if (credentials.email.endsWith("@voltaic.com") && credentials.password === "mock-password-123") {
           let user = await prisma.user.findUnique({
             where: { email: credentials.email },
           });

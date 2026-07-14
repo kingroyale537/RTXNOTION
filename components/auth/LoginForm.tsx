@@ -1,5 +1,5 @@
 // components/auth/LoginForm.tsx
-// Notion-style LoginForm: credentials fields + mock OAuth/SSO/Passkey providers.
+// Voltaic-style LoginForm: credentials fields + mock OAuth/SSO/Passkey providers.
 
 "use client";
 
@@ -101,7 +101,7 @@ export function LoginForm() {
 
     // Complete sign-in
     const result = await signIn("credentials", {
-      email: "passkey-mock@rtxnotion.com",
+      email: "passkey-mock@voltaic.com",
       password: "mock-password-123",
       redirect: false,
     });

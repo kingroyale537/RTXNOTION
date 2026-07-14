@@ -27,7 +27,7 @@ export default function WikisPage() {
     },
     {
       icon: Sparkles,
-      title: "Notion AI Integration",
+      title: "Voltaic AI Integration",
       description: "Leverage embedded AI agents to summarize wiki pages, answer cross-document questions, and draft team guidelines.",
     },
     {
@@ -47,7 +47,7 @@ export default function WikisPage() {
       badge="Product"
       title="Wikis"
       subtitle="Centralize your company knowledge."
-      description="Say goodbye to scattered folders and disconnected files. RTX Notion Wikis consolidate your engineering manuals, company playbooks, and product guidelines in one clean, instantly searchable workspace."
+      description="Say goodbye to scattered folders and disconnected files. Voltaic Wikis consolidate your engineering manuals, company playbooks, and product guidelines in one clean, instantly searchable workspace."
       gradientFrom="from-[#a855f7]"
       gradientTo="to-[#6366f1]"
       features={features}

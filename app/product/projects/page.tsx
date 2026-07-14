@@ -47,7 +47,7 @@ export default function ProjectsPage() {
       badge="Product"
       title="Projects"
       subtitle="Track plans from kick-off to release."
-      description="Connect your meeting docs with task boards. RTX Notion Projects keeps tasks and checklists in the same environment as your specs, keeping execution in sync with plans."
+      description="Connect your meeting docs with task boards. Voltaic Projects keeps tasks and checklists in the same environment as your specs, keeping execution in sync with plans."
       gradientFrom="from-[#ef4444]"
       gradientTo="to-[#f97316]"
       features={features}

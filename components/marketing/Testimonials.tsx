@@ -57,7 +57,7 @@ export function Testimonials() {
               Loved by thousands of creators.
             </h3>
             <p className="text-sm sm:text-base text-muted-foreground">
-              See how teams are optimizing their collaboration using RTX Notion.
+              See how teams are optimizing their collaboration using Voltaic.
             </p>
           </div>
 
@@ -66,7 +66,7 @@ export function Testimonials() {
             <div className="bg-card border border-border/60 p-6 rounded-2xl shadow-sm relative space-y-4">
               <Quote className="absolute right-6 top-6 h-8 w-8 text-muted-foreground/15" />
               <p className="text-sm text-foreground/80 leading-relaxed italic">
-                &quot;RTX Notion transformed how our engineering team writes code guidelines and plans product roadmaps. The real-time sync is incredibly fast and reliable.&quot;
+                &quot;Voltaic transformed how our engineering team writes code guidelines and plans product roadmaps. The real-time sync is incredibly fast and reliable.&quot;
               </p>
               <div className="flex items-center gap-3 border-t border-border/40 pt-4">
                 <div className="w-8 h-8 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-xs select-none">

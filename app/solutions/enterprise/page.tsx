@@ -28,7 +28,7 @@ export default function EnterprisePage() {
     {
       icon: Building2,
       title: "Dedicated Deployment Support",
-      description: "Self-host RTX Notion on private AWS or GCP environments with direct setup support from core engineers.",
+      description: "Self-host Voltaic on private AWS or GCP environments with direct setup support from core engineers.",
     },
     {
       icon: Users,
@@ -45,9 +45,9 @@ export default function EnterprisePage() {
   return (
     <MarketingPageLayout
       badge="Solutions"
-      title="RTX Notion for Enterprise"
+      title="Voltaic for Enterprise"
       subtitle="Secure, collaborative, enterprise-grade."
-      description="Equip your organization with a collaborative workspace that keeps data secure. RTX Notion Enterprise offers SAML SSO integrations, role permissions controls, and audit trails."
+      description="Equip your organization with a collaborative workspace that keeps data secure. Voltaic Enterprise offers SAML SSO integrations, role permissions controls, and audit trails."
       gradientFrom="from-[#4f46e5]"
       gradientTo="to-[#a855f7]"
       features={features}

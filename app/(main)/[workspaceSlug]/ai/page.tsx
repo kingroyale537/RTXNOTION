@@ -1,5 +1,5 @@
 // app/(main)/[workspaceSlug]/ai/page.tsx
-// Notion AI chat assistant page: workspace-aware, styled with pixel-perfect mockup fidelity.
+// Voltaic AI chat assistant page: workspace-aware, styled with pixel-perfect mockup fidelity.
 
 "use client";
 
@@ -34,7 +34,7 @@ interface Message {
 const PRESET_SUGGESTIONS = [
   {
     title: "Track and organize any kind of work",
-    prompt: "Show me how to track tasks, organize my schedule, and structure projects using RTX Notion.",
+    prompt: "Show me how to track tasks, organize my schedule, and structure projects using Voltaic.",
     emoji: "📋",
   },
   {
@@ -150,9 +150,9 @@ export default function AiChatPage() {
       <header className="h-11 border-b border-[#2a2a2a] flex items-center justify-between px-6 bg-[#191919] select-none text-xs text-gray-400">
         <div className="flex items-center gap-2">
           <Sparkles className="h-3.5 w-3.5 text-purple-400" />
-          <span className="font-semibold text-gray-200">Notion AI</span>
+          <span className="font-semibold text-gray-200">Voltaic AI</span>
           <span>/</span>
-          <span>Welcome to Notion AI</span>
+          <span>Welcome to Voltaic AI</span>
           <ChevronDown className="h-3 w-3" />
         </div>
       </header>
@@ -164,13 +164,13 @@ export default function AiChatPage() {
             {/* Welcoming message */}
             <div className="space-y-4 mb-10">
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-2">
-                Hi {userName}. I&apos;m Notion AI 👋
+                Hi {userName}. I&apos;m Voltaic AI 👋
               </h1>
               <p className="text-gray-300 text-base leading-relaxed font-medium">
                 Yes, another AI, I know. But I actually get work done for you — not just talk about it.
               </p>
               <p className="text-gray-300 text-base leading-relaxed font-medium">
-                Think of Notion as your home base for work. Meetings, tasks, and projects are all in one place, all connected.
+                Think of Voltaic as your home base for work. Meetings, tasks, and projects are all in one place, all connected.
               </p>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Let&apos;s get started. Tell me what you&apos;re here to do or jump in with what most people start with:
@@ -183,7 +183,7 @@ export default function AiChatPage() {
                 <AlertTriangle className="h-5 w-5 text-yellow-500 shrink-0 mt-0.5" />
                 <div className="text-xs text-gray-300">
                   <span className="font-bold text-yellow-500 block mb-1">GEMINI_API_KEY NOT CONFIGURED</span>
-                  To enable Notion AI features, you need to add your Gemini API Key to your `.env` file or Vercel environment variables:
+                  To enable Voltaic AI features, you need to add your Gemini API Key to your `.env` file or Vercel environment variables:
                   <div className="bg-black/40 p-2.5 rounded border border-[#2e2e2e] mt-2 font-mono text-[10px] select-text">
                     GEMINI_API_KEY=your_gemini_key_here
                   </div>
@@ -263,7 +263,7 @@ export default function AiChatPage() {
             {isLoading && (
               <div className="flex items-center gap-3 text-sm text-gray-400">
                 <Loader2 className="h-4 w-4 animate-spin text-purple-400" />
-                <span>Notion AI is thinking…</span>
+                <span>Voltaic AI is thinking…</span>
               </div>
             )}
 

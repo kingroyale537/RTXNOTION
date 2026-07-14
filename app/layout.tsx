@@ -19,19 +19,19 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "RTX Notion – Collaborative Workspace",
-    template: "%s | RTX Notion",
+    default: "Voltaic – Collaborative Workspace",
+    template: "%s | Voltaic",
   },
   description:
     "A self-hosted, real-time collaborative workspace for your team – create pages, share knowledge, and work together.",
-  keywords: ["notion", "workspace", "collaboration", "notes", "knowledge base"],
-  authors: [{ name: "RTX Notion" }],
+  keywords: ["voltaic", "workspace", "collaboration", "notes", "knowledge base"],
+  authors: [{ name: "Voltaic" }],
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "RTX Notion",
+    title: "Voltaic",
     description: "Real-time collaborative workspace for your team",
-    siteName: "RTX Notion",
+    siteName: "Voltaic",
   },
 };
 

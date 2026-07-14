@@ -177,7 +177,7 @@ export function BubbleToolbar({ editor, onTriggerAi }: Props) {
                   onTriggerAi(from, to, text);
                 }}
                 className="flex items-center gap-1 px-2.5 h-8 rounded-md text-xs font-bold transition-colors bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 mr-1.5 flex-shrink-0"
-                title="Ask Notion AI to write or edit"
+                title="Ask Voltaic AI to write or edit"
               >
                 <Sparkles className="h-3.5 w-3.5 text-purple-400" />
                 <span>Ask AI</span>

@@ -198,7 +198,7 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
       {/* ── Premium Onboarding Card ───────────────────────────────────────── */}
       <div className="mx-3.5 mb-3 p-3 rounded-xl bg-gradient-to-br from-[#222222] to-[#151515] border border-[#2a2a2a] relative overflow-hidden flex flex-col gap-2 shadow-inner">
         <div className="w-full h-16 rounded-lg bg-[#191919]/60 border border-[#2c2c2c] overflow-hidden relative flex items-center justify-center">
-          <div className="absolute top-1 left-1.5 text-[8px] text-gray-600 font-mono tracking-widest">NOTION AI</div>
+          <div className="absolute top-1 left-1.5 text-[8px] text-gray-600 font-mono tracking-widest">VOLTAIC AI</div>
           <div className="flex gap-1 items-end h-6">
             <div className="w-2 h-4 bg-purple-500/20 border border-purple-500/35 rounded-sm" />
             <div className="w-2 h-8 bg-blue-500/30 border border-blue-500/40 rounded-sm relative">
@@ -209,7 +209,7 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
           <div className="absolute top-2 right-3 text-[10px] opacity-40">☁️</div>
         </div>
         <div className="flex flex-col gap-0.5">
-          <h4 className="text-[11px] font-bold text-white tracking-wide">Build your ideal Notion</h4>
+          <h4 className="text-[11px] font-bold text-white tracking-wide">Build your ideal Voltaic</h4>
           <p className="text-[9px] text-gray-400 font-medium">Create pages, databases, and agents</p>
         </div>
       </div>
@@ -305,12 +305,12 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
               <button
                 onClick={() => {
                   toggleAiSidebar();
-                  setActiveAgentId("welcome-notion");
+                  setActiveAgentId("welcome-voltaic");
                 }}
                 className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs text-gray-300 hover:bg-[#2c2c2c] hover:text-white transition text-left"
               >
                 <span>🌴</span>
-                <span className="truncate">Welcome to Notion</span>
+                <span className="truncate">Welcome to Voltaic</span>
               </button>
               <button
                 onClick={() => {
@@ -348,7 +348,7 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
           {/* 4. Help & Library */}
           <div className="space-y-0.5 pt-2">
             <button
-              onClick={() => toast.success("Accessing RTX Notion documentation...")}
+              onClick={() => toast.success("Accessing Voltaic documentation...")}
               className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs text-gray-400 hover:bg-[#2c2c2c] hover:text-white transition text-left"
             >
               <BookOpen className="h-3.5 w-3.5" />

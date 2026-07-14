@@ -11,12 +11,12 @@ import { Search, HelpCircle, Key, Users, BookOpen, MessageSquare } from "lucide-
 export default function HelpCenterPage() {
   const faqs = [
     {
-      q: "How does real-time collaboration work in RTX Notion?",
-      a: "RTX Notion uses Yjs CRDT technology backed by a WebSocket server. When multiple users open the same page, edits sync seamlessly character-by-character, and users see each other's live cursor selections.",
+      q: "How does real-time collaboration work in Voltaic?",
+      a: "Voltaic uses Yjs CRDT technology backed by a WebSocket server. When multiple users open the same page, edits sync seamlessly character-by-character, and users see each other's live cursor selections.",
     },
     {
-      q: "Can I self-host RTX Notion on my company servers?",
-      a: "Yes! RTX Notion is designed as a self-hosted workspace package. You can configure your local PostgreSQL database, setup NextAuth credentials, and launch it in Docker containers easily.",
+      q: "Can I self-host Voltaic on my company servers?",
+      a: "Yes! Voltaic is designed as a self-hosted workspace package. You can configure your local PostgreSQL database, setup NextAuth credentials, and launch it in Docker containers easily.",
     },
     {
       q: "What security features are supported for enterprise SSO?",

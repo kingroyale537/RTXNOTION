@@ -131,7 +131,7 @@ export default function OnboardingPage() {
         {step === 1 ? (
           <div className="w-full text-center">
             <h1 className="text-3xl font-bold tracking-tight mb-2">
-              How do you want to use RTX Notion?
+              How do you want to use Voltaic?
             </h1>
             <p className="text-gray-400 text-sm mb-8">This helps customize your experience</p>
 
@@ -237,7 +237,7 @@ export default function OnboardingPage() {
                   className="h-4 w-4 rounded border-gray-600 bg-gray-800 text-primary focus:ring-primary focus:ring-offset-gray-900"
                 />
                 <span className="text-xs font-medium text-gray-400 group-hover:text-white transition">
-                  I agree to RTX Notion marketing communications
+                  I agree to Voltaic marketing communications
                 </span>
               </label>
             </div>
@@ -283,7 +283,7 @@ export default function OnboardingPage() {
                   </Label>
                   <div className="flex items-center mt-1.5">
                     <span className="flex h-11 items-center rounded-l-md border border-r-0 border-[#3e3e3e] bg-[#2d2d2d] px-3 text-sm text-gray-400 select-none">
-                      rtxnotion.app/
+                      voltaic.app/
                     </span>
                     <Input
                       id="ws-slug"

@@ -54,7 +54,7 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
         setIsLoading: (isLoading) => set({ isLoading }),
       }),
       {
-        name: "rtxnotion-workspace",
+        name: "voltaic-workspace",
         // Only persist the current workspace ID, not full object
         partialize: (s) => ({ workspaces: s.workspaces }),
       }

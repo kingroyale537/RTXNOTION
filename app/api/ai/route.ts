@@ -1,5 +1,5 @@
 // app/api/ai/route.ts
-// Backend endpoint for RTX Notion AI. Supports both Q&A workspace chat and inline editing.
+// Backend endpoint for Voltaic AI. Supports both Q&A workspace chat and inline editing.
 
 import { NextRequest } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return Res.error("GEMINI_API_KEY is not configured. Please add it to your environment variables to enable Notion AI.", 400);
+      return Res.error("GEMINI_API_KEY is not configured. Please add it to your environment variables to enable Voltaic AI.", 400);
     }
 
     const body = await req.json();
@@ -101,7 +101,7 @@ ${p.contentText || "(Empty)"}
         }
       }
 
-      const systemPrompt = `You are RTX Notion AI, a helpful AI assistant integrated into the user's collaborative workspace.
+      const systemPrompt = `You are Voltaic AI, a helpful AI assistant integrated into the user's collaborative workspace.
 You can answer questions, summarize pages, draft copy, or help brainstorm ideas.
 
 [SECURITY PERIMETER]

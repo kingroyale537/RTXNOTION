@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import { Zap } from "lucide-react";
 
 export function Footer() {
   return (
@@ -11,18 +12,18 @@ export function Footer() {
         {/* Logo and Name column */}
         <div className="col-span-2 space-y-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-7.5 h-7.5 rounded-lg bg-foreground text-background font-bold text-base select-none">
-              N
+            <div className="flex items-center justify-center w-[30px] h-[30px] rounded-lg bg-amber-400 text-black select-none">
+              <Zap className="h-4 w-4 fill-current" />
             </div>
             <span className="font-bold tracking-tight text-base text-foreground">
-              RTX Notion
+              Voltaic
             </span>
           </Link>
           <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
             A self-hosted, collaborative workspace designed to organize your docs, wikis, and projects in one beautiful environment.
           </p>
           <p className="text-[10px] text-muted-foreground/80">
-            &copy; {new Date().getFullYear()} RTX Notion. All rights reserved.
+            &copy; {new Date().getFullYear()} Voltaic. All rights reserved.
           </p>
         </div>
 
