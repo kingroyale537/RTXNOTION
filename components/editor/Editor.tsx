@@ -280,7 +280,7 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
       editorProps: {
         attributes: {
           id: "page-editor",
-          class: "prose prose-slate dark:prose-invert max-w-none outline-none min-h-[60vh] focus:outline-none",
+          class: "prose prose-invert prose-slate max-w-none outline-none min-h-[60vh] focus:outline-none",
           "data-page-id": pageId,
           spellcheck: "true",
         },
