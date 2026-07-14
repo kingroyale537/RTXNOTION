@@ -1,10 +1,9 @@
 // app/waitlist/page.tsx
-// Interactive early-access waitlist landing page mirroring the design.
+// Stateful client Waitlist Page using native CSS transitions for maximum reliability.
 
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { 
   Globe, 
@@ -67,9 +66,18 @@ const features = [
 ];
 
 export default function WaitlistPage() {
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Trigger layout fade-in on next tick
+    const timer = setTimeout(() => setVisible(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Handle Waitlist subscription submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -105,11 +113,17 @@ export default function WaitlistPage() {
     }
   };
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen w-full bg-[#030303] flex items-center justify-center" />
+    );
+  }
+
   return (
     <div className="min-h-screen w-full bg-[#030303] flex items-center justify-center p-4 sm:p-6 transition-colors duration-500 overflow-y-auto">
       {/* Outer mock card interface */}
       <div 
-        className={`w-full max-w-[900px] rounded-[32px] overflow-hidden shadow-2xl transition-colors duration-500 border ${
+        className={`w-full max-w-[900px] rounded-[32px] overflow-hidden shadow-2xl transition-all duration-500 border ${
           theme === "light" 
             ? "bg-[#fafafa] border-zinc-200/50 text-zinc-900" 
             : "bg-[#09090b] border-zinc-800/50 text-zinc-100"
@@ -128,11 +142,9 @@ export default function WaitlistPage() {
               }`}
             >
               {/* Sliding Background */}
-              <motion.div 
-                layout 
-                transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                className={`absolute top-1 bottom-1 w-[38px] rounded-full shadow-sm ${
-                  theme === "light" ? "bg-zinc-900 left-1" : "bg-white right-1"
+              <div 
+                className={`absolute top-1 bottom-1 w-[38px] rounded-full shadow-sm transition-all duration-300 ease-out ${
+                  theme === "light" ? "bg-zinc-900 left-1" : "bg-white left-[47px]"
                 }`}
               />
               
@@ -157,56 +169,52 @@ export default function WaitlistPage() {
           </div>
 
           {/* Badge: Beyond Artificial */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border mb-6 tracking-wide select-none ${
+          <div 
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border mb-6 tracking-wide select-none transition-all duration-700 transform ease-out ${
               theme === "light"
                 ? "bg-zinc-100/70 text-zinc-600 border-zinc-200/40"
                 : "bg-zinc-900/70 text-zinc-400 border-zinc-800/40"
+            } ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Beyond Artificial</span>
-          </motion.div>
+          </div>
 
           {/* Main Title Header */}
-          <motion.h1 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className={`text-3.5xl sm:text-[44px] font-extrabold tracking-tight text-center max-w-xl leading-[1.1] mb-5 select-none ${
+          <h1 
+            className={`text-3.5xl sm:text-[44px] font-extrabold tracking-tight text-center max-w-xl leading-[1.1] mb-5 select-none transition-all duration-700 delay-100 transform ease-out ${
               theme === "light" ? "text-[#18181b]" : "text-white"
+            } ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             }`}
           >
             Early Access to <br />
             Game-Changing AI
-          </motion.h1>
+          </h1>
 
           {/* Subheading Description */}
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className={`text-center max-w-[420px] text-[14px] sm:text-[15px] leading-relaxed mb-8 ${
+          <p 
+            className={`text-center max-w-[420px] text-[14px] sm:text-[15px] leading-relaxed mb-8 transition-all duration-700 delay-200 transform ease-out ${
               theme === "light" ? "text-zinc-500" : "text-zinc-400"
+            } ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             }`}
           >
             Unlock exclusive early access to groundbreaking AI. <br className="hidden sm:inline" />
             Subscribe now and stay ahead of the future!
-          </motion.p>
+          </p>
 
           {/* Subscription Input Form */}
-          <motion.form 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+          <form 
             onSubmit={handleSubmit}
-            className={`flex items-center p-1.5 rounded-full w-full max-w-[410px] shadow-sm mb-6 border focus-within:ring-2 transition-all duration-300 ${
+            className={`flex items-center p-1.5 rounded-full w-full max-w-[410px] shadow-sm mb-6 border focus-within:ring-2 transition-all duration-700 delay-300 transform ease-out ${
               theme === "light"
                 ? "bg-zinc-100/50 border-zinc-200/80 focus-within:ring-zinc-900/10"
                 : "bg-zinc-900/50 border-zinc-800/80 focus-within:ring-white/10"
+            } ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             }`}
           >
             <input 
@@ -222,7 +230,7 @@ export default function WaitlistPage() {
             <button 
               type="submit" 
               disabled={loading}
-              className={`flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-full font-semibold transition text-xs sm:text-sm active:scale-[0.98] shadow-sm ${
+              className={`flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-full font-semibold transition-all duration-200 text-xs sm:text-sm active:scale-[0.98] shadow-sm ${
                 theme === "light"
                   ? "bg-zinc-900 hover:bg-zinc-800 text-white"
                   : "bg-white hover:bg-zinc-100 text-zinc-950"
@@ -235,41 +243,39 @@ export default function WaitlistPage() {
               )}
               <span>Subscribe</span>
             </button>
-          </motion.form>
+          </form>
 
           {/* Social Proof */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="flex items-center gap-2.5 mb-14"
+          <div 
+            className={`flex items-center gap-2.5 mb-14 transition-all duration-700 delay-500 ease-out ${
+              theme === "light" ? "text-zinc-500" : "text-zinc-400"
+            } ${
+              visible ? "opacity-100" : "opacity-0"
+            }`}
           >
             <AvatarGroup />
-            <span className={`text-[12px] font-medium ${
-              theme === "light" ? "text-zinc-500" : "text-zinc-400"
-            }`}>
+            <span className="text-[12px] font-medium">
               Trusted by 1,000+ early adopters
             </span>
-          </motion.div>
+          </div>
 
           {/* Bottom Card Columns Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-[760px] pt-6 border-t border-zinc-200/30 dark:border-zinc-800/30">
             {features.map((feature, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 + i * 0.1 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                className={`relative px-5 py-8 rounded-[20px] flex flex-col items-center shadow-[0_4px_20px_rgba(0,0,0,0.02)] ${
+                className={`relative px-5 py-8 rounded-[20px] flex flex-col items-center shadow-[0_4px_20px_rgba(0,0,0,0.02)] transition-all duration-700 hover:-translate-y-1 transform ease-out ${
                   theme === "light" 
                     ? "bg-[#fcfcfc] border border-zinc-200/20" 
                     : "bg-[#111115] border border-zinc-800/30"
+                } ${
+                  visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
+                style={{ transitionDelay: `${600 + i * 100}ms` }}
               >
                 {/* Floating Icon Container */}
                 <div 
-                  className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md mb-4 border-4 ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md mb-4 border-4 transition-colors duration-500 ${
                     theme === "light"
                       ? "bg-zinc-900 border-white text-white"
                       : "bg-zinc-800 border-[#09090b] text-white"
@@ -284,7 +290,7 @@ export default function WaitlistPage() {
                 }`}>
                   {feature.title}
                 </h3>
-              </motion.div>
+              </div>
             ))}
           </div>
 

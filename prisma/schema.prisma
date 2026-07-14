@@ -88,6 +88,7 @@ model User {
   pagePresence         PagePresence[]
   uploadedMedia        Media[]
   notifications        Notification[]
+  agentJobs            AgentJob[]
 
   @@map("users")
 }
@@ -164,6 +165,8 @@ model Workspace {
   media       Media[]
   databases   Database[]
   integrations Integration[]
+  agentJobs     AgentJob[]
+  agentTriggers AgentTrigger[]
 
   @@map("workspaces")
 }
@@ -522,4 +525,59 @@ model WaitlistEntry {
 
   @@map("waitlist_entries")
 }
+
+// =============================================================================
+// BACKGROUND AGENT MODELS
+// =============================================================================
+
+model AgentJob {
+  id          String      @id @default(cuid())
+  workspaceId String
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      String      // PENDING, RUNNING, COMPLETED, FAILED, ABORTED, TIMEOUT
+  triggerType String      // MANUAL, SCHEDULE, WEBHOOK
+  tokenUsage  Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  steps       AgentStep[]
+
+  @@index([workspaceId])
+  @@index([status])
+  @@map("agent_jobs")
+}
+
+model AgentStep {
+  id          String    @id @default(cuid())
+  jobId       String
+  job         AgentJob  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name        String    // E.g., "readWorkspacePage", "writeToPage", "searchWorkspaceMetadata"
+  status      String    // PENDING, EXECUTING, SUCCESS, FAILED
+  input       String?   @db.Text // JSON payload of step inputs
+  output      String?   @db.Text // JSON/Text output of the action
+  error       String?   @db.Text // Complete exception detail / stderr
+  startedAt   DateTime  @default(now())
+  finishedAt  DateTime?
+
+  @@index([jobId])
+  @@map("agent_steps")
+}
+
+model AgentTrigger {
+  id          String    @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  type        String    // SCHEDULE, MANUAL, WEBHOOK
+  config      String    @db.Text // JSON stringified configuration (cron, keys, etc.)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([workspaceId])
+  @@map("agent_triggers")
+}
+
 
