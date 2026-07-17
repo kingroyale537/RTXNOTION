@@ -23,7 +23,6 @@ export async function GET(req: NextRequest, { params }: Ctx) {
         orderBy: { createdAt: "desc" },
         skip,
         take,
-        // Don't return full content in the list (expensive) – only on demand
         select: {
           id: true,
           pageId: true,
@@ -35,8 +34,21 @@ export async function GET(req: NextRequest, { params }: Ctx) {
       prisma.pageVersion.count({ where: { pageId: params.pageId } }),
     ]);
 
+    // Query and map author profiles in-memory
+    const authorIds = Array.from(new Set(versions.map((v) => v.authorId)));
+    const authors = await prisma.user.findMany({
+      where: { id: { in: authorIds } },
+      select: { id: true, name: true, email: true, image: true },
+    });
+    const authorMap = new Map(authors.map((a) => [a.id, a]));
+
+    const versionsWithAuthors = versions.map((v) => ({
+      ...v,
+      author: authorMap.get(v.authorId) || null,
+    }));
+
     return Res.ok({
-      data: versions,
+      data: versionsWithAuthors,
       total,
       page,
       pageSize,

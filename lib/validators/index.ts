@@ -52,6 +52,7 @@ export const updatePageSchema = z.object({
   isArchived: z.boolean().optional(),
   sortOrder: z.number().optional(),
   parentId: z.string().cuid().nullable().optional(),
+  properties: z.any().optional(),
 });
 
 export const movePageSchema = z.object({

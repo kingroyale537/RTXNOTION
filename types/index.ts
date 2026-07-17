@@ -73,6 +73,7 @@ export interface PageTree {
   sortOrder: number;
   isArchived: boolean;
   workspaceId: string;
+  properties?: any;
   children: PageTree[];
   _count?: { children: number };
 }

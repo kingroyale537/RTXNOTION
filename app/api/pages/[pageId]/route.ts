@@ -74,6 +74,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
       isArchived,
       sortOrder,
       parentId,
+      properties,
     } = parsed.data;
 
     // Snapshot the current content as a version before updating
@@ -108,6 +109,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
         ...(isArchived !== undefined && { isArchived }),
         ...(sortOrder !== undefined && { sortOrder }),
         ...(parentId !== undefined && { parentId }),
+        ...(properties !== undefined && { properties }),
         lastEditedById: user.id,
       },
     });

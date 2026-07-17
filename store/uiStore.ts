@@ -26,6 +26,14 @@ interface UIStore {
   settingsOpen: boolean;
   setSettingsOpen: (open: boolean) => void;
 
+  // Trash modal
+  trashOpen: boolean;
+  setTrashOpen: (open: boolean) => void;
+
+  // History sidebar
+  historyOpen: boolean;
+  setHistoryOpen: (open: boolean) => void;
+
   // Share modal
   sharePageId: string | null;
   setSharePageId: (id: string | null) => void;
@@ -57,6 +65,12 @@ export const useUIStore = create<UIStore>()(
 
         settingsOpen: false,
         setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
+
+        trashOpen: false,
+        setTrashOpen: (trashOpen) => set({ trashOpen }),
+
+        historyOpen: false,
+        setHistoryOpen: (historyOpen) => set({ historyOpen }),
 
         sharePageId: null,
         setSharePageId: (sharePageId) => set({ sharePageId }),

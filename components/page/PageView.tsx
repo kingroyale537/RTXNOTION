@@ -11,6 +11,8 @@ import { usePresence } from "@/hooks/usePresence";
 import { PageHeader } from "@/components/page/PageHeader";
 import { PageBreadcrumb } from "@/components/page/PageBreadcrumb";
 import { DatabaseView } from "@/components/page/DatabaseView";
+import { VersionHistorySidebar } from "@/components/page/VersionHistorySidebar";
+import { useUIStore } from "@/store/uiStore";
 import type { PageWithRelations } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +48,7 @@ interface Props {
 export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canEdit }: Props) {
   const { setCurrentPage } = usePageStore();
   const { socket } = useSocket(workspaceId);
+  const { historyOpen, setHistoryOpen } = useUIStore();
   
   // Choose default view based on page properties
   const isDefaultDatabase = page.title === "Notes" || page.title === "Team HQ" || (page._count?.children ?? 0) > 0;
@@ -69,63 +72,72 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
         pageId={page.id}
       />
 
-      {/* Scrollable page content */}
-      <div className="flex-1 overflow-auto bg-[#191919] text-[#f3f4f6]">
-        <div className="min-h-full pb-16">
-          {/* Cover image + emoji icon + editable title */}
-          <PageHeader
-            page={page}
-            workspaceId={workspaceId}
-            workspaceSlug={workspaceSlug}
-            readOnly={!canEdit}
-          />
+      <div className="flex-1 flex overflow-hidden">
+        {/* Scrollable page content */}
+        <div className="flex-1 overflow-auto bg-[#191919] text-[#f3f4f6]">
+          <div className="min-h-full pb-16">
+            {/* Cover image + emoji icon + editable title */}
+            <PageHeader
+              page={page}
+              workspaceId={workspaceId}
+              workspaceSlug={workspaceSlug}
+              readOnly={!canEdit}
+            />
 
-          {/* View Mode Tabs */}
-          <div className="max-w-4xl mx-auto px-8 md:px-16 mb-6 flex items-center gap-1.5 border-b border-[#2a2a2a]/60 pb-2.5">
-            <button
-              onClick={() => setViewMode("editor")}
-              className={cn(
-                "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                viewMode === "editor"
-                  ? "bg-[#2c2c2c] text-white border border-[#3c3c3c]"
-                  : "text-gray-400 hover:bg-[#2c2c2c]/40 hover:text-white"
-              )}
-            >
-              📝 Page Editor
-            </button>
-            <button
-              onClick={() => setViewMode("database")}
-              className={cn(
-                "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                viewMode === "database"
-                  ? "bg-[#2c2c2c] text-white border border-[#3c3c3c]"
-                  : "text-gray-400 hover:bg-[#2c2c2c]/40 hover:text-white"
-              )}
-            >
-              📊 Database View ({page._count?.children ?? 0})
-            </button>
-          </div>
+            {/* View Mode Tabs */}
+            <div className="max-w-4xl mx-auto px-8 md:px-16 mb-6 flex items-center gap-1.5 border-b border-[#2a2a2a]/60 pb-2.5">
+              <button
+                onClick={() => setViewMode("editor")}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  viewMode === "editor"
+                    ? "bg-[#2c2c2c] text-white border border-[#3c3c3c]"
+                    : "text-gray-400 hover:bg-[#2c2c2c]/40 hover:text-white"
+                )}
+              >
+                📝 Page Editor
+              </button>
+              <button
+                onClick={() => setViewMode("database")}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  viewMode === "database"
+                    ? "bg-[#2c2c2c] text-white border border-[#3c3c3c]"
+                    : "text-gray-400 hover:bg-[#2c2c2c]/40 hover:text-white"
+                )}
+              >
+                📊 Database View ({page._count?.children ?? 0})
+              </button>
+            </div>
 
-          {/* View rendering */}
-          <div className="max-w-4xl mx-auto px-8 md:px-16">
-            {viewMode === "editor" ? (
-              <Editor
-                pageId={page.id}
-                workspaceId={workspaceId}
-                initialContent={page.content as object | null}
-                canEdit={canEdit}
-                socket={socket}
-              />
-            ) : (
-              <DatabaseView
-                pageId={page.id}
-                workspaceId={workspaceId}
-                workspaceSlug={workspaceSlug}
-                canEdit={canEdit}
-              />
-            )}
+            {/* View rendering */}
+            <div className="max-w-4xl mx-auto px-8 md:px-16">
+              {viewMode === "editor" ? (
+                <Editor
+                  pageId={page.id}
+                  workspaceId={workspaceId}
+                  initialContent={page.content as object | null}
+                  canEdit={canEdit}
+                  socket={socket}
+                />
+              ) : (
+                <DatabaseView
+                  pageId={page.id}
+                  workspaceId={workspaceId}
+                  workspaceSlug={workspaceSlug}
+                  canEdit={canEdit}
+                />
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Sliding page history sidebar */}
+        <VersionHistorySidebar
+          pageId={page.id}
+          isOpen={historyOpen}
+          onClose={() => setHistoryOpen(false)}
+        />
       </div>
     </div>
   );

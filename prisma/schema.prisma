@@ -277,6 +277,7 @@ model Page {
   presence   PagePresence[]
   versions   PageVersion[]
   permissions PagePermission[]
+  properties  Json?            // custom metadata properties for database views (e.g. status, date, priority)
 
   @@index([workspaceId])
   @@index([parentId])

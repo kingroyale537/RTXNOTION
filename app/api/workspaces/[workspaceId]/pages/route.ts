@@ -51,6 +51,7 @@ export async function GET(_req: NextRequest, { params }: Ctx) {
         sortOrder: true,
         isArchived: true,
         workspaceId: true,
+        properties: true,
         _count: { select: { children: true } },
       },
       orderBy: { sortOrder: "asc" },

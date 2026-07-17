@@ -4,7 +4,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { PanelLeft, Share2, MoreHorizontal, Star, Link, Lock, ChevronDown, Sparkles } from "lucide-react";
+import { PanelLeft, Share2, MoreHorizontal, Star, Link, Lock, ChevronDown, Sparkles, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export function PageBreadcrumb({ workspaceSlug, workspaceId, pageId }: Props) {
-  const { toggleSidebar, sidebarOpen, setSharePageId, toggleAiSidebar, aiSidebarOpen } = useUIStore();
+  const { toggleSidebar, sidebarOpen, setSharePageId, toggleAiSidebar, aiSidebarOpen, historyOpen, setHistoryOpen } = useUIStore();
   const { currentPage } = usePageStore();
 
   const handleCopyLink = () => {
@@ -144,6 +144,24 @@ export function PageBreadcrumb({ workspaceSlug, workspaceId, pageId }: Props) {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>{aiSidebarOpen ? "Close AI assistant" : "Open AI assistant"}</TooltipContent>
+              </Tooltip>
+
+              {/* Page History */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={cn(
+                      "h-8 w-8 transition",
+                      historyOpen ? "bg-[#2c2c2c] text-purple-400" : "text-gray-400 hover:bg-[#2c2c2c] hover:text-white"
+                    )}
+                    onClick={() => setHistoryOpen(!historyOpen)}
+                  >
+                    <History className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Page History</TooltipContent>
               </Tooltip>
 
               {/* Options */}

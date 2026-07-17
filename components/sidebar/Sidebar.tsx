@@ -25,6 +25,7 @@ import {
   CheckSquare,
   Calendar,
   PenSquare,
+  Trash2,
 } from "lucide-react";
 import { useUIStore } from "@/store/uiStore";
 import { usePageStore } from "@/store/pageStore";
@@ -33,6 +34,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarHeader } from "./SidebarHeader";
 import { PageTree } from "./PageTree";
 import { SidebarFooter } from "./SidebarFooter";
+import { TrashModal } from "../modals/TrashModal";
 import { cn } from "@/lib/utils";
 import type { WorkspaceWithMembers } from "@/types";
 import type { Role } from "@prisma/client";
@@ -53,6 +55,7 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
     aiSidebarOpen,
     setCommandOpen,
     setActiveAgentId,
+    setTrashOpen,
   } = useUIStore();
   const { pageTree, addPageToTree } = usePageStore();
 
@@ -361,6 +364,13 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
               <HelpCircle className="h-3.5 w-3.5" />
               <span>Help</span>
             </button>
+            <button
+              onClick={() => setTrashOpen(true)}
+              className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs text-gray-400 hover:bg-[#2c2c2c] hover:text-white transition text-left"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              <span>Trash</span>
+            </button>
           </div>
         </div>
       </ScrollArea>
@@ -380,6 +390,8 @@ export function Sidebar({ workspace, currentUserId, currentUserRole }: Props) {
 
         <SidebarFooter currentUserId={currentUserId} />
       </div>
+
+      <TrashModal workspaceId={workspace.id} />
     </aside>
   );
 }
