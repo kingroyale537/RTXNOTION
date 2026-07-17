@@ -31,6 +31,7 @@ import { useUIStore } from "@/store/uiStore";
 import { useWorkspaceStore } from "@/store/workspaceStore";
 import { usePageStore } from "@/store/pageStore";
 import toast from "react-hot-toast";
+import { cn } from "@/lib/utils";
 
 interface Message {
   role: "user" | "model";
@@ -67,6 +68,50 @@ export function AiSidebar() {
   const [isLoading, setIsLoading] = useState(false);
   const [isWorkspaceSearch, setIsWorkspaceSearch] = useState(true);
   const [showAgentDropdown, setShowAgentDropdown] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+
+  function handleMicClick() {
+    if (typeof window === "undefined") return;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      toast.error("Speech recognition is not supported in this browser.");
+      return;
+    }
+
+    if (isRecording) {
+      setIsRecording(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+      toast.success("Listening... Speak now");
+    };
+
+    recognition.onerror = () => {
+      toast.error("Could not recognize speech.");
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInputValue((prev) => (prev ? prev + " " + transcript : transcript));
+      toast.success("Speech transcribed!");
+    };
+
+    recognition.start();
+  }
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -356,8 +401,15 @@ export function AiSidebar() {
                 <span>Auto</span>
                 <ChevronDown className="h-3 w-3" />
               </div>
-              <button className="p-1.5 rounded hover:bg-[#2c2c2c] text-gray-500 transition">
-                <Mic className="h-3.5 w-3.5" />
+              <button
+                onClick={handleMicClick}
+                className={cn(
+                  "p-1.5 rounded transition",
+                  isRecording ? "text-red-400 bg-red-500/10 hover:bg-red-500/20" : "text-gray-500 hover:bg-[#2c2c2c] hover:text-white"
+                )}
+                title={isRecording ? "Stop listening" : "Record voice input"}
+              >
+                <Mic className={cn("h-3.5 w-3.5", isRecording && "animate-pulse")} />
               </button>
               <button
                 onClick={() => sendMessage(inputValue)}

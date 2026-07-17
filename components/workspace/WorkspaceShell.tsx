@@ -12,6 +12,7 @@ import { usePageTree } from "@/hooks/usePageTree";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { AiSidebar } from "@/components/workspace/AiSidebar";
 import { CommandPalette } from "@/components/modals/CommandPalette";
+import { ShareModal } from "@/components/modals/ShareModal";
 import type { WorkspaceWithMembers } from "@/types";
 import type { Role } from "@prisma/client";
 
@@ -96,6 +97,7 @@ export function WorkspaceShell({ workspace, currentUserId, currentUserRole, chil
 
       {/* Global overlays */}
       <CommandPalette workspaceId={workspace.id} workspaceSlug={workspace.slug} />
+      <ShareModal workspaceSlug={workspace.slug} />
     </div>
   );
 }
