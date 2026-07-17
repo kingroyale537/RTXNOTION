@@ -10,7 +10,7 @@ import { useUIStore } from "@/store/uiStore";
 import { usePageStore } from "@/store/pageStore";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Role } from "@prisma/client";
+import type { Role } from "@prisma/client";
 import toast from "react-hot-toast";
 
 interface Props {
