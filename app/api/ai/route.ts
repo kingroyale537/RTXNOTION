@@ -150,15 +150,17 @@ IMPORTANT: You can use your tools to directly read, search, and update page cont
         userId: user.id,
       });
 
-      const formattedMessages = (messages || []).map((m: { role: "user" | "model"; content: string }) => ({
-        role: m.role === "model" ? "assistant" as const : "user" as const,
-        content: m.content,
-      }));
+      const formattedMessages = [
+        ...(messages || []).map((m: { role: "user" | "model"; content: string }) => ({
+          role: m.role === "model" ? "assistant" as const : "user" as const,
+          content: m.content,
+        })),
+        ...(prompt ? [{ role: "user" as const, content: prompt }] : []),
+      ];
 
       const result = await generateText({
         model: google("gemini-2.5-flash") as any,
         system: systemPrompt,
-        prompt: prompt,
         messages: formattedMessages,
         tools: {
           readWorkspacePage: {
