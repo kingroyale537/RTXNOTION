@@ -1,14 +1,14 @@
 # Render Blueprint configuration to deploy Database and WebSocket server together
 services:
   - type: web
-    name: rtxnotion-ws
+    name: voltaiic-ws
     runtime: node
     buildCommand: npm install --legacy-peer-deps && npx prisma generate
     startCommand: npx tsx server/ws-server.ts
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: rtxnotion-db
+          name: voltaiic-db
           property: connectionString
       - key: WS_PORT
         value: 10000
@@ -16,7 +16,7 @@ services:
         value: production
 
 databases:
-  - name: rtxnotion-db
-    databaseName: rtxnotion
-    user: rtxnotion_user
+  - name: voltaiic-db
+    databaseName: voltaiic
+    user: voltaiic_user
     plan: free
