@@ -2,7 +2,7 @@
 // Backend endpoint for Voltaic AI. Supports both Q&A workspace chat and inline editing.
 
 import { NextRequest } from "next/server";
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { z } from "zod";
 import { Res, getAuthUser, requireWorkspaceMember, requirePageAccess } from "@/lib/api-helpers";
@@ -14,10 +14,12 @@ export async function POST(req: NextRequest) {
     const user = await getAuthUser();
     if (!user) return Res.unauthorized();
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
     if (!apiKey) {
-      return Res.error("GEMINI_API_KEY is not configured. Please add it to your environment variables to enable Voltaic AI.", 400);
+      return Res.error("GEMINI_API_KEY or GOOGLE_GENERATIVE_AI_API_KEY is not configured. Please add it to your environment variables to enable Voltaic AI.", 400);
     }
+
+    const googleProvider = createGoogleGenerativeAI({ apiKey });
 
     const body = await req.json();
     const { mode, prompt, messages, workspaceId, text, pageId } = body;
@@ -58,7 +60,7 @@ ${prompt}
 `;
 
       const result = await generateText({
-        model: google("gemini-2.5-flash") as any,
+        model: googleProvider("gemini-2.5-flash") as any,
         prompt: systemPrompt,
       } as any);
 
@@ -159,7 +161,7 @@ IMPORTANT: You can use your tools to directly read, search, and update page cont
       ];
 
       const result = await generateText({
-        model: google("gemini-2.5-flash") as any,
+        model: googleProvider("gemini-2.5-flash") as any,
         system: systemPrompt,
         messages: formattedMessages,
         tools: {
