@@ -3,7 +3,7 @@
 
 import { NextRequest } from "next/server";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateText } from "ai";
+import { generateText, isStepCount } from "ai";
 import { z } from "zod";
 import { Res, getAuthUser, requireWorkspaceMember, requirePageAccess } from "@/lib/api-helpers";
 import prisma from "@/lib/prisma";
@@ -168,17 +168,25 @@ IMPORTANT: You can use your tools to directly read, search, and update page cont
           readWorkspacePage: {
             description: "Safely reads the content of a page within the workspace.",
             parameters: z.object({
-              pageId: z.string().describe("The unique page ID to load."),
+              pageId: z.string().optional().describe("The unique page ID to load. Defaults to the active page if not provided."),
             }),
-            execute: async ({ pageId }: { pageId: string }) => mcpRouter.readWorkspacePage(pageId),
+            execute: async ({ pageId: toolPageId }: { pageId?: string }) => {
+              const targetPageId = toolPageId || pageId;
+              if (!targetPageId) throw new Error("No page ID context provided.");
+              return mcpRouter.readWorkspacePage(targetPageId);
+            },
           },
           writeToPage: {
             description: "Overwrites the page content in the active workspace with the provided text.",
             parameters: z.object({
-              pageId: z.string().describe("The unique page ID to edit."),
+              pageId: z.string().optional().describe("The unique page ID to edit. Defaults to the active page if not provided."),
               text: z.string().describe("The text content to save."),
             }),
-            execute: async ({ pageId, text }: { pageId: string; text: string }) => mcpRouter.writeToPage(pageId, text),
+            execute: async ({ pageId: toolPageId, text }: { pageId?: string; text: string }) => {
+              const targetPageId = toolPageId || pageId;
+              if (!targetPageId) throw new Error("No page ID context provided.");
+              return mcpRouter.writeToPage(targetPageId, text);
+            },
           },
           searchWorkspaceMetadata: {
             description: "Searches document titles and notes for relevant keywords within the active workspace.",
@@ -188,7 +196,7 @@ IMPORTANT: You can use your tools to directly read, search, and update page cont
             execute: async ({ query }: { query: string }) => mcpRouter.searchWorkspaceMetadata(query),
           },
         } as any,
-        maxSteps: 5,
+        stopWhen: isStepCount(5),
       } as any);
 
       return Res.ok({ text: result.text });

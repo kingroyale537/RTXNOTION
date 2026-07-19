@@ -5,7 +5,7 @@ import { Worker, Job } from "bullmq";
 import Redis from "ioredis";
 import { PrismaClient } from "@prisma/client";
 import { google } from "@ai-sdk/google";
-import { generateText } from "ai";
+import { generateText, isStepCount } from "ai";
 import { z } from "zod";
 import { McpRouter } from "../services/mcpRouter";
 import { JobStatus, StepStatus } from "../types/agent";
@@ -220,7 +220,7 @@ ${stepsContext}
           },
         },
       } as any,
-      maxSteps: 15,
+      stopWhen: isStepCount(15),
     } as any);
 
     // Check if aborted via timeout or request

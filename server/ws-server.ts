@@ -10,10 +10,14 @@
 //   page-meta-update→ title / emoji changed (non-editor users need to know)
 //   awareness       → Yjs awareness state (used by TipTap collab cursor)
 
+import * as dotenv from "dotenv";
+dotenv.config();
+
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import * as Y from "yjs";
 import { PrismaClient } from "@prisma/client";
+import { decode } from "next-auth/jwt";
 
 const prisma = new PrismaClient();
 const httpServer = createServer();
@@ -104,6 +108,44 @@ function debouncedPersist(pageId: string, ydoc: Y.Doc) {
   persistTimers.set(pageId, timer);
 }
 
+// ─── Authentication Middleware ────────────────────────────────────────────────
+io.use(async (socket, next) => {
+  try {
+    const cookieHeader = socket.handshake.headers.cookie || "";
+    const cookies = cookieHeader.split(";").reduce((acc, c) => {
+      const parts = c.split("=");
+      if (parts.length >= 2) {
+        acc[parts[0].trim()] = parts.slice(1).join("=");
+      }
+      return acc;
+    }, {} as Record<string, string>);
+
+    const sessionToken = cookies["next-auth.session-token"] || cookies["__Secure-next-auth.session-token"];
+
+    if (!sessionToken) {
+      console.warn(`[WS Auth] Connection rejected for ${socket.id}: No session token found in cookies`);
+      return next(new Error("Unauthorized: No session token found"));
+    }
+
+    const decoded = await decode({
+      token: sessionToken,
+      secret: process.env.NEXTAUTH_SECRET!,
+    });
+
+    if (!decoded || !decoded.sub) {
+      console.warn(`[WS Auth] Connection rejected for ${socket.id}: Invalid session token`);
+      return next(new Error("Unauthorized: Invalid session token"));
+    }
+
+    // Attach decoded user token info to the socket instance
+    socket.data.user = decoded;
+    next();
+  } catch (err) {
+    console.error("[WS Auth Middleware] Error:", err);
+    next(new Error("Unauthorized: Authentication failed"));
+  }
+});
+
 // ─── Socket.io connection handler ─────────────────────────────────────────────
 io.on("connection", (socket: Socket) => {
   console.log(`[WS] Client connected: ${socket.id}`);
@@ -120,6 +162,58 @@ io.on("connection", (socket: Socket) => {
     }) => {
       const { pageId, userId, name, color, image } = data;
       console.log(`[WS] ${name} joining page ${pageId}`);
+
+      // 1. Verify user identity matches the token sub
+      if (socket.data.user?.sub !== userId) {
+        console.warn(`[WS] Blocked join-page: token sub (${socket.data.user?.sub}) !== data userId (${userId})`);
+        socket.emit("error", { message: "Forbidden: user ID mismatch" });
+        return;
+      }
+
+      // 2. Verify workspace/page access permissions
+      try {
+        const page = await prisma.page.findUnique({
+          where: { id: pageId },
+          select: { id: true, workspaceId: true, isArchived: true },
+        });
+
+        if (!page) {
+          socket.emit("error", { message: "Page not found" });
+          return;
+        }
+
+        // Check workspace membership
+        const member = await prisma.workspaceMember.findUnique({
+          where: {
+            workspaceId_userId: {
+              workspaceId: page.workspaceId,
+              userId,
+            },
+          },
+        });
+
+        if (!member) {
+          // Check if there is a page-level permission override
+          const override = await prisma.pagePermission.findUnique({
+            where: {
+              pageId_userId: {
+                pageId,
+                userId,
+              },
+            },
+          });
+
+          if (!override) {
+            console.warn(`[WS] User ${userId} is not allowed to access page ${pageId}`);
+            socket.emit("error", { message: "Forbidden: No page access" });
+            return;
+          }
+        }
+      } catch (dbErr) {
+        console.error("[WS] Database permission check failed:", dbErr);
+        socket.emit("error", { message: "Internal server error" });
+        return;
+      }
 
       // Join Socket.io room
       socket.join(pageId);
@@ -160,6 +254,45 @@ io.on("connection", (socket: Socket) => {
   // Client Yjs provider requests the current document state on joining a page.
   socket.on("yjs-join", async (data: { pageId: string }) => {
     const { pageId } = data;
+    const userId = socket.data.user?.sub;
+
+    if (!userId) {
+      socket.emit("error", { message: "Unauthorized" });
+      return;
+    }
+
+    try {
+      const page = await prisma.page.findUnique({
+        where: { id: pageId },
+        select: { id: true, workspaceId: true },
+      });
+
+      if (!page) {
+        socket.emit("error", { message: "Page not found" });
+        return;
+      }
+
+      const member = await prisma.workspaceMember.findUnique({
+        where: { workspaceId_userId: { workspaceId: page.workspaceId, userId } },
+      });
+
+      if (!member) {
+        const override = await prisma.pagePermission.findUnique({
+          where: { pageId_userId: { pageId, userId } },
+        });
+
+        if (!override) {
+          console.warn(`[WS] User ${userId} is not allowed to join Yjs session for page ${pageId}`);
+          socket.emit("error", { message: "Forbidden: No page access" });
+          return;
+        }
+      }
+    } catch (dbErr) {
+      console.error("[WS] Database permission check failed in yjs-join:", dbErr);
+      socket.emit("error", { message: "Internal server error" });
+      return;
+    }
+
     const ydoc = getOrCreateYDoc(pageId);
     const currentState = Y.encodeStateAsUpdate(ydoc);
     const { fromUint8Array } = await import("js-base64");
@@ -178,6 +311,28 @@ io.on("connection", (socket: Socket) => {
     "yjs-update",
     async (data: { pageId: string; update: string }) => {
       const { pageId, update } = data;
+      const userId = socket.data.user?.sub;
+
+      if (!userId) {
+        socket.emit("error", { message: "Unauthorized" });
+        return;
+      }
+
+      // Restrict payload size to prevent DDoS / overflow (e.g. max 2MB)
+      if (update && update.length > 2 * 1024 * 1024) {
+        console.warn(`[WS] Blocked update payload exceeding size limit on page ${pageId} from socket ${socket.id}`);
+        socket.emit("error", { message: "Payload size limit exceeded" });
+        return;
+      }
+
+      // Verify socket session info matches the user and page
+      const meta = socketMeta.get(socket.id);
+      if (!meta || meta.pageId !== pageId || meta.userId !== userId) {
+        console.warn(`[WS] Blocked yjs-update: socket session mismatch for socket ${socket.id} on page ${pageId}`);
+        socket.emit("error", { message: "Forbidden: Session mismatch" });
+        return;
+      }
+
       const ydoc = getOrCreateYDoc(pageId);
       try {
         const { toUint8Array, fromUint8Array } = await import("js-base64");

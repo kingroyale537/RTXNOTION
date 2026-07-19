@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 const waitlistSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email("Please enter a valid email address").max(100, "Email address is too long (max 100 characters)"),
 });
 
 export async function POST(req: NextRequest) {

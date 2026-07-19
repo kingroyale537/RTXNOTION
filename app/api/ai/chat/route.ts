@@ -5,7 +5,7 @@
 import { NextRequest } from "next/server";
 import { streamText, isStepCount } from "ai";
 import { google } from "@ai-sdk/google";
-import { openai } from "@ai-sdk/openai";
+import { openai, createOpenAI } from "@ai-sdk/openai";
 import { z } from "zod";
 import crypto from "crypto";
 import { Res, getAuthUser, requireWorkspaceMember } from "@/lib/api-helpers";
@@ -81,7 +81,22 @@ export async function POST(req: NextRequest) {
     let modelInstance;
     const geminiKey = process.env.GEMINI_API_KEY;
 
-    if (modelKey && modelKey.startsWith("gpt-") && process.env.OPENAI_API_KEY) {
+    if (modelKey && modelKey.startsWith("openrouter/")) {
+      const openrouterApiKey = process.env.OPENROUTER_API_KEY;
+      if (!openrouterApiKey) {
+        return Res.error("OPENROUTER_API_KEY is not configured.", 400);
+      }
+      const openRouterModelName = modelKey.replace("openrouter/", "");
+      const openrouterProvider = createOpenAI({
+        apiKey: openrouterApiKey,
+        baseURL: "https://openrouter.ai/api/v1",
+        headers: {
+          "HTTP-Referer": "http://localhost:3000",
+          "X-Title": "Voltaic Workspace",
+        },
+      });
+      modelInstance = openrouterProvider(openRouterModelName);
+    } else if (modelKey && modelKey.startsWith("gpt-") && process.env.OPENAI_API_KEY) {
       modelInstance = openai(modelKey);
     } else {
       if (!geminiKey) {

@@ -26,6 +26,7 @@ function getSocket(): Socket {
         reconnectionDelay: 1000,
         reconnectionDelayMax: 5000,
         transports: ["websocket", "polling"],
+        withCredentials: true,
       }
     );
   }
@@ -60,12 +61,22 @@ export function useSocket(workspaceId?: string) {
       }
     });
 
+    socket.on("connect_error", (err) => {
+      console.error("[Socket] Connection error:", err.message);
+    });
+
+    socket.on("error", (err) => {
+      console.error("[Socket] Error:", err);
+    });
+
     socket.on("disconnect", (reason) => {
       console.log("[Socket] Disconnected:", reason);
     });
 
     return () => {
       socket.off("connect");
+      socket.off("connect_error");
+      socket.off("error");
       socket.off("disconnect");
     };
   }, [session]);

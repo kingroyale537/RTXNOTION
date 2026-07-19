@@ -7,7 +7,7 @@ import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "@/lib/prisma";
-import { Res, getAuthUser, ApiError } from "@/lib/api-helpers";
+import { Res, getAuthUser, ApiError, requireWorkspaceMember } from "@/lib/api-helpers";
 
 // Allowed MIME types
 const ALLOWED_TYPES: Record<string, string> = {
@@ -38,6 +38,9 @@ export async function POST(req: NextRequest) {
 
     if (!file) return Res.error("No file provided", 400);
     if (!workspaceId) return Res.error("workspaceId required", 400);
+
+    // Verify user is member of target workspace with write (EDITOR) permissions
+    await requireWorkspaceMember(workspaceId, user.id, "EDITOR");
 
     // Validate type
     const mediaType = ALLOWED_TYPES[file.type];
