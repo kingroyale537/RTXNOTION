@@ -85,6 +85,7 @@ export default withAuth(
           "/api/invites/",
           "/waitlist",
           "/api/waitlist",
+          "/public/pages/",
         ];
 
         if (pathname === "/") return true;

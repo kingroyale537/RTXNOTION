@@ -180,12 +180,15 @@ IMPORTANT: You can use your tools to directly read, search, and update page cont
             description: "Overwrites the page content in the active workspace with the provided text.",
             parameters: z.object({
               pageId: z.string().optional().describe("The unique page ID to edit. Defaults to the active page if not provided."),
-              text: z.string().describe("The text content to save."),
+              text: z.string().optional().describe("The text content to save."),
+              content: z.string().optional().describe("Alternative parameter name for the text content to save."),
             }),
-            execute: async ({ pageId: toolPageId, text }: { pageId?: string; text: string }) => {
+            execute: async ({ pageId: toolPageId, text, content }: { pageId?: string; text?: string; content?: string }) => {
               const targetPageId = toolPageId || pageId;
               if (!targetPageId) throw new Error("No page ID context provided.");
-              return mcpRouter.writeToPage(targetPageId, text);
+              const targetText = text || content;
+              if (targetText === undefined) throw new Error("No text or content parameter provided.");
+              return mcpRouter.writeToPage(targetPageId, targetText);
             },
           },
           searchWorkspaceMetadata: {

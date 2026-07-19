@@ -146,19 +146,22 @@ ${stepsContext}
           description: "Overwrites the page content in the active workspace with the provided text.",
           parameters: z.object({
             pageId: z.string().describe("The unique page ID to edit."),
-            text: z.string().describe("The text content to save."),
+            text: z.string().optional().describe("The text content to save."),
+            content: z.string().optional().describe("Alternative parameter name for the text content to save."),
           }),
-          execute: async ({ pageId, text }: { pageId: string; text: string }) => {
+          execute: async ({ pageId, text, content }: { pageId: string; text?: string; content?: string }) => {
+            const targetText = text || content;
+            if (targetText === undefined) throw new Error("No text or content parameter provided.");
             const stepDb = await prisma.agentStep.create({
               data: {
                 jobId,
                 name: "writeToPage",
                 status: StepStatus.EXECUTING,
-                input: JSON.stringify({ pageId, textLength: text.length }),
+                input: JSON.stringify({ pageId, textLength: targetText.length }),
               },
             });
             try {
-              const res = await mcpRouter.writeToPage(pageId, text);
+              const res = await mcpRouter.writeToPage(pageId, targetText);
               await prisma.agentStep.update({
                 where: { id: stepDb.id },
                 data: {

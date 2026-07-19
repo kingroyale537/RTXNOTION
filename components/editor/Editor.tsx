@@ -332,14 +332,20 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
     [ydoc, canEdit] // Re-create editor when Yjs doc is ready
   );
 
-  // Seed initial content after Yjs sync is complete
+  // Seed initial content after Yjs sync is complete or if no socket is provided
   useEffect(() => {
-    if (!isSynced || !editor || !ydoc || !initialContent) return;
-    const fragment = ydoc.getXmlFragment("default");
-    if (fragment.length === 0) {
+    if (!editor || !initialContent) return;
+    if (socket && !isSynced) return; // wait for sync if socket is active
+
+    if (ydoc) {
+      const fragment = ydoc.getXmlFragment("default");
+      if (fragment.length === 0) {
+        editor.commands.setContent(initialContent);
+      }
+    } else {
       editor.commands.setContent(initialContent);
     }
-  }, [isSynced, editor, ydoc, initialContent]);
+  }, [isSynced, editor, ydoc, initialContent, socket]);
 
   // ── Auto-save: debounce content → PATCH /api/pages/:id ───────────────────
   const [editorContent, setEditorContent] = useState<object | null>(null);

@@ -23,7 +23,7 @@ export class McpRouter {
   async readWorkspacePage(pageId: string) {
     console.log(`[MCP] readWorkspacePage triggered for page ${pageId} in workspace ${this.ctx.workspaceId}`);
     
-    const page = await prisma.page.findUnique({
+    let page = await prisma.page.findUnique({
       where: { id: pageId },
       select: {
         id: true,
@@ -35,7 +35,33 @@ export class McpRouter {
     });
 
     if (!page) {
-      throw new Error(`Page with ID ${pageId} not found.`);
+      // Fallback: search by title (case-insensitive) in this workspace
+      const cleanTitle = pageId.replace(/\b(page|document|doc|sheet)\b/gi, "").trim();
+      const pageByTitle = await prisma.page.findFirst({
+        where: {
+          workspaceId: this.ctx.workspaceId,
+          OR: [
+            { title: { equals: pageId, mode: "insensitive" } },
+            { title: { equals: cleanTitle, mode: "insensitive" } },
+            { title: { contains: cleanTitle, mode: "insensitive" } },
+          ],
+          isArchived: false,
+        },
+        select: {
+          id: true,
+          title: true,
+          contentText: true,
+          workspaceId: true,
+          isArchived: true,
+        },
+      });
+      if (pageByTitle) {
+        page = pageByTitle;
+      }
+    }
+
+    if (!page) {
+      throw new Error(`Page with ID or Title "${pageId}" not found.`);
     }
 
     if (page.workspaceId !== this.ctx.workspaceId) {
@@ -55,7 +81,7 @@ export class McpRouter {
   async writeToPage(pageId: string, text: string) {
     console.log(`[MCP] writeToPage triggered for page ${pageId} in workspace ${this.ctx.workspaceId}`);
 
-    const page = await prisma.page.findUnique({
+    let page = await prisma.page.findUnique({
       where: { id: pageId },
       select: {
         id: true,
@@ -64,7 +90,30 @@ export class McpRouter {
     });
 
     if (!page) {
-      throw new Error(`Page with ID ${pageId} not found.`);
+      // Fallback: search by title (case-insensitive) in this workspace
+      const cleanTitle = pageId.replace(/\b(page|document|doc|sheet)\b/gi, "").trim();
+      const pageByTitle = await prisma.page.findFirst({
+        where: {
+          workspaceId: this.ctx.workspaceId,
+          OR: [
+            { title: { equals: pageId, mode: "insensitive" } },
+            { title: { equals: cleanTitle, mode: "insensitive" } },
+            { title: { contains: cleanTitle, mode: "insensitive" } },
+          ],
+          isArchived: false,
+        },
+        select: {
+          id: true,
+          workspaceId: true,
+        },
+      });
+      if (pageByTitle) {
+        page = pageByTitle;
+      }
+    }
+
+    if (!page) {
+      throw new Error(`Page with ID or Title "${pageId}" not found.`);
     }
 
     if (page.workspaceId !== this.ctx.workspaceId) {
@@ -85,7 +134,7 @@ export class McpRouter {
     };
 
     const updatedPage = await prisma.page.update({
-      where: { id: pageId },
+      where: { id: page.id },
       data: {
         contentText: text,
         content: tipTapJson,
