@@ -1,18 +1,23 @@
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "com.rtxnotion.app",
-  "productName": "RTX Notion",
-  "copyright": "Copyright © 2026 RTX Notion",
+  "appId": "com.voltaic.app",
+  "productName": "Voltaic",
+  "copyright": "Copyright © 2026 Voltaic",
   "mac": {
     "category": "public.app-category.productivity",
+    "icon": "public/icon.icns",
     "target": [
       {
         "target": "dmg",
-        "arch": ["x64", "arm64"]
+        "arch": ["arm64"]
       },
       {
         "target": "zip",
-        "arch": ["x64", "arm64"]
+        "arch": ["arm64"]
+      },
+      {
+        "target": "dir",
+        "arch": ["arm64"]
       }
     ],
     "darkModeSupport": true,
@@ -20,10 +25,11 @@
     "gatekeeperAssess": false
   },
   "directories": {
-    "output": "dist-mac"
+    "output": "out-mac"
   },
   "files": [
     "electron/**/*",
+    "public/**/*",
     "package.json"
   ]
 }

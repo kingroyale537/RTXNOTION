@@ -12,3 +12,8 @@ public/uploads/
 .turbo/
 coverage/
 .vercel
+out-mac/
+dist-mac/
+mac-app/
+dist-electron/
+

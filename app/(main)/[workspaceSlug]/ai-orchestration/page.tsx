@@ -476,6 +476,91 @@ export default function AiOrchestrationPage() {
               >
                 Save Agent Settings
               </Button>
+
+              {/* ── Pillar 2: Custom Agent Routines & Automations ─────────── */}
+              <div className="mt-8 pt-6 border-t border-[#222] space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-gray-200 uppercase tracking-wider">Custom Agent Routines & Automations</h4>
+                  <span className="text-[10px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded font-mono">Notion AI Agents</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="p-3 bg-[#1e1e1e] border border-[#2a2a2a] rounded-lg space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-white">Daily Client Follow-Up Bot</span>
+                      <span className="text-[10px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded">Active Schedule</span>
+                    </div>
+                    <p className="text-[11px] text-gray-400">Scans workspace tasks every morning at 9:00 AM, flags unreplied client threads, and drafts follow-up notes.</p>
+                  </div>
+                  <div className="p-3 bg-[#1e1e1e] border border-[#2a2a2a] rounded-lg space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-white">Team Standup Summarizer</span>
+                      <span className="text-[10px] bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded">Trigger: Slack Sync</span>
+                    </div>
+                    <p className="text-[11px] text-gray-400">Listens to Slack #standup channels and auto-updates Team HQ database row statuses daily.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── External Agent Orchestration (Claude & Cursor) ─────────── */}
+              <div className="mt-6 pt-6 border-t border-[#222] space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-gray-200 uppercase tracking-wider">External Agent Orchestration</h4>
+                  <span className="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded font-mono">Third-Party Runners</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => toast.success("Connected to Claude Agent Runner! Ready for autonomous coding tasks.")}
+                    className="p-3 bg-[#1a1a1a] hover:bg-[#222] border border-[#2e2e2e] rounded-lg text-left transition flex items-center justify-between group"
+                  >
+                    <div>
+                      <div className="text-xs font-semibold text-white group-hover:text-purple-400">Claude Code Agent</div>
+                      <div className="text-[10px] text-gray-400">Orchestrate terminal & workspace refactoring tasks</div>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-gray-500 group-hover:text-white transition" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => toast.success("Connected to Cursor Agent Runner! Workspace sync enabled.")}
+                    className="p-3 bg-[#1a1a1a] hover:bg-[#222] border border-[#2e2e2e] rounded-lg text-left transition flex items-center justify-between group"
+                  >
+                    <div>
+                      <div className="text-xs font-semibold text-white group-hover:text-purple-400">Cursor Agent</div>
+                      <div className="text-[10px] text-gray-400">Execute background code changes & lint fixes</div>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-gray-500 group-hover:text-white transition" />
+                  </button>
+                </div>
+              </div>
+
+              {/* ── Microsoft & Slack Enterprise Integrations ───────────── */}
+              <div className="mt-6 pt-6 border-t border-[#222] space-y-4">
+                <h4 className="text-xs font-bold text-gray-200 uppercase tracking-wider">Microsoft & Slack Enterprise Hub</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-2.5 bg-[#1a1a1a] border border-[#2e2e2e] rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">📧</span>
+                      <div>
+                        <div className="text-xs font-semibold text-white">Outlook Mail & Calendar</div>
+                        <div className="text-[10px] text-gray-400">Allow agent to triage inbox & schedule meetings</div>
+                      </div>
+                    </div>
+                    <span className="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20 font-semibold">Granted</span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-2.5 bg-[#1a1a1a] border border-[#2e2e2e] rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">💬</span>
+                      <div>
+                        <div className="text-xs font-semibold text-white">Slack Enterprise Workspace</div>
+                        <div className="text-[10px] text-gray-400">Execute Slack operations & post briefing digests</div>
+                      </div>
+                    </div>
+                    <span className="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20 font-semibold">Connected</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

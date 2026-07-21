@@ -64,9 +64,12 @@ const AGENTS = [
 ];
 
 const MODELS = [
-  { id: "auto", name: "Auto" },
-  { id: "openrouter/meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3" },
-  { id: "openrouter/deepseek/deepseek-chat", name: "DeepSeek" },
+  { id: "auto", name: "Notion Auto-Select" },
+  { id: "gpt-5-preview", name: "GPT-5 (Preview)" },
+  { id: "claude-opus-4.5", name: "Claude Opus 4.5" },
+  { id: "gemini-3", name: "Gemini 3" },
+  { id: "openrouter/meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3 70B" },
+  { id: "openrouter/deepseek/deepseek-chat", name: "DeepSeek V3" },
   { id: "gpt-4o", name: "GPT-4o" },
 ];
 
@@ -82,6 +85,8 @@ export function AiSidebar() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isWorkspaceSearch, setIsWorkspaceSearch] = useState(true);
+  const [isResearchMode, setIsResearchMode] = useState(false);
+  const [attachmentText, setAttachmentText] = useState<string | null>(null);
   const [showAgentDropdown, setShowAgentDropdown] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [isRecording, setIsRecording] = useState(false);

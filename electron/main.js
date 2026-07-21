@@ -1,6 +1,9 @@
 const { app, BrowserWindow, shell, Menu, ipcMain } = require('electron');
 const path = require('path');
 
+app.name = 'Voltaic';
+app.setName('Voltaic');
+
 let mainWindow = null;
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -13,7 +16,8 @@ function createMainWindow() {
     height: 850,
     minWidth: 960,
     minHeight: 650,
-    title: 'RTX Notion',
+    title: 'Voltaic',
+    icon: path.join(__dirname, '../public/icon.png'),
     titleBarStyle: 'hiddenInset',
     trafficLightPosition: { x: 16, y: 16 },
     show: false,
@@ -53,7 +57,7 @@ function createApplicationMenu() {
     ...(isMac
       ? [
           {
-            label: app.name,
+            label: 'Voltaic',
             submenu: [
               { role: 'about' },
               { type: 'separator' },
@@ -115,7 +119,12 @@ function createApplicationMenu() {
   Menu.setApplicationMenu(menu);
 }
 
+app.setName('Voltaic');
+
 app.whenReady().then(() => {
+  if (process.platform === 'darwin' && app.dock) {
+    app.dock.setIcon(path.join(__dirname, '../public/icon.png'));
+  }
   createApplicationMenu();
   createMainWindow();
 

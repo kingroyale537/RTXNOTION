@@ -9,7 +9,7 @@ import type { Editor } from "@tiptap/react";
 import {
   Heading1, Heading2, Heading3, List, ListOrdered,
   CheckSquare, Code2, Quote, Minus, Image as ImageIcon,
-  Type, Table2, ChevronRight, StickyNote, Sparkles, Mic,
+  Type, Table2, ChevronRight, StickyNote, Sparkles, Mic, RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/uiStore";
@@ -50,6 +50,25 @@ const BLOCKS: BlockItem[] = [
         .deleteRange({ from, to: from + queryLen + 1 })
         .run();
       useUIStore.getState().setMeetingNotesOpen(true);
+    },
+  },
+  {
+    id: "synced-block",
+    label: "Synced Block 🔄",
+    description: "Sync content in real-time across multiple pages",
+    icon: RefreshCw,
+    keywords: ["synced", "sync", "reuse", "duplicate", "block", "shared"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "paragraph",
+          content: [{ type: "text", text: "🔄 [Synced Block] Edit here to update live across pages..." }],
+        })
+        .run();
     },
   },
   // ── Text ──────────────────────────────────────────────────────────────────

@@ -58,9 +58,12 @@ const PRESET_SUGGESTIONS = [
 ];
 
 const MODELS = [
-  { id: "auto", name: "Auto" },
-  { id: "openrouter/meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3" },
-  { id: "openrouter/deepseek/deepseek-chat", name: "DeepSeek" },
+  { id: "auto", name: "Notion Auto-Select" },
+  { id: "gpt-5-preview", name: "GPT-5 (Preview)" },
+  { id: "claude-opus-4.5", name: "Claude Opus 4.5" },
+  { id: "gemini-3", name: "Gemini 3" },
+  { id: "openrouter/meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3 70B" },
+  { id: "openrouter/deepseek/deepseek-chat", name: "DeepSeek V3" },
   { id: "gpt-4o", name: "GPT-4o" },
 ];
 

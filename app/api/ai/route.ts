@@ -22,17 +22,25 @@ export async function POST(req: NextRequest) {
     const googleProvider = createGoogleGenerativeAI({ apiKey });
 
     const body = await req.json();
-    const { mode, prompt, messages, workspaceId, text, pageId, modelKey } = body;
+    const { mode, prompt, messages, workspaceId, text, pageId, modelKey, columnType, customPrompt, rowData } = body;
+
+    // ── Notion Auto-Select Engine (LLM Flex Complexity Classifier) ─────────────
+    let resolvedModelKey = modelKey;
+    if (!modelKey || modelKey === "auto") {
+      const isComplexPrompt = (prompt && prompt.length > 250) || 
+        /\b(database|schema|code|architect|refactor|analyze|multi-step|html|mermaid)\b/i.test(prompt || "");
+      resolvedModelKey = isComplexPrompt ? "gpt-4o" : "gemini-2.5-flash";
+    }
 
     // Resolve target AI model
     let modelInstance;
-    if (modelKey && modelKey.startsWith("openrouter/")) {
+    if (resolvedModelKey && resolvedModelKey.startsWith("openrouter/")) {
       const openrouterApiKey = process.env.OPENROUTER_API_KEY;
       if (!openrouterApiKey) {
         return Res.error("OPENROUTER_API_KEY is not configured.", 400);
       }
       const { createOpenAI } = await import("@ai-sdk/openai");
-      const openRouterModelName = modelKey.replace("openrouter/", "");
+      const openRouterModelName = resolvedModelKey.replace("openrouter/", "");
       const openrouterProvider = createOpenAI({
         apiKey: openrouterApiKey,
         baseURL: "https://openrouter.ai/api/v1",
@@ -42,7 +50,10 @@ export async function POST(req: NextRequest) {
         },
       });
       modelInstance = openrouterProvider(openRouterModelName);
-    } else if (modelKey && modelKey.startsWith("gpt-")) {
+    } else if (resolvedModelKey === "gpt-5-preview" || resolvedModelKey === "claude-opus-4.5" || resolvedModelKey === "gemini-3") {
+      // Map preview models to Gemini 2.5 Flash / OpenRouter for live execution fallback
+      modelInstance = googleProvider("gemini-2.5-flash");
+    } else if (resolvedModelKey && resolvedModelKey.startsWith("gpt-")) {
       const openrouterApiKey = process.env.OPENROUTER_API_KEY;
       const openaiApiKey = process.env.OPENAI_API_KEY;
       if (!openaiApiKey && openrouterApiKey) {
@@ -51,13 +62,81 @@ export async function POST(req: NextRequest) {
           apiKey: openrouterApiKey,
           baseURL: "https://openrouter.ai/api/v1",
         });
-        modelInstance = openrouterProvider(`openai/${modelKey}`);
+        modelInstance = openrouterProvider(`openai/${resolvedModelKey}`);
       } else {
         const { openai } = await import("@ai-sdk/openai");
-        modelInstance = openai(modelKey);
+        modelInstance = openai(resolvedModelKey);
       }
     } else {
       modelInstance = googleProvider("gemini-2.5-flash");
+    }
+
+    // ── Mode: Prompted Database Generation (Pillar 3) ──────────────────────────
+    if (mode === "generateDatabase") {
+      if (!prompt) return Res.error("Prompt description is required to generate database", 400);
+
+      const dbGenPrompt = `You are Notion AI's Database Architect.
+Convert the user's description into a structured database layout.
+
+[USER DESCRIPTION]
+"${prompt}"
+
+[OUTPUT SCHEMA REQUIREMENT]
+Respond ONLY with a valid JSON object matching this structure:
+{
+  "name": "Database Title",
+  "schema": [
+    { "id": "title", "name": "Name", "type": "title" },
+    { "id": "status", "name": "Status", "type": "select", "options": ["To Do", "In Progress", "Done"] },
+    { "id": "priority", "name": "Priority", "type": "select", "options": ["High", "Medium", "Low"] },
+    { "id": "assignee", "name": "Assignee", "type": "text" },
+    { "id": "date", "name": "Due Date", "type": "date" },
+    { "id": "ai_summary", "name": "AI Summary", "type": "AI_SUMMARY" }
+  ],
+  "defaultView": "table",
+  "initialRows": [
+    { "title": "Sample Entry 1", "status": "To Do", "priority": "High" },
+    { "title": "Sample Entry 2", "status": "In Progress", "priority": "Medium" }
+  ]
+}`;
+
+      const response = await generateText({
+        model: modelInstance as any,
+        prompt: dbGenPrompt,
+      } as any);
+
+      let cleanJson = response.text.trim().replace(/^```json\s*/, "").replace(/\s*```$/, "");
+      try {
+        const dbConfig = JSON.parse(cleanJson);
+        return Res.ok(dbConfig);
+      } catch {
+        return Res.error("Failed to parse AI generated database structure.", 500);
+      }
+    }
+
+    // ── Mode: AI Database Property Column Autofill (Pillar 3) ─────────────────
+    if (mode === "autofillColumn") {
+      if (!rowData) return Res.error("Row data context is required for column autofill", 400);
+
+      const columnInstruction = 
+        columnType === "AI_SUMMARY" ? "Summarize the key points from this row content into 1-2 concise sentences." :
+        columnType === "AI_TRANSLATE" ? "Translate the main text from this row into clear Hindi / English." :
+        columnType === "AI_SENTIMENT" ? "Identify the overall sentiment of this row (Positive, Neutral, Negative, or Urgent)." :
+        columnType === "AI_ACTION_ITEMS" ? "Extract explicit action items or tasks from this row." :
+        customPrompt ? customPrompt : "Extract relevant insights from this row.";
+
+      const autofillPrompt = `You are Notion AI Database Property Autofill.
+Row Data: ${JSON.stringify(rowData)}
+Instruction: ${columnInstruction}
+
+Return ONLY the plain-text computed result value for this database cell.`;
+
+      const response = await generateText({
+        model: modelInstance as any,
+        prompt: autofillPrompt,
+      } as any);
+
+      return Res.ok({ value: response.text.trim() });
     }
 
     if (!prompt) return Res.error("Prompt is required", 400);

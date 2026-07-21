@@ -1,14 +1,15 @@
 {
   "name": "voltaic",
+  "productName": "Voltaic",
   "version": "0.1.0",
-  "description": "RTX Notion - Self-Hosted Collaborative Workspace Desktop App",
-  "author": "RTX Notion",
+  "description": "Voltaic - Self-Hosted Collaborative Workspace",
+  "author": "Voltaic",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
     "dev": "next dev -p 3002",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3002",
     "lint": "next lint",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
@@ -18,9 +19,9 @@
     "ws:dev": "tsx --watch server/ws-server.ts",
     "agent:dev": "tsx --watch src/server.ts",
     "dev:all": "concurrently \"npm run dev\" \"npm run ws:dev\" \"npm run agent:dev\"",
-    "electron:dev": "concurrently \"npm run dev:all\" \"npx wait-on http://localhost:3002 && npx electron .\"",
-    "electron:build": "npm run build && npx electron-builder --mac",
-    "electron:start": "npx electron ."
+    "electron:dev": "concurrently \"npm run dev:all\" \"npx wait-on http://localhost:3002 && sleep 1 && npx electron .\"",
+    "electron:build": "npx rimraf out-mac && npm run build && npx electron-builder --mac",
+    "electron:start": "concurrently \"npm run start\" \"npm run ws:dev\" \"npx wait-on http://localhost:3002 && npx electron .\""
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.14",
@@ -120,7 +121,7 @@
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.5.2",
-    "electron": "34.3.0",
+    "electron": "^34.3.0",
     "electron-builder": "^25.1.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",

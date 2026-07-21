@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePageStore } from "@/store/pageStore";
+import { evaluateFormula } from "@/lib/formulas";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -257,10 +258,11 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
         {activeView === "table" && (
           <div className="w-full border border-[#2a2a2a] rounded-lg overflow-hidden">
             <div className="grid grid-cols-12 bg-[#222]/40 h-9 border-b border-[#2a2a2a] text-xs text-gray-500 font-bold items-center px-4">
-              <span className="col-span-5">Name</span>
+              <span className="col-span-4">Name</span>
               <span className="col-span-2">Status</span>
               <span className="col-span-2">Due Date</span>
-              <span className="col-span-2">Priority</span>
+              <span className="col-span-1">Priority</span>
+              <span className="col-span-2">Formula 2.0</span>
               <span className="col-span-1 text-right">Actions</span>
             </div>
 
@@ -268,13 +270,18 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
               {filteredChildren.length > 0 ? (
                 filteredChildren.map((item) => {
                   const props = item.properties || {};
+                  const formulaVal = evaluateFormula(
+                    props.formula || "IF(prop('status') == 'Done', '✅ Complete', '⏳ Active')",
+                    { status: props.status || "To Do", priority: props.priority || "Medium", ...props }
+                  );
+
                   return (
                     <div
                       key={item.id}
                       className="grid grid-cols-12 h-11 items-center px-4 hover:bg-[#222]/30 text-xs transition cursor-pointer group"
                       onClick={() => router.push(`/${workspaceSlug}/${item.id}`)}
                     >
-                      <div className="col-span-5 flex items-center gap-2 pr-2">
+                      <div className="col-span-4 flex items-center gap-2 pr-2">
                         <span className="text-sm">{item.iconValue ?? "📄"}</span>
                         <span className="font-semibold text-gray-200 group-hover:text-white truncate">
                           {item.title || "Untitled Note"}
@@ -302,16 +309,22 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
                         />
                       </div>
 
-                      <div className="col-span-2" onClick={(e) => e.stopPropagation()}>
+                      <div className="col-span-1" onClick={(e) => e.stopPropagation()}>
                         <select
                           value={props.priority || "Medium"}
                           onChange={(e) => handlePropertyChange(item.id, "priority", e.target.value)}
-                          className="bg-[#222] border border-[#2a2a2a] rounded px-1.5 py-0.5 text-[10px] text-gray-300 outline-none cursor-pointer focus:border-blue-500"
+                          className="bg-[#222] border border-[#2a2a2a] rounded px-1 py-0.5 text-[10px] text-gray-300 outline-none cursor-pointer focus:border-blue-500"
                         >
                           <option value="Low">Low</option>
                           <option value="Medium">Medium</option>
                           <option value="High">High</option>
                         </select>
+                      </div>
+
+                      <div className="col-span-2 font-mono text-[11px] text-purple-300 truncate" title={String(formulaVal)}>
+                        <span className="bg-purple-950/40 border border-purple-500/20 px-2 py-0.5 rounded-full">
+                          {String(formulaVal)}
+                        </span>
                       </div>
 
                       <div className="col-span-1 text-right" onClick={(e) => e.stopPropagation()}>

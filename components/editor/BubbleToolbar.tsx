@@ -170,18 +170,53 @@ export function BubbleToolbar({ editor, onTriggerAi }: Props) {
         ) : (
           <>
             {onTriggerAi && (
-              <button
-                onClick={() => {
-                  const { from, to } = editor.state.selection;
-                  const text = editor.state.doc.textBetween(from, to, " ");
-                  onTriggerAi(from, to, text);
-                }}
-                className="flex items-center gap-1 px-2.5 h-8 rounded-md text-xs font-bold transition-colors bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 mr-1.5 flex-shrink-0"
-                title="Ask Voltaic AI to write or edit"
-              >
-                <Sparkles className="h-3.5 w-3.5 text-purple-400" />
-                <span>Ask AI</span>
-              </button>
+              <>
+                <button
+                  onClick={() => {
+                    const { from, to } = editor.state.selection;
+                    const text = editor.state.doc.textBetween(from, to, " ");
+                    onTriggerAi(from, to, text);
+                  }}
+                  className="flex items-center gap-1 px-2.5 h-8 rounded-md text-xs font-bold transition-colors bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 mr-1 flex-shrink-0"
+                  title="Ask Voltaic AI to write or edit"
+                >
+                  <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                  <span>Ask AI</span>
+                </button>
+                <button
+                  onClick={() => {
+                    const { from, to } = editor.state.selection;
+                    const text = editor.state.doc.textBetween(from, to, " ");
+                    onTriggerAi(from, to, `Rewrite this text in a clear, professional tone: "${text}"`);
+                  }}
+                  className="px-2 h-8 rounded-md text-[11px] font-semibold text-gray-300 hover:bg-white/10 transition flex items-center gap-1"
+                  title="Make text Professional"
+                >
+                  <span>Tone: Pro</span>
+                </button>
+                <button
+                  onClick={() => {
+                    const { from, to } = editor.state.selection;
+                    const text = editor.state.doc.textBetween(from, to, " ");
+                    onTriggerAi(from, to, `Generate a Mermaid.js diagram (e.g. flowchart or sequence diagram) representing this text: "${text}"`);
+                  }}
+                  className="px-2 h-8 rounded-md text-[11px] font-semibold text-gray-300 hover:bg-white/10 transition flex items-center gap-1"
+                  title="Generate Mermaid Diagram"
+                >
+                  <span>Diagram 📊</span>
+                </button>
+                <button
+                  onClick={() => {
+                    const { from, to } = editor.state.selection;
+                    const text = editor.state.doc.textBetween(from, to, " ");
+                    onTriggerAi(from, to, `Translate this text into Hindi/English: "${text}"`);
+                  }}
+                  className="px-2 h-8 rounded-md text-[11px] font-semibold text-gray-300 hover:bg-white/10 transition flex items-center gap-1 mr-1"
+                  title="Translate Text"
+                >
+                  <span>Translate 🌐</span>
+                </button>
+              </>
             )}
             <ToolbarButton
               onClick={() => editor.chain().focus().toggleBold().run()}
