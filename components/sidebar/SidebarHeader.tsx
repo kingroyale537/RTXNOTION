@@ -30,13 +30,17 @@ export function SidebarHeader({ workspace, currentUserRole }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="px-2 py-3 h-14 flex items-center">
+    <div 
+      className="px-2 pt-6 pb-2 min-h-[56px] flex items-center"
+      style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
+    >
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             className="w-full justify-between h-9 px-2 hover:bg-sidebar-accent text-sidebar-foreground font-medium"
             id="workspace-switcher"
+            style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
             <div className="flex items-center gap-2 min-w-0">
               {/* Workspace avatar */}

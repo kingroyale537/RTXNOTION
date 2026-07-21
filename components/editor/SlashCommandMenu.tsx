@@ -9,9 +9,10 @@ import type { Editor } from "@tiptap/react";
 import {
   Heading1, Heading2, Heading3, List, ListOrdered,
   CheckSquare, Code2, Quote, Minus, Image as ImageIcon,
-  Type, Table2, ChevronRight, StickyNote, Sparkles,
+  Type, Table2, ChevronRight, StickyNote, Sparkles, Mic,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUIStore } from "@/store/uiStore";
 
 // ─── Block definitions ────────────────────────────────────────────────────────
 interface BlockItem {
@@ -34,6 +35,22 @@ const BLOCKS: BlockItem[] = [
     keywords: ["ai", "write", "generator", "ask", "gpt", "gemini", "sparkles"],
     group: "AI Tools",
     action: () => {},
+  },
+  {
+    id: "meeting-notes",
+    label: "Meeting Notes AI 🎙️",
+    description: "Record live meetings or paste transcripts for auto-summary & action items",
+    icon: Mic,
+    keywords: ["meet", "meeting", "notes", "audio", "transcript", "hinglish", "speech", "record"],
+    group: "AI Tools",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .run();
+      useUIStore.getState().setMeetingNotesOpen(true);
+    },
   },
   // ── Text ──────────────────────────────────────────────────────────────────
   {

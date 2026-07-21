@@ -25,8 +25,15 @@ import {
   Maximize2,
   FileText,
   Share2,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useUIStore } from "@/store/uiStore";
 import { useWorkspaceStore } from "@/store/workspaceStore";
 import { usePageStore } from "@/store/pageStore";
@@ -56,8 +63,16 @@ const AGENTS = [
   },
 ];
 
+const MODELS = [
+  { id: "auto", name: "Auto" },
+  { id: "openrouter/meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3" },
+  { id: "openrouter/deepseek/deepseek-chat", name: "DeepSeek" },
+  { id: "gpt-4o", name: "GPT-4o" },
+];
+
 export function AiSidebar() {
   const params = useParams();
+  const [selectedModel, setSelectedModel] = useState("auto");
   const { data: session } = useSession();
   const { currentWorkspace } = useWorkspaceStore();
   const { aiSidebarOpen, setAiSidebarOpen, activeAgentId, setActiveAgentId } = useUIStore();
@@ -68,6 +83,7 @@ export function AiSidebar() {
   const [isLoading, setIsLoading] = useState(false);
   const [isWorkspaceSearch, setIsWorkspaceSearch] = useState(true);
   const [showAgentDropdown, setShowAgentDropdown] = useState(false);
+  const [showModelDropdown, setShowModelDropdown] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
 
   function handleMicClick() {
@@ -115,6 +131,7 @@ export function AiSidebar() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const modelDropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedAgent = AGENTS.find((a) => a.id === activeAgentId) || AGENTS[0];
 
@@ -122,11 +139,14 @@ export function AiSidebar() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  // Click outside listener for dropdown
+  // Click outside listener for dropdowns
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowAgentDropdown(false);
+      }
+      if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
+        setShowModelDropdown(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -153,6 +173,7 @@ export function AiSidebar() {
           messages: messages,
           workspaceId: isWorkspaceSearch ? currentWorkspace?.id : undefined,
           pageId: currentPage?.id || undefined,
+          modelKey: selectedModel,
         }),
       });
 
@@ -397,9 +418,38 @@ export function AiSidebar() {
 
             {/* Right toolbar */}
             <div className="flex items-center gap-1.5">
-              <div className="flex items-center gap-1 text-[10px] font-semibold bg-[#2c2c2c] hover:bg-[#333] transition border border-[#3c3c3c] px-2 py-0.5 rounded text-gray-300 cursor-pointer">
-                <span>Auto</span>
-                <ChevronDown className="h-3 w-3" />
+              <div className="relative" ref={modelDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowModelDropdown(!showModelDropdown)}
+                  className="flex items-center gap-1 text-[10px] font-semibold bg-[#2c2c2c] hover:bg-[#333] transition border border-[#3c3c3c] px-2 py-0.5 rounded text-gray-300 cursor-pointer select-none outline-none focus:ring-1 focus:ring-purple-500/50"
+                >
+                  <span>{MODELS.find(m => m.id === selectedModel)?.name || "Auto"}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </button>
+
+                {showModelDropdown && (
+                  <div className="absolute bottom-full right-0 mb-1.5 w-44 bg-[#222222] border border-[#3c3c3c] rounded-lg shadow-2xl py-1 z-50 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                    {MODELS.map((model) => (
+                      <button
+                        key={model.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedModel(model.id);
+                          setShowModelDropdown(false);
+                          toast.success(`Model changed to ${model.name}`);
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-1.5 text-xs transition flex items-center justify-between hover:bg-[#2c2c2c]",
+                          selectedModel === model.id ? "text-purple-400 font-medium bg-purple-500/10" : "text-gray-300"
+                        )}
+                      >
+                        <span>{model.name}</span>
+                        {selectedModel === model.id && <Check className="h-3.5 w-3.5 text-purple-400" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <button
                 onClick={handleMicClick}

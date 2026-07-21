@@ -13,8 +13,9 @@ import { PageBreadcrumb } from "@/components/page/PageBreadcrumb";
 import { DatabaseView } from "@/components/page/DatabaseView";
 import { VersionHistorySidebar } from "@/components/page/VersionHistorySidebar";
 import { useUIStore } from "@/store/uiStore";
-import type { PageWithRelations } from "@/types";
 import { cn } from "@/lib/utils";
+import type { PageWithRelations } from "@/types";
+import { MeetingNotesModal } from "@/components/modals/MeetingNotesModal";
 
 // Lazy-load the editor to avoid SSR issues with ProseMirror / Yjs
 const Editor = dynamic(
@@ -137,6 +138,17 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
           pageId={page.id}
           isOpen={historyOpen}
           onClose={() => setHistoryOpen(false)}
+        />
+
+        {/* AI Meeting Notes Modal */}
+        <MeetingNotesModal
+          onInsertContent={(markdown) => {
+            if (typeof window !== "undefined" && (window as any).__tiptapView) {
+              const view = (window as any).__tiptapView;
+              const { tr } = view.state;
+              view.dispatch(tr.insertText("\n\n" + markdown));
+            }
+          }}
         />
       </div>
     </div>

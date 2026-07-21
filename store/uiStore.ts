@@ -38,6 +38,11 @@ interface UIStore {
   sharePageId: string | null;
   setSharePageId: (id: string | null) => void;
 
+  // Meeting Notes modal
+  meetingNotesOpen: boolean;
+  setMeetingNotesOpen: (open: boolean) => void;
+  toggleMeetingNotes: () => void;
+
   // Theme
   theme: "light" | "dark" | "system";
   setTheme: (theme: "light" | "dark" | "system") => void;
@@ -74,6 +79,10 @@ export const useUIStore = create<UIStore>()(
 
         sharePageId: null,
         setSharePageId: (sharePageId) => set({ sharePageId }),
+
+        meetingNotesOpen: false,
+        setMeetingNotesOpen: (meetingNotesOpen) => set({ meetingNotesOpen }),
+        toggleMeetingNotes: () => set((s) => ({ meetingNotesOpen: !s.meetingNotesOpen })),
 
         theme: "system",
         setTheme: (theme) => set({ theme }),

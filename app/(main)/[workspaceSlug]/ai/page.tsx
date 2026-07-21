@@ -21,10 +21,18 @@ import {
   ChevronDown,
   Loader2,
   AlertTriangle,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWorkspaceStore } from "@/store/workspaceStore";
 import toast from "react-hot-toast";
+import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Message {
   role: "user" | "model";
@@ -49,8 +57,16 @@ const PRESET_SUGGESTIONS = [
   },
 ];
 
+const MODELS = [
+  { id: "auto", name: "Auto" },
+  { id: "openrouter/meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3" },
+  { id: "openrouter/deepseek/deepseek-chat", name: "DeepSeek" },
+  { id: "gpt-4o", name: "GPT-4o" },
+];
+
 export default function AiChatPage() {
   const params = useParams();
+  const [selectedModel, setSelectedModel] = useState("auto");
   const router = useRouter();
   const { data: session } = useSession();
   const { currentWorkspace } = useWorkspaceStore();
@@ -59,13 +75,25 @@ export default function AiChatPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isWorkspaceSearch, setIsWorkspaceSearch] = useState(true);
   const [keyMissingError, setKeyMissingError] = useState(false);
+  const [showModelDropdown, setShowModelDropdown] = useState(false);
   
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const modelDropdownRef = useRef<HTMLDivElement>(null);
   const userName = session?.user?.name?.split(" ")[0] ?? "friend";
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
+        setShowModelDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   async function sendMessage(textToSend: string) {
     if (!textToSend.trim() || isLoading) return;
@@ -87,6 +115,7 @@ export default function AiChatPage() {
           prompt: userPrompt,
           messages: messages, // history
           workspaceId: isWorkspaceSearch ? currentWorkspace?.id : undefined,
+          modelKey: selectedModel,
         }),
       });
 
@@ -317,9 +346,38 @@ export default function AiChatPage() {
 
             {/* Input Toolbar Right */}
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 text-[11px] font-semibold bg-[#2d2d2d] hover:bg-[#3d3d3d] transition border border-[#3a3a3a] px-2 py-0.5 rounded text-gray-300 cursor-pointer">
-                <span>Auto</span>
-                <ChevronDown className="h-3 w-3" />
+              <div className="relative" ref={modelDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowModelDropdown(!showModelDropdown)}
+                  className="flex items-center gap-1 text-[11px] font-semibold bg-[#2d2d2d] hover:bg-[#3d3d3d] transition border border-[#3a3a3a] px-2 py-0.5 rounded text-gray-300 cursor-pointer select-none outline-none focus:ring-1 focus:ring-purple-500/50"
+                >
+                  <span>{MODELS.find(m => m.id === selectedModel)?.name || "Auto"}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </button>
+
+                {showModelDropdown && (
+                  <div className="absolute bottom-full right-0 mb-1.5 w-44 bg-[#222222] border border-[#3c3c3c] rounded-lg shadow-2xl py-1 z-50 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                    {MODELS.map((model) => (
+                      <button
+                        key={model.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedModel(model.id);
+                          setShowModelDropdown(false);
+                          toast.success(`Model changed to ${model.name}`);
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-1.5 text-xs transition flex items-center justify-between hover:bg-[#2c2c2c]",
+                          selectedModel === model.id ? "text-purple-400 font-medium bg-purple-500/10" : "text-gray-300"
+                        )}
+                      >
+                        <span>{model.name}</span>
+                        {selectedModel === model.id && <Check className="h-3.5 w-3.5 text-purple-400" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <button className="p-1 rounded hover:bg-[#2d2d2d] text-gray-500 transition">
                 <Mic className="h-4 w-4" />

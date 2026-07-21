@@ -2,6 +2,7 @@
   "name": "voltaic",
   "version": "0.1.0",
   "private": true,
+  "main": "electron/main.js",
   "scripts": {
     "dev": "next dev -p 3002",
     "build": "next build",
@@ -14,7 +15,10 @@
     "db:seed": "tsx prisma/seed.ts",
     "ws:dev": "tsx --watch server/ws-server.ts",
     "agent:dev": "tsx --watch src/server.ts",
-    "dev:all": "concurrently \"npm run dev\" \"npm run ws:dev\" \"npm run agent:dev\""
+    "dev:all": "concurrently \"npm run dev\" \"npm run ws:dev\" \"npm run agent:dev\"",
+    "electron:dev": "concurrently \"npm run dev:all\" \"npx wait-on http://localhost:3002 && npx electron .\"",
+    "electron:build": "npm run build && npx electron-builder --mac",
+    "electron:start": "npx electron ."
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.14",
@@ -114,12 +118,15 @@
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.5.2",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "postcss": "^8.5.17",
     "prisma": "^5.20.0",
     "tailwindcss": "^3.4.19",
     "tsx": "^4.19.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^8.0.1"
   }
 }

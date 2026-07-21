@@ -22,7 +22,43 @@ export async function POST(req: NextRequest) {
     const googleProvider = createGoogleGenerativeAI({ apiKey });
 
     const body = await req.json();
-    const { mode, prompt, messages, workspaceId, text, pageId } = body;
+    const { mode, prompt, messages, workspaceId, text, pageId, modelKey } = body;
+
+    // Resolve target AI model
+    let modelInstance;
+    if (modelKey && modelKey.startsWith("openrouter/")) {
+      const openrouterApiKey = process.env.OPENROUTER_API_KEY;
+      if (!openrouterApiKey) {
+        return Res.error("OPENROUTER_API_KEY is not configured.", 400);
+      }
+      const { createOpenAI } = await import("@ai-sdk/openai");
+      const openRouterModelName = modelKey.replace("openrouter/", "");
+      const openrouterProvider = createOpenAI({
+        apiKey: openrouterApiKey,
+        baseURL: "https://openrouter.ai/api/v1",
+        headers: {
+          "HTTP-Referer": "http://localhost:3000",
+          "X-Title": "Voltaic Workspace",
+        },
+      });
+      modelInstance = openrouterProvider(openRouterModelName);
+    } else if (modelKey && modelKey.startsWith("gpt-")) {
+      const openrouterApiKey = process.env.OPENROUTER_API_KEY;
+      const openaiApiKey = process.env.OPENAI_API_KEY;
+      if (!openaiApiKey && openrouterApiKey) {
+        const { createOpenAI } = await import("@ai-sdk/openai");
+        const openrouterProvider = createOpenAI({
+          apiKey: openrouterApiKey,
+          baseURL: "https://openrouter.ai/api/v1",
+        });
+        modelInstance = openrouterProvider(`openai/${modelKey}`);
+      } else {
+        const { openai } = await import("@ai-sdk/openai");
+        modelInstance = openai(modelKey);
+      }
+    } else {
+      modelInstance = googleProvider("gemini-2.5-flash");
+    }
 
     if (!prompt) return Res.error("Prompt is required", 400);
 
@@ -60,7 +96,7 @@ ${prompt}
 `;
 
       const result = await generateText({
-        model: googleProvider("gemini-2.5-flash") as any,
+        model: modelInstance as any,
         prompt: systemPrompt,
       } as any);
 
@@ -161,7 +197,7 @@ IMPORTANT: You can use your tools to directly read, search, and update page cont
       ];
 
       const result = await generateText({
-        model: googleProvider("gemini-2.5-flash") as any,
+        model: modelInstance as any,
         system: systemPrompt,
         messages: formattedMessages,
         tools: {

@@ -35,6 +35,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { MacTitlebar } from "@/components/desktop/MacTitlebar";
+
 export default function RootLayout({
   children,
 }: {
@@ -43,6 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <MacTitlebar />
         <Providers>{children}</Providers>
       </body>
     </html>

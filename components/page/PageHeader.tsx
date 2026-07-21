@@ -4,9 +4,10 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Image as ImageIcon, Smile, X } from "lucide-react";
+import { Image as ImageIcon, Smile, X, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePageStore } from "@/store/pageStore";
+import { useUIStore } from "@/store/uiStore";
 import { useUpload } from "@/hooks/useUpload";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useSocket } from "@/hooks/useSocket";
@@ -155,6 +156,14 @@ export function PageHeader({ page, workspaceId, workspaceSlug, readOnly = false 
                 </button>
               </>
             )}
+            <span className="text-border">·</span>
+            <button
+              onClick={() => useUIStore.getState().setMeetingNotesOpen(true)}
+              className="flex items-center gap-1.5 text-xs text-purple-400 hover:text-purple-300 font-semibold transition-colors"
+            >
+              <Mic className="h-4 w-4" />
+              Meeting Notes 🎙️
+            </button>
           </div>
         )}
 
