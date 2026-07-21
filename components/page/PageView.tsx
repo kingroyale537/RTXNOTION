@@ -16,6 +16,7 @@ import { useUIStore } from "@/store/uiStore";
 import { cn } from "@/lib/utils";
 import type { PageWithRelations } from "@/types";
 import { MeetingNotesModal } from "@/components/modals/MeetingNotesModal";
+import { MeetingPillBanner } from "@/components/desktop/MeetingPillBanner";
 
 // Lazy-load the editor to avoid SSR issues with ProseMirror / Yjs
 const Editor = dynamic(
@@ -139,6 +140,9 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
           isOpen={historyOpen}
           onClose={() => setHistoryOpen(false)}
         />
+
+        {/* Floating Meeting Pill Popup Widget */}
+        <MeetingPillBanner />
 
         {/* AI Meeting Notes Modal */}
         <MeetingNotesModal

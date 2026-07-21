@@ -1,6 +1,8 @@
 {
   "name": "voltaic",
   "version": "0.1.0",
+  "description": "RTX Notion - Self-Hosted Collaborative Workspace Desktop App",
+  "author": "RTX Notion",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
@@ -118,7 +120,7 @@
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.5.2",
-    "electron": "^33.0.0",
+    "electron": "34.3.0",
     "electron-builder": "^25.1.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
