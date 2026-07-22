@@ -14,6 +14,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useSession } from "next-auth/react";
 import type { Socket } from "socket.io-client";
+import { MermaidRenderer } from "./MermaidRenderer";
 
 // ─── TipTap extensions ────────────────────────────────────────────────────────
 import StarterKit from "@tiptap/starter-kit";
@@ -349,15 +350,34 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
 
   // ── Auto-save: debounce content → PATCH /api/pages/:id ───────────────────
   const [editorContent, setEditorContent] = useState<object | null>(null);
+  const [diagrams, setDiagrams] = useState<string[]>([]);
 
   useEffect(() => {
     if (!editor) return;
-    const handler = () => setEditorContent(editor.getJSON());
+    const handler = () => {
+      setEditorContent(editor.getJSON());
+      
+      const html = editor.getHTML();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const mermaidBlocks = doc.querySelectorAll("pre code.language-mermaid");
+      const charts: string[] = [];
+      mermaidBlocks.forEach((block) => {
+        if (block.textContent) {
+          charts.push(block.textContent);
+        }
+      });
+      setDiagrams(charts);
+    };
+
     editor.on("update", handler);
+    if (isSynced) {
+      setTimeout(handler, 800);
+    }
     return () => {
       editor.off("update", handler);
     };
-  }, [editor]);
+  }, [editor, isSynced]);
 
   const debouncedContent = useDebounce(editorContent, 2000);
 
@@ -463,6 +483,26 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
         }}
       >
         <EditorContent editor={editor} />
+
+        {/* ── Live Mermaid Diagrams Render Layer (Pillar 6) ────────────────── */}
+        {diagrams.length > 0 && (
+          <div className="mt-8 border-t border-[#2a2a2a] pt-6 space-y-4 pointer-events-auto select-none" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold text-gray-200 uppercase tracking-wider flex items-center gap-1.5">
+                <span>📊 Live Structural Diagrams ({diagrams.length})</span>
+              </h3>
+              <span className="text-[10px] bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded font-mono">Mermaid.js</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {diagrams.map((chart, idx) => (
+                <div key={idx} className="bg-[#181818] border border-[#2c2c2c] rounded-xl p-4 flex flex-col space-y-2 shadow-sm">
+                  <div className="text-[10px] text-gray-400 font-semibold font-mono">Diagram #{idx + 1}</div>
+                  <MermaidRenderer chart={chart} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── Slash command menu ─────────────────────────────────────────────── */}

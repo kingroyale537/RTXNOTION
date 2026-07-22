@@ -19,6 +19,9 @@ import { MeetingNotesModal } from "@/components/modals/MeetingNotesModal";
 import { MeetingPillBanner } from "@/components/desktop/MeetingPillBanner";
 import { CommandHudModal } from "@/components/modals/CommandHudModal";
 import { AgentRunnerModal } from "@/components/modals/AgentRunnerModal";
+import { VoiceKhataModal } from "@/components/vendor/VoiceKhataModal";
+import { UpiBillModal } from "@/components/vendor/UpiBillModal";
+import { VyaparDashboard } from "@/components/vendor/VyaparDashboard";
 
 // Lazy-load the editor to avoid SSR issues with ProseMirror / Yjs
 const Editor = dynamic(
@@ -162,6 +165,12 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
 
         {/* Autonomous AI Agent Execution Runner */}
         <AgentRunnerModal workspaceId={workspaceId} />
+
+        {/* Vernacular Voice Khata Engine */}
+        <VoiceKhataModal />
+
+        {/* Dynamic UPI QR Code Billing & WhatsApp Reminder */}
+        <UpiBillModal />
       </div>
     </div>
   );

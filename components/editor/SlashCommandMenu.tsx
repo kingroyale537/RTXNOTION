@@ -167,6 +167,42 @@ const BLOCKS: BlockItem[] = [
         .run();
     },
   },
+  {
+    id: "vyapar",
+    label: "Vyapar & Kirana OS 🏪",
+    description: "Single-tap vendor ledger, UPI QR code & WhatsApp bill reminders",
+    icon: RefreshCw,
+    keywords: ["vyapar", "kirana", "vendor", "khata", "upi", "qr", "billing"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "paragraph",
+          content: [{ type: "text", text: "🏪 [Vyapar & Kirana OS: Single-tap Udhar Ledger & UPI Billing]" }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "khata",
+    label: "Awaaz Se Khata 🎙️",
+    description: "Voice-to-ledger input in Hindi, Hinglish, Tamil, Telugu, Marathi",
+    icon: Mic,
+    keywords: ["khata", "awaaz", "voice", "udhar", "grahak", "ledger", "hindi"],
+    group: "AI Tools",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .run();
+      const event = new CustomEvent("open-voice-khata");
+      window.dispatchEvent(event);
+    },
+  },
   // ── Text ──────────────────────────────────────────────────────────────────
   {
     id: "paragraph",

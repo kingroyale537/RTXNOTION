@@ -94,6 +94,7 @@
     "jsonwebtoken": "^9.0.2",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.454.0",
+    "mermaid": "^11.16.0",
     "multer": "^1.4.5-lts.1",
     "next": "^14.2.35",
     "next-auth": "^4.24.8",
