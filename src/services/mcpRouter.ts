@@ -85,6 +85,8 @@ export class McpRouter {
       where: { id: pageId },
       select: {
         id: true,
+        title: true,
+        contentText: true,
         workspaceId: true,
       },
     });
@@ -104,6 +106,8 @@ export class McpRouter {
         },
         select: {
           id: true,
+          title: true,
+          contentText: true,
           workspaceId: true,
         },
       });
@@ -120,8 +124,14 @@ export class McpRouter {
       throw new Error("Access Denied: Page does not belong to the active workspace.");
     }
 
-    // Convert plain text into a valid TipTap JSON document
-    const paragraphs = text.split("\n").map((line) => {
+    // Append new text to existing page content to avoid overwriting previous work
+    const existingText = page.contentText || "";
+    const combinedText = existingText.trim()
+      ? `${existingText.trim()}\n\n${text.trim()}`
+      : text.trim();
+
+    // Convert combined text into a valid TipTap JSON document
+    const paragraphs = combinedText.split("\n").map((line) => {
       return {
         type: "paragraph",
         content: line ? [{ type: "text", text: line }] : [],
@@ -136,7 +146,7 @@ export class McpRouter {
     const updatedPage = await prisma.page.update({
       where: { id: page.id },
       data: {
-        contentText: text,
+        contentText: combinedText,
         content: tipTapJson,
         updatedAt: new Date(),
       },

@@ -190,14 +190,16 @@ export function AiSidebar() {
         return;
       }
 
-      setMessages([...newMessages, { role: "model" as const, content: json.data.text }]);
+      const aiText = json.data?.text || "";
+      setMessages([...newMessages, { role: "model" as const, content: aiText }]);
 
-      if (json.data?.pageUpdated || json.data?.updatedContent) {
-        const reloadEvent = new CustomEvent("editor-reload-page", {
-          detail: { content: json.data.updatedContent },
+      const isWritePrompt = /\b(write|likho|lakh|draft|add|insert|create|generate|fayde|list|points|table|banao|nikalo)\b/i.test(userPrompt);
+
+      if (isWritePrompt || json.data?.pageUpdated) {
+        const insertEvent = new CustomEvent("insert-to-editor", {
+          detail: { text: json.data?.updatedContent || aiText },
         });
-        window.dispatchEvent(reloadEvent);
-        toast.success("Page content updated live on editor!");
+        window.dispatchEvent(insertEvent);
       }
     } catch {
       toast.error("Something went wrong");

@@ -357,8 +357,9 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
       const customEvent = e as CustomEvent<{ text?: string }>;
       const textToInsert = customEvent.detail?.text;
       if (editor && textToInsert) {
-        editor.chain().focus().insertContent("\n\n" + textToInsert).run();
-        toast.success("Inserted content into document!");
+        const endPos = editor.state.doc.content.size;
+        editor.chain().focus().insertContentAt(endPos, "\n\n" + textToInsert).run();
+        toast.success("Appended content to document!");
       }
     };
 
@@ -366,8 +367,9 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
       const customEvent = e as CustomEvent<{ content?: string }>;
       const newContent = customEvent.detail?.content;
       if (editor && newContent) {
-        editor.commands.setContent(newContent);
-        toast.success("Document updated by AI!");
+        const endPos = editor.state.doc.content.size;
+        editor.chain().focus().insertContentAt(endPos, "\n\n" + newContent).run();
+        toast.success("Appended AI content live!");
       }
     };
 
