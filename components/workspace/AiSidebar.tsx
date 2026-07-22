@@ -191,6 +191,14 @@ export function AiSidebar() {
       }
 
       setMessages([...newMessages, { role: "model" as const, content: json.data.text }]);
+
+      if (json.data?.pageUpdated || json.data?.updatedContent) {
+        const reloadEvent = new CustomEvent("editor-reload-page", {
+          detail: { content: json.data.updatedContent },
+        });
+        window.dispatchEvent(reloadEvent);
+        toast.success("Page content updated live on editor!");
+      }
     } catch {
       toast.error("Something went wrong");
     } finally {
@@ -350,10 +358,21 @@ export function AiSidebar() {
                   <div className="flex items-center gap-2 mt-2 px-1 text-gray-500 hover:text-gray-400 transition select-none">
                     <button
                       onClick={() => copyToClipboard(m.content)}
-                      className="p-1 rounded hover:bg-[#2c2c2c] transition"
+                      className="p-1 rounded hover:bg-[#2c2c2c] transition flex items-center gap-1 text-[11px]"
                       title="Copy response"
                     >
                       <Copy className="h-3 w-3" />
+                      <span>Copy</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        const event = new CustomEvent("insert-to-editor", { detail: { text: m.content } });
+                        window.dispatchEvent(event);
+                      }}
+                      className="px-2 py-0.5 rounded bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 transition flex items-center gap-1 text-[10px] font-bold cursor-pointer"
+                      title="Insert directly onto page editor"
+                    >
+                      <span>Insert Into Page 📝</span>
                     </button>
                     <button className="p-1 rounded hover:bg-[#2c2c2c] transition">
                       <ThumbsUp className="h-3 w-3" />

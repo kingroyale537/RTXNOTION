@@ -269,17 +269,19 @@ export default function AiChatPage() {
                   <div className="flex items-center gap-2 mt-2 px-2 text-gray-500 hover:text-gray-400 transition select-none">
                     <button
                       onClick={() => copyToClipboard(m.content)}
-                      className="p-1 rounded hover:bg-[#2d2d2d] transition"
+                      className="p-1 rounded hover:bg-[#2d2d2d] transition flex items-center gap-1 text-xs"
                       title="Copy response"
                     >
                       <Copy className="h-3.5 w-3.5" />
+                      <span>Copy</span>
                     </button>
                     <button
                       onClick={() => insertToNewPage(m.content)}
-                      className="p-1 rounded hover:bg-[#2d2d2d] transition"
+                      className="px-2 py-0.5 rounded bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 transition flex items-center gap-1 text-xs font-semibold cursor-pointer"
                       title="Save to new page"
                     >
                       <Plus className="h-3.5 w-3.5" />
+                      <span>Create Page 📄</span>
                     </button>
                     <div className="h-3 w-[1px] bg-[#2e2e2e] mx-1" />
                     <button className="p-1 rounded hover:bg-[#2d2d2d] transition">

@@ -310,8 +310,8 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
 
       // Load initial content if Yjs doc is empty and we have saved content
       onCreate({ editor }) {
-        // Expose view for slash command positioning
         (window as unknown as Record<string, unknown>).__tiptapView = editor.view;
+        (window as unknown as Record<string, unknown>).__tiptapEditor = editor;
       },
 
       onUpdate({ editor }) {
@@ -347,6 +347,38 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
       editor.commands.setContent(initialContent);
     }
   }, [isSynced, editor, ydoc, initialContent, socket]);
+
+  // ── Event Listeners for AI Insert & Auto-Reload ─────────────────────────
+  useEffect(() => {
+    if (!editor) return;
+    (window as unknown as Record<string, unknown>).__tiptapEditor = editor;
+
+    const handleInsertText = (e: Event) => {
+      const customEvent = e as CustomEvent<{ text?: string }>;
+      const textToInsert = customEvent.detail?.text;
+      if (editor && textToInsert) {
+        editor.chain().focus().insertContent("\n\n" + textToInsert).run();
+        toast.success("Inserted content into document!");
+      }
+    };
+
+    const handleReloadPage = (e: Event) => {
+      const customEvent = e as CustomEvent<{ content?: string }>;
+      const newContent = customEvent.detail?.content;
+      if (editor && newContent) {
+        editor.commands.setContent(newContent);
+        toast.success("Document updated by AI!");
+      }
+    };
+
+    window.addEventListener("insert-to-editor", handleInsertText);
+    window.addEventListener("editor-reload-page", handleReloadPage);
+
+    return () => {
+      window.removeEventListener("insert-to-editor", handleInsertText);
+      window.removeEventListener("editor-reload-page", handleReloadPage);
+    };
+  }, [editor]);
 
   // ── Auto-save: debounce content → PATCH /api/pages/:id ───────────────────
   const [editorContent, setEditorContent] = useState<object | null>(null);
