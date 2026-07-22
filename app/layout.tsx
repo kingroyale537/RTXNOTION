@@ -1,9 +1,8 @@
 import { Inter, JetBrains_Mono } from "next/font/google";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 import "./editor.css";
-
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,6 +16,15 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#09090b",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   title: {
     default: "Voltaic – Collaborative Workspace",
@@ -26,6 +34,12 @@ export const metadata: Metadata = {
     "A self-hosted, real-time collaborative workspace for your team – create pages, share knowledge, and work together.",
   keywords: ["voltaic", "workspace", "collaboration", "notes", "knowledge base"],
   authors: [{ name: "Voltaic" }],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Voltaic",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

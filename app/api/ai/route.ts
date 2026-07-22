@@ -50,6 +50,18 @@ export async function POST(req: NextRequest) {
         },
       });
       modelInstance = openrouterProvider(openRouterModelName);
+    } else if (resolvedModelKey && resolvedModelKey.startsWith("groq/")) {
+      const groqApiKey = process.env.GROQ_API_KEY;
+      if (!groqApiKey) {
+        return Res.error("GROQ_API_KEY is not configured.", 400);
+      }
+      const { createOpenAI } = await import("@ai-sdk/openai");
+      const groqModelName = resolvedModelKey.replace("groq/", "");
+      const groqProvider = createOpenAI({
+        apiKey: groqApiKey,
+        baseURL: "https://api.groq.com/openai/v1",
+      });
+      modelInstance = groqProvider(groqModelName);
     } else if (resolvedModelKey === "gpt-5-preview" || resolvedModelKey === "claude-opus-4.5" || resolvedModelKey === "gemini-3") {
       // Map preview models to Gemini 2.5 Flash / OpenRouter for live execution fallback
       modelInstance = googleProvider("gemini-2.5-flash");

@@ -56,7 +56,7 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [showChart, setShowChart] = useState(false);
-  const [activeView, setActiveView] = useState<"table" | "board" | "calendar" | "gallery">("table");
+  const [activeView, setActiveView] = useState<"table" | "board" | "calendar" | "gallery" | "canvas">("table");
 
   // Helper to find the current page node in the tree to get its children
   function findNode(tree: any[], targetId: string): any | null {
@@ -222,6 +222,16 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
           >
             <LayoutGrid className="h-3.5 w-3.5" />
             <span>Gallery</span>
+          </button>
+          <button
+            onClick={() => setActiveView("canvas")}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all",
+              activeView === "canvas" ? "bg-purple-600/20 text-purple-300 border border-purple-500/40" : "text-gray-400 hover:text-white"
+            )}
+          >
+            <Layers className="h-3.5 w-3.5 text-purple-400" />
+            <span>Canvas 🎨</span>
           </button>
         </div>
 
@@ -580,6 +590,59 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
                 No entries found. Click Add row to create one.
               </div>
             )}
+          </div>
+        )}
+
+        {/* ── 5. SPATIAL 2D CANVAS VIEW & MICRO-APP WIDGETS ── */}
+        {activeView === "canvas" && (
+          <div className="w-full min-h-[500px] bg-[#141416] border border-[#2c2c30] rounded-2xl p-6 relative overflow-auto bg-[radial-gradient(#25252a_1px,transparent_1px)] [background-size:16px_16px]">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-bold text-purple-400 flex items-center gap-1.5 uppercase tracking-wider">
+                <Layers className="w-4 h-4" /> 2D Spatial Canvas & Micro-App Telemetry Cards
+              </span>
+              <span className="text-[10px] text-gray-500 font-mono">P2P Real-time Graph</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredChildren.map((item, idx) => {
+                const props = item.properties || {};
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => router.push(`/${workspaceSlug}/${item.id}`)}
+                    className="bg-[#1c1c22]/90 backdrop-blur-md border border-[#2b2b35] hover:border-purple-500/50 rounded-2xl p-4 shadow-xl cursor-pointer transition-all hover:scale-[1.02] group space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl">{item.iconValue ?? "📄"}</span>
+                      <span className="text-[10px] font-mono text-purple-400 bg-purple-950/40 border border-purple-500/20 px-2 py-0.5 rounded-full">
+                        Card #{idx + 1}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-bold text-white group-hover:text-purple-300 transition truncate">
+                        {item.title || "Untitled Card"}
+                      </h4>
+                      <p className="text-[11px] text-gray-400 truncate mt-0.5">
+                        {props.status ? `Status: ${props.status}` : "No status tag"}
+                      </p>
+                    </div>
+
+                    {/* Micro-App Widgets: Live Metric Counter & Telemetry Gauge */}
+                    <div className="pt-2 border-t border-[#25252d] grid grid-cols-2 gap-2 text-[10px]">
+                      <div className="bg-[#121216] p-2 rounded-xl border border-[#222]">
+                        <span className="text-gray-500 block font-semibold">Priority</span>
+                        <span className="font-bold text-yellow-400">{props.priority || "Medium"}</span>
+                      </div>
+                      <div className="bg-[#121216] p-2 rounded-xl border border-[#222]">
+                        <span className="text-gray-500 block font-semibold">Telemetry</span>
+                        <span className="font-bold text-emerald-400">Live 🟢</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

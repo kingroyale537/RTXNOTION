@@ -1,0 +1,13 @@
+{
+  "appId": "com.voltaic.app",
+  "appName": "Voltaic",
+  "webDir": "out",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "http://localhost:3002",
+    "cleartext": true
+  },
+  "ios": {
+    "contentInset": "always"
+  }
+}

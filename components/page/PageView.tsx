@@ -17,6 +17,8 @@ import { cn } from "@/lib/utils";
 import type { PageWithRelations } from "@/types";
 import { MeetingNotesModal } from "@/components/modals/MeetingNotesModal";
 import { MeetingPillBanner } from "@/components/desktop/MeetingPillBanner";
+import { CommandHudModal } from "@/components/modals/CommandHudModal";
+import { AgentRunnerModal } from "@/components/modals/AgentRunnerModal";
 
 // Lazy-load the editor to avoid SSR issues with ProseMirror / Yjs
 const Editor = dynamic(
@@ -154,6 +156,12 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
             }
           }}
         />
+
+        {/* Cyber-Terminal Command HUD (⌘K) */}
+        <CommandHudModal />
+
+        {/* Autonomous AI Agent Execution Runner */}
+        <AgentRunnerModal workspaceId={workspaceId} />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { useWorkspaceStore } from "@/store/workspaceStore";
 import { useUIStore } from "@/store/uiStore";
@@ -15,6 +15,11 @@ import { CommandPalette } from "@/components/modals/CommandPalette";
 import { ShareModal } from "@/components/modals/ShareModal";
 import type { WorkspaceWithMembers } from "@/types";
 import type { Role } from "@prisma/client";
+import { cn } from "@/lib/utils";
+
+import { MobileBottomNav } from "@/components/mobile/MobileBottomNav";
+import { ExecutiveBriefing } from "@/components/dashboard/ExecutiveBriefing";
+import { KeynoteView } from "@/components/editor/KeynoteView";
 
 interface Props {
   workspace: WorkspaceWithMembers;
@@ -25,7 +30,10 @@ interface Props {
 
 export function WorkspaceShell({ workspace, currentUserId, currentUserRole, children }: Props) {
   const { setCurrentWorkspace } = useWorkspaceStore();
-  const { sidebarOpen, aiSidebarOpen } = useUIStore();
+  const { sidebarOpen, aiSidebarOpen, setCommandOpen } = useUIStore();
+
+  const [briefingOpen, setBriefingOpen] = useState(false);
+  const [keynoteOpen, setKeynoteOpen] = useState(false);
 
   // Sync workspace into Zustand store
   useEffect(() => {
@@ -94,6 +102,24 @@ export function WorkspaceShell({ workspace, currentUserId, currentUserRole, chil
           </>
         )}
       </PanelGroup>
+
+      {/* Persistent Mobile iOS Bottom Navigation */}
+      <MobileBottomNav 
+        onOpenSearch={() => setCommandOpen(true)}
+        onOpenBriefing={() => setBriefingOpen(true)}
+        onOpenKeynote={() => setKeynoteOpen(true)}
+      />
+
+      {/* Steve Jobs Edition Modals */}
+      <ExecutiveBriefing 
+        isOpen={briefingOpen} 
+        onClose={() => setBriefingOpen(false)} 
+      />
+
+      <KeynoteView 
+        isOpen={keynoteOpen} 
+        onClose={() => setKeynoteOpen(false)} 
+      />
 
       {/* Global overlays */}
       <CommandPalette workspaceId={workspace.id} workspaceSlug={workspace.slug} />

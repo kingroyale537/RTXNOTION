@@ -1,0 +1,36 @@
+# docker-compose.yml
+# One-command self-hosted stack for Voltaic (PostgreSQL + Next.js Web App).
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: voltaic_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: voltaic
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: voltaic_app
+    restart: always
+    ports:
+      - "3002:3002"
+    environment:
+      DATABASE_URL: "postgresql://postgres:password@postgres:5432/voltaic?schema=public"
+      NEXTAUTH_URL: "http://localhost:3002"
+      NEXTAUTH_SECRET: "voltaic-secret-key-change-in-production"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
