@@ -86,6 +86,8 @@ export default withAuth(
           "/waitlist",
           "/api/waitlist",
           "/public/pages/",
+          "/public/forms/",
+          "/api/forms/",
         ];
 
         if (pathname === "/") return true;

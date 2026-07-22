@@ -29,6 +29,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { usePageStore } from "@/store/pageStore";
 import { evaluateFormula } from "@/lib/formulas";
+import { ChartView } from "@/components/page/ChartView";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -54,6 +55,7 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
   const { pageTree, addPageToTree, removePageFromTree, updatePageInTree } = usePageStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [showChart, setShowChart] = useState(false);
   const [activeView, setActiveView] = useState<"table" | "board" | "calendar" | "gallery">("table");
 
   // Helper to find the current page node in the tree to get its children
@@ -235,6 +237,28 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
           )}
           <Button
             variant="ghost"
+            size="sm"
+            onClick={() => setShowChart((v) => !v)}
+            className={cn("h-8 text-xs text-gray-300 hover:bg-[#2c2c2c] gap-1", showChart && "bg-[#2c2c2c] text-blue-400")}
+            title="Toggle Database Analytics Chart"
+          >
+            <span>Analytics 📊</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const url = `${window.location.origin}/public/forms/${pageId}`;
+              navigator.clipboard.writeText(url);
+              toast.success("Public Form link copied to clipboard!");
+            }}
+            className="h-8 text-xs text-purple-400 hover:bg-[#2c2c2c] gap-1"
+            title="Copy Public Database Form link"
+          >
+            <span>Share Form 📝</span>
+          </Button>
+          <Button
+            variant="ghost"
             size="icon"
             onClick={() => setShowSearch(!showSearch)}
             className={cn("h-8 w-8 hover:bg-[#2c2c2c]", showSearch && "bg-[#2c2c2c]")}
@@ -251,6 +275,9 @@ export function DatabaseView({ pageId, workspaceId, workspaceSlug, canEdit }: Pr
           </Button>
         </div>
       </div>
+
+      {/* Render optional Database Analytics Chart */}
+      {showChart && <ChartView items={filteredChildren} />}
 
       {/* ── Render selected active view mode ────────────────────────────── */}
       <div className="flex-1 overflow-auto p-4 bg-[#191919]">

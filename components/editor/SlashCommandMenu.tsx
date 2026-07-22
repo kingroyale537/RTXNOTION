@@ -10,6 +10,7 @@ import {
   Heading1, Heading2, Heading3, List, ListOrdered,
   CheckSquare, Code2, Quote, Minus, Image as ImageIcon,
   Type, Table2, ChevronRight, StickyNote, Sparkles, Mic, RefreshCw,
+  ListTree, MousePointerClick, Calculator, BarChart, Navigation, FormInput,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/uiStore";
@@ -67,6 +68,101 @@ const BLOCKS: BlockItem[] = [
         .insertContent({
           type: "paragraph",
           content: [{ type: "text", text: "🔄 [Synced Block] Edit here to update live across pages..." }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "button",
+    label: "Automation Button 🔘",
+    description: "Insert single-click workflow automation button",
+    icon: MousePointerClick,
+    keywords: ["button", "action", "automation", "click", "workflow"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "paragraph",
+          content: [{ type: "text", text: "🔘 [Button: Click to execute workflow action]" }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "toc",
+    label: "Table of Contents 📋",
+    description: "Auto-generated clickable outline of page headings",
+    icon: ListTree,
+    keywords: ["toc", "table", "contents", "outline", "headings", "nav"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "paragraph",
+          content: [{ type: "text", text: "📋 [Table of Contents: Jump-to outline of H1/H2/H3 headings]" }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "breadcrumb",
+    label: "Breadcrumb Navigation 🧭",
+    description: "Insert path bar for page hierarchy navigation",
+    icon: Navigation,
+    keywords: ["breadcrumb", "path", "hierarchy", "nav", "location"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "paragraph",
+          content: [{ type: "text", text: "🧭 Workspace > Parent Page > Current Page" }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "math",
+    label: "LaTeX Math Equation 🧮",
+    description: "Render formatted LaTeX mathematical formula",
+    icon: Calculator,
+    keywords: ["math", "latex", "equation", "formula", "algebra", "calc"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "paragraph",
+          content: [{ type: "text", text: "🧮 E = mc^2 | \\sum_{i=1}^n x_i" }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "form",
+    label: "Public Database Form 📝",
+    description: "Generate shareable public submission web form link",
+    icon: FormInput,
+    keywords: ["form", "public", "submit", "survey", "webform", "link"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "paragraph",
+          content: [{ type: "text", text: "📝 [Public Form Portal: Shareable link for database submissions]" }],
         })
         .run();
     },
