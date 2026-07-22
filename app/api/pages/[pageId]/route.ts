@@ -95,11 +95,26 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
       }
     }
 
+    let extractedText = "";
+    if (content && typeof content === "object" && "content" in content && Array.isArray((content as any).content)) {
+      const extractNodes = (nodes: any[]): string => {
+        return nodes
+          .map((node) => {
+            if (node.text) return node.text;
+            if (node.content && Array.isArray(node.content)) return extractNodes(node.content);
+            return "";
+          })
+          .filter(Boolean)
+          .join(" ");
+      };
+      extractedText = extractNodes((content as any).content);
+    }
+
     const page = await prisma.page.update({
       where: { id: params.pageId },
       data: {
         ...(title !== undefined && { title }),
-        ...(content !== undefined && { content }),
+        ...(content !== undefined && { content, contentText: extractedText || undefined }),
         ...(emoji !== undefined && { emoji }),
         ...(iconType !== undefined && { iconType }),
         ...(iconValue !== undefined && { iconValue }),

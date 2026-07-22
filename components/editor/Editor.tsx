@@ -333,20 +333,25 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
     [ydoc, canEdit] // Re-create editor when Yjs doc is ready
   );
 
-  // Seed initial content after Yjs sync is complete or if no socket is provided
+  const seededPageIdRef = useRef<string | null>(null);
+
+  // Seed initial content ONCE per pageId after Yjs sync is complete or if no socket is provided
   useEffect(() => {
     if (!editor || !initialContent) return;
+    if (seededPageIdRef.current === pageId) return; // Never overwrite user edits on subsequent re-renders!
     if (socket && !isSynced) return; // wait for sync if socket is active
 
     if (ydoc) {
       const fragment = ydoc.getXmlFragment("default");
       if (fragment.length === 0) {
         editor.commands.setContent(initialContent);
+        seededPageIdRef.current = pageId;
       }
     } else {
       editor.commands.setContent(initialContent);
+      seededPageIdRef.current = pageId;
     }
-  }, [isSynced, editor, ydoc, initialContent, socket]);
+  }, [isSynced, editor, ydoc, initialContent, socket, pageId]);
 
   // ── Event Listeners for AI Insert & Auto-Reload ─────────────────────────
   useEffect(() => {
