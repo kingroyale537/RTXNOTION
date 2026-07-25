@@ -11,7 +11,7 @@ import {
   CheckSquare, Code2, Quote, Minus, Image as ImageIcon,
   Type, Table2, ChevronRight, StickyNote, Sparkles, Mic, RefreshCw,
   ListTree, MousePointerClick, Calculator, BarChart, Navigation, FormInput,
-  Table as TableIcon, Columns, LayoutGrid,
+  Table as TableIcon, Columns, LayoutGrid, Bookmark, Video, Music, FileText, Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/uiStore";
@@ -201,6 +201,86 @@ const BLOCKS: BlockItem[] = [
         .focus()
         .deleteRange({ from, to: from + queryLen + 1 })
         .setHorizontalRule()
+        .run();
+    },
+  },
+  {
+    id: "bookmark",
+    label: "Web Bookmark Card 🔖",
+    description: "Embed a visual web link card with URL preview",
+    icon: Bookmark,
+    keywords: ["bookmark", "link", "card", "url", "web"],
+    group: "Media & Embeds",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({ type: "bookmark" })
+        .run();
+    },
+  },
+  {
+    id: "video",
+    label: "Video Player Embed 🎥",
+    description: "Embed YouTube, MP4, or web video player",
+    icon: Video,
+    keywords: ["video", "youtube", "mp4", "player", "embed", "media"],
+    group: "Media & Embeds",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({ type: "mediaEmbed", attrs: { mediaType: "video" } })
+        .run();
+    },
+  },
+  {
+    id: "audio",
+    label: "Audio Player Embed 🎵",
+    description: "Embed MP3 audio player or podcast track",
+    icon: Music,
+    keywords: ["audio", "mp3", "music", "sound", "podcast", "player"],
+    group: "Media & Embeds",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({ type: "mediaEmbed", attrs: { mediaType: "audio" } })
+        .run();
+    },
+  },
+  {
+    id: "pdf",
+    label: "PDF Document Viewer 📄",
+    description: "Embed interactive PDF reader view",
+    icon: FileText,
+    keywords: ["pdf", "document", "file", "viewer", "reader"],
+    group: "Media & Embeds",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({ type: "mediaEmbed", attrs: { mediaType: "pdf" } })
+        .run();
+    },
+  },
+  {
+    id: "template",
+    label: "Template Generator Button ➕",
+    description: "Create a reusable button that generates pre-configured block structures",
+    icon: Plus,
+    keywords: ["template", "button", "generator", "duplicate", "repeat"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({ type: "templateButton" })
         .run();
     },
   },

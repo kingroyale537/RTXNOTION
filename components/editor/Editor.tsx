@@ -46,6 +46,9 @@ import { InlineDatabaseNode } from "./extensions/InlineDatabaseNode";
 import { ColumnGroup, Column } from "./extensions/ColumnsExtension";
 import { CalloutNode } from "./extensions/CalloutNode";
 import { ToggleNode } from "./extensions/ToggleNode";
+import { BookmarkNode } from "./extensions/BookmarkNode";
+import { MediaEmbedNode } from "./extensions/MediaEmbedNode";
+import { TemplateButtonNode } from "./extensions/TemplateButtonNode";
 import { BlockGripHandle } from "./BlockGripHandle";
 import { SlashCommandMenu } from "./SlashCommandMenu";
 import { BubbleToolbar } from "./BubbleToolbar";
@@ -258,6 +261,9 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
         Column,
         CalloutNode,
         ToggleNode,
+        BookmarkNode,
+        MediaEmbedNode,
+        TemplateButtonNode,
 
         // ── Tables ───────────────────────────────────────────────────────────
         Table.configure({ resizable: true }),
