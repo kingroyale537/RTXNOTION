@@ -330,14 +330,12 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
         setWordCount(editor.storage.characterCount?.words?.() ?? 0);
       },
 
-      onSelectionUpdate({ editor }) {
-        // Sync cursor position to awareness
+      onSelectionUpdate() {
+        // CollaborationCursor handles cursor relative positions automatically
         if (!awareness || !canEdit) return;
-        const { from, to } = editor.state.selection;
         const current = awareness.getLocalState() as Record<string, unknown> | null;
         awareness.setLocalState({
           ...(current ?? {}),
-          cursor: { anchor: from, head: to },
           isTyping: false,
         });
       },

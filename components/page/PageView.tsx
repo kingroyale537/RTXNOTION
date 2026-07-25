@@ -21,6 +21,7 @@ import { AgentRunnerModal } from "@/components/modals/AgentRunnerModal";
 import { VoiceKhataModal } from "@/components/vendor/VoiceKhataModal";
 import { UpiBillModal } from "@/components/vendor/UpiBillModal";
 import { VyaparDashboard } from "@/components/vendor/VyaparDashboard";
+import { EditorErrorBoundary } from "@/components/editor/EditorErrorBoundary";
 
 // Lazy-load the editor to avoid SSR issues with ProseMirror / Yjs
 const Editor = dynamic(
@@ -119,13 +120,15 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
             {/* View rendering */}
             <div className="max-w-4xl mx-auto px-8 md:px-16">
               {viewMode === "editor" ? (
-                <Editor
-                  pageId={page.id}
-                  workspaceId={workspaceId}
-                  initialContent={page.content as object | null}
-                  canEdit={canEdit}
-                  socket={socket}
-                />
+                <EditorErrorBoundary>
+                  <Editor
+                    pageId={page.id}
+                    workspaceId={workspaceId}
+                    initialContent={page.content as object | null}
+                    canEdit={canEdit}
+                    socket={socket}
+                  />
+                </EditorErrorBoundary>
               ) : (
                 <DatabaseView
                   pageId={page.id}
