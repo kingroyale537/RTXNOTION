@@ -150,6 +150,61 @@ const BLOCKS: BlockItem[] = [
     },
   },
   {
+    id: "callout",
+    label: "Callout Box 💡",
+    description: "Make text stand out with icon and tinted callout box",
+    icon: StickyNote,
+    keywords: ["callout", "box", "alert", "notice", "info", "tip", "note"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "callout",
+          attrs: { emoji: "💡" },
+          content: [{ type: "text", text: "Callout note content..." }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "toggle",
+    label: "Toggle Collapsible List ▶",
+    description: "Hide or reveal nested notes to keep pages clean",
+    icon: ChevronRight,
+    keywords: ["toggle", "collapse", "expand", "hide", "accordion", "list"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "toggle",
+          content: [{ type: "paragraph", content: [{ type: "text", text: "Toggle note details..." }] }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "divider",
+    label: "Divider Separator Line ➖",
+    description: "Visually divide sections with a horizontal line",
+    icon: Minus,
+    keywords: ["divider", "hr", "line", "separator", "rule"],
+    group: "Basic blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .setHorizontalRule()
+        .run();
+    },
+  },
+  {
     id: "form",
     label: "Public Database Form 📝",
     description: "Generate shareable public submission web form link",
