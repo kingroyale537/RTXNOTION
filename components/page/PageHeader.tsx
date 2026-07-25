@@ -132,7 +132,7 @@ export function PageHeader({ page, workspaceId, workspaceSlug, readOnly = false 
       )}
 
       {/* Page metadata area */}
-      <div className={cn("px-8 md:px-16 pt-8 pb-2", page.coverImage && "pt-0")}>
+      <div className={cn("px-8 md:px-16 pt-8 pb-2 group", page.coverImage && "pt-0")}>
         {/* Hover actions above title */}
         {!readOnly && (
           <div className="flex items-center gap-2 mb-3 opacity-0 group-hover:opacity-100 transition-opacity h-7">

@@ -11,6 +11,7 @@ import {
   CheckSquare, Code2, Quote, Minus, Image as ImageIcon,
   Type, Table2, ChevronRight, StickyNote, Sparkles, Mic, RefreshCw,
   ListTree, MousePointerClick, Calculator, BarChart, Navigation, FormInput,
+  Table as TableIcon, Columns, LayoutGrid,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/uiStore";
@@ -163,6 +164,66 @@ const BLOCKS: BlockItem[] = [
         .insertContent({
           type: "paragraph",
           content: [{ type: "text", text: "📝 [Public Form Portal: Shareable link for database submissions]" }],
+        })
+        .run();
+    },
+  },
+  {
+    id: "table_inline",
+    label: "Inline Database Table 📊",
+    description: "Embed an interactive relational database table inline",
+    icon: TableIcon,
+    keywords: ["table", "database", "inline", "grid", "db", "relational"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "inlineDatabase",
+          attrs: { title: "Inline Table Database" },
+        })
+        .run();
+    },
+  },
+  {
+    id: "board_inline",
+    label: "Inline Kanban Board 📋",
+    description: "Embed a drag-and-drop workflow Kanban board inline",
+    icon: Columns,
+    keywords: ["board", "kanban", "inline", "workflow", "cards", "status"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "inlineDatabase",
+          attrs: { title: "Inline Kanban Board" },
+        })
+        .run();
+    },
+  },
+  {
+    id: "columns_2",
+    label: "2 Columns Layout 📰",
+    description: "Create side-by-side 2-column layout grid",
+    icon: LayoutGrid,
+    keywords: ["2col", "col", "column", "columns", "layout", "grid", "side"],
+    group: "Advanced blocks",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .insertContent({
+          type: "columnGroup",
+          content: [
+            { type: "column", content: [{ type: "paragraph", content: [{ type: "text", text: "Left Column..." }] }] },
+            { type: "column", content: [{ type: "paragraph", content: [{ type: "text", text: "Right Column..." }] }] },
+          ],
         })
         .run();
     },

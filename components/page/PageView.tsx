@@ -15,8 +15,7 @@ import { VersionHistorySidebar } from "@/components/page/VersionHistorySidebar";
 import { useUIStore } from "@/store/uiStore";
 import { cn } from "@/lib/utils";
 import type { PageWithRelations } from "@/types";
-import { MeetingNotesModal } from "@/components/modals/MeetingNotesModal";
-import { MeetingPillBanner } from "@/components/desktop/MeetingPillBanner";
+import { MeetingCapsuleRecorder } from "@/components/desktop/MeetingCapsuleRecorder";
 import { CommandHudModal } from "@/components/modals/CommandHudModal";
 import { AgentRunnerModal } from "@/components/modals/AgentRunnerModal";
 import { VoiceKhataModal } from "@/components/vendor/VoiceKhataModal";
@@ -146,19 +145,8 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
           onClose={() => setHistoryOpen(false)}
         />
 
-        {/* Floating Meeting Pill Popup Widget */}
-        <MeetingPillBanner />
-
-        {/* AI Meeting Notes Modal */}
-        <MeetingNotesModal
-          onInsertContent={(markdown) => {
-            if (typeof window !== "undefined" && (window as any).__tiptapView) {
-              const view = (window as any).__tiptapView;
-              const { tr } = view.state;
-              view.dispatch(tr.insertText("\n\n" + markdown));
-            }
-          }}
-        />
+        {/* Floating Vertical Capsule Meeting Recorder */}
+        <MeetingCapsuleRecorder />
 
         {/* Cyber-Terminal Command HUD (⌘K) */}
         <CommandHudModal />

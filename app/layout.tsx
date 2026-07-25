@@ -50,6 +50,7 @@ export const metadata: Metadata = {
 };
 
 import { MacTitlebar } from "@/components/desktop/MacTitlebar";
+import { ErrorShield } from "@/components/desktop/ErrorShield";
 
 export default function RootLayout({
   children,
@@ -59,6 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <ErrorShield />
         <MacTitlebar />
         <Providers>{children}</Providers>
       </body>

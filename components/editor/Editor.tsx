@@ -42,6 +42,9 @@ import * as Y from "yjs";
 // ─── Local extensions & hooks ─────────────────────────────────────────────────
 import { SlashCommand } from "./extensions/SlashCommandExtension";
 import { TrailingNode } from "./extensions/TrailingNode";
+import { InlineDatabaseNode } from "./extensions/InlineDatabaseNode";
+import { ColumnGroup, Column } from "./extensions/ColumnsExtension";
+import { BlockGripHandle } from "./BlockGripHandle";
 import { SlashCommandMenu } from "./SlashCommandMenu";
 import { BubbleToolbar } from "./BubbleToolbar";
 import { CollabCursors } from "./CollabCursors";
@@ -246,6 +249,11 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
             class: "rounded-xl max-w-full my-4 shadow-md cursor-pointer",
           },
         }),
+
+        // ── Custom Blocks & Layouts ───────────────────────────────────────────
+        InlineDatabaseNode,
+        ColumnGroup,
+        Column,
 
         // ── Tables ───────────────────────────────────────────────────────────
         Table.configure({ resizable: true }),
@@ -510,6 +518,13 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
         currentUserId={yjsUser.id}
         editorRef={editorWrapperRef}
       />
+
+      {/* ── Block Grip Handle (::) ──────────────────────────────────────────── */}
+      {canEdit && (
+        <div className="absolute top-2 left-2 z-10">
+          <BlockGripHandle editor={editor} />
+        </div>
+      )}
 
       {/* ── Editor content ─────────────────────────────────────────────────── */}
       <div
