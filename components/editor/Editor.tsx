@@ -56,6 +56,7 @@ import { CollabCursors } from "./CollabCursors";
 import { useYjsProvider } from "./useYjsProvider";
 import { useUpload } from "@/hooks/useUpload";
 import { useDebounce } from "@/hooks/useDebounce";
+import { saveOfflinePage } from "@/lib/indexed-db";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { Sparkles, Loader2 } from "lucide-react";
@@ -442,6 +443,7 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
     async function save() {
       setIsSaving(true);
       try {
+        saveOfflinePage({ id: pageId, title: "Page", content: debouncedContent, contentText: null, updatedAt: new Date().toISOString(), isSynced: true });
         await fetch(`/api/pages/${pageId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
