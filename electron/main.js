@@ -45,6 +45,13 @@ function createMainWindow() {
 
   mainWindow.loadURL(APP_URL);
 
+  // Production Hardening: Disable DevTools in production
+  if (!isDev) {
+    mainWindow.webContents.on('devtools-opened', () => {
+      mainWindow.webContents.closeDevTools();
+    });
+  }
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
