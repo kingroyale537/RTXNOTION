@@ -1,0 +1,238 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1A0000012C1E000100000001 /* VoltaicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000012C1E000100000000 /* VoltaicApp.swift */; };
+		1A0000022C1E000200000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000022C1E000200000000 /* ContentView.swift */; };
+		1A0000032C1E000300000001 /* VoltaicModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000032C1E000300000000 /* VoltaicModels.swift */; };
+		1A0000042C1E000400000001 /* VoltaicSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000042C1E000400000000 /* VoltaicSyncEngine.swift */; };
+		1A0000052C1E000500000001 /* VoltaicAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000052C1E000500000000 /* VoltaicAIService.swift */; };
+		1A0000062C1E000600000001 /* WorkspaceSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000062C1E000600000000 /* WorkspaceSidebarView.swift */; };
+		1A0000072C1E000700000001 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000072C1E000700000000 /* EditorView.swift */; };
+		1A0000082C1E000800000001 /* VoiceCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000082C1E000800000000 /* VoiceCaptureView.swift */; };
+		1A0000092C1E000900000001 /* ExecutiveBriefingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0000092C1E000900000000 /* ExecutiveBriefingView.swift */; };
+		1A00000A2C1E000A00000001 /* KeynoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000A2C1E000A00000000 /* KeynoteView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1A0000002C1E000000000001 /* Voltaic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Voltaic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A0000012C1E000100000000 /* VoltaicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltaicApp.swift; sourceTree = "<group>"; };
+		1A0000022C1E000200000000 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1A0000032C1E000300000000 /* VoltaicModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/VoltaicModels.swift; sourceTree = "<group>"; };
+		1A0000042C1E000400000000 /* VoltaicSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/VoltaicSyncEngine.swift; sourceTree = "<group>"; };
+		1A0000052C1E000500000000 /* VoltaicAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/VoltaicAIService.swift; sourceTree = "<group>"; };
+		1A0000062C1E000600000000 /* WorkspaceSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/WorkspaceSidebarView.swift; sourceTree = "<group>"; };
+		1A0000072C1E000700000000 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/EditorView.swift; sourceTree = "<group>"; };
+		1A0000082C1E000800000000 /* VoiceCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/VoiceCaptureView.swift; sourceTree = "<group>"; };
+		1A0000092C1E000900000000 /* ExecutiveBriefingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ExecutiveBriefingView.swift; sourceTree = "<group>"; };
+		1A00000A2C1E000A00000000 /* KeynoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/KeynoteView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A0000002C1E000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A0000002C1E000000000000 = {
+			isa = PBXGroup;
+			children = (
+				1A0000002C1E000000000003 /* Voltaic */,
+				1A0000002C1E000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1A0000002C1E000000000003 /* Voltaic */ = {
+			isa = PBXGroup;
+			children = (
+				1A0000012C1E000100000000 /* VoltaicApp.swift */,
+				1A0000022C1E000200000000 /* ContentView.swift */,
+				1A0000032C1E000300000000 /* VoltaicModels.swift */,
+				1A0000042C1E000400000000 /* VoltaicSyncEngine.swift */,
+				1A0000052C1E000500000000 /* VoltaicAIService.swift */,
+				1A0000062C1E000600000000 /* WorkspaceSidebarView.swift */,
+				1A0000072C1E000700000000 /* EditorView.swift */,
+				1A0000082C1E000800000000 /* VoiceCaptureView.swift */,
+				1A0000092C1E000900000000 /* ExecutiveBriefingView.swift */,
+				1A00000A2C1E000A00000000 /* KeynoteView.swift */,
+			);
+			path = Voltaic;
+			sourceTree = "<group>";
+		};
+		1A0000002C1E000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A0000002C1E000000000001 /* Voltaic.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A0000002C1E000000000005 /* Voltaic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A0000002C1E000000000006 /* Build configuration list for PBXNativeTarget "Voltaic" */;
+			buildPhases = (
+				1A0000002C1E000000000007 /* Sources */,
+				1A0000002C1E000000000002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Voltaic;
+			productName = Voltaic;
+			productReference = 1A0000002C1E000000000001 /* Voltaic.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A0000002C1E000000000008 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					1A0000002C1E000000000005 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 1A0000002C1E000000000009 /* Build configuration list for PBXProject "Voltaic" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1A0000002C1E000000000000;
+			productRefGroup = 1A0000002C1E000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1A0000002C1E000000000005 /* Voltaic */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A0000002C1E000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A0000012C1E000100000001 /* VoltaicApp.swift in Sources */,
+				1A0000022C1E000200000001 /* ContentView.swift in Sources */,
+				1A0000032C1E000300000001 /* VoltaicModels.swift in Sources */,
+				1A0000042C1E000400000001 /* VoltaicSyncEngine.swift in Sources */,
+				1A0000052C1E000500000001 /* VoltaicAIService.swift in Sources */,
+				1A0000062C1E000600000001 /* WorkspaceSidebarView.swift in Sources */,
+				1A0000072C1E000700000001 /* EditorView.swift in Sources */,
+				1A0000082C1E000800000001 /* VoiceCaptureView.swift in Sources */,
+				1A0000092C1E000900000001 /* ExecutiveBriefingView.swift in Sources */,
+				1A00000A2C1E000A00000001 /* KeynoteView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1A0000002C1E00000000000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltaic.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_TARGETS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A0000002C1E00000000000B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltaic.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_TARGETS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1A0000002C1E00000000000C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1A0000002C1E00000000000D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A0000002C1E000000000006 /* Build configuration list for PBXNativeTarget "Voltaic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A0000002C1E00000000000A /* Debug */,
+				1A0000002C1E00000000000B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A0000002C1E000000000009 /* Build configuration list for PBXProject "Voltaic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A0000002C1E00000000000C /* Debug */,
+				1A0000002C1E00000000000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A0000002C1E000000000008 /* Project object */;
+}

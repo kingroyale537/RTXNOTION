@@ -1,8 +1,9 @@
-// components/marketing/Footer.tsx
 "use client";
 
+// components/marketing/Footer.tsx
 import Link from "next/link";
-import { Zap } from "lucide-react";
+import { VoltaicLogo } from "./VoltaicLogo";
+import { Globe, Github, Twitter, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -11,19 +12,25 @@ export function Footer() {
         
         {/* Logo and Name column */}
         <div className="col-span-2 space-y-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-[30px] h-[30px] rounded-lg bg-amber-400 text-black select-none">
-              <Zap className="h-4 w-4 fill-current" />
-            </div>
-            <span className="font-bold tracking-tight text-base text-foreground">
-              Voltaic
-            </span>
+          <Link href="/" className="inline-block">
+            <VoltaicLogo size="md" />
           </Link>
-          <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
-            A self-hosted, collaborative workspace designed to organize your docs, wikis, and projects in one beautiful environment.
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-xs font-medium">
+            Voltaic is the connected workspace for your docs, wikis, and projects. Self-hosted, real-time, and powered by AI.
           </p>
-          <p className="text-[10px] text-muted-foreground/80">
-            &copy; {new Date().getFullYear()} Voltaic. All rights reserved.
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors p-1">
+              <Github className="h-4 w-4" />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors p-1">
+              <Twitter className="h-4 w-4" />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-foreground transition-colors p-1">
+              <Linkedin className="h-4 w-4" />
+            </a>
+          </div>
+          <p className="text-[11px] text-muted-foreground/80 font-medium">
+            &copy; {new Date().getFullYear()} Voltaic Technologies Inc. All rights reserved.
           </p>
         </div>
 
@@ -35,6 +42,7 @@ export function Footer() {
             <li><Link href="/product/docs" className="hover:text-foreground transition-colors">Docs</Link></li>
             <li><Link href="/product/projects" className="hover:text-foreground transition-colors">Projects</Link></li>
             <li><Link href="/product/calendar" className="hover:text-foreground transition-colors">Calendar</Link></li>
+            <li><Link href="/editor-widget" className="hover:text-foreground transition-colors font-bold text-primary">Canvas Widget →</Link></li>
           </ul>
         </div>
  
@@ -54,7 +62,7 @@ export function Footer() {
           <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Solutions</h4>
           <ul className="space-y-2 text-xs font-medium text-muted-foreground">
             <li><Link href="/solutions/startups" className="hover:text-foreground transition-colors">Startups</Link></li>
-            <li><Link href="/solutions/personal" className="hover:text-foreground transition-colors">Personal</Link></li>
+            <li><Link href="/solutions/personal" className="hover:text-foreground transition-colors">Personal Use</Link></li>
             <li><Link href="/solutions/enterprise" className="hover:text-foreground transition-colors">Enterprise</Link></li>
             <li><Link href="/solutions/teams" className="hover:text-foreground transition-colors">By Team</Link></li>
           </ul>
