@@ -7,8 +7,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        if isJailbrokenDevice() {
+            print("[Voltaic Security] Compromised runtime environment detected.")
+        }
         return true
+    }
+
+    private func isJailbrokenDevice() -> Bool {
+        #if targetEnvironment(simulator)
+        return false
+        #else
+        let paths = [
+            "/Applications/Cydia.app",
+            "/Library/MobileSubstrate/MobileSubstrate.dylib",
+            "/bin/bash",
+            "/usr/sbin/sshd",
+            "/etc/apt"
+        ]
+        for path in paths {
+            if FileManager.default.fileExists(atPath: path) {
+                return true
+            }
+        }
+        return false
+        #endif
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
