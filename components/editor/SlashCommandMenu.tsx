@@ -11,7 +11,7 @@ import {
   CheckSquare, Code2, Quote, Minus, Image as ImageIcon,
   Type, Table2, ChevronRight, StickyNote, Sparkles, Mic, RefreshCw,
   ListTree, MousePointerClick, Calculator, BarChart, Navigation, FormInput,
-  Table as TableIcon, Columns, LayoutGrid, Bookmark, Video, Music, FileText, Plus,
+  Table as TableIcon, Columns, LayoutGrid, Bookmark, Video, Music, FileText, Plus, Paintbrush
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/uiStore";
@@ -52,6 +52,22 @@ const BLOCKS: BlockItem[] = [
         .deleteRange({ from, to: from + queryLen + 1 })
         .run();
       useUIStore.getState().setMeetingNotesOpen(true);
+    },
+  },
+  {
+    id: "sketchpad",
+    label: "Apple Pencil Sketchpad 🎨",
+    description: "Draw flowcharts, sketches, and annotations with Apple Pencil pressure sensitivity",
+    icon: Paintbrush,
+    keywords: ["sketch", "draw", "canvas", "pencil", "paint", "whiteboard", "ink"],
+    group: "AI Tools",
+    action: (editor, from, queryLen) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to: from + queryLen + 1 })
+        .run();
+      (useUIStore.getState() as any).setSketchpadOpen(true);
     },
   },
   {

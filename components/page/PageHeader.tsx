@@ -4,7 +4,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Image as ImageIcon, Smile, X, Mic, BadgeCheck } from "lucide-react";
+import { Image as ImageIcon, Smile, X, Mic, BadgeCheck, Paintbrush } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePageStore } from "@/store/pageStore";
 import { useUIStore } from "@/store/uiStore";
@@ -163,6 +163,14 @@ export function PageHeader({ page, workspaceId, workspaceSlug, readOnly = false 
             >
               <Mic className="h-4 w-4" />
               Meeting Notes 🎙️
+            </button>
+            <span className="text-border">·</span>
+            <button
+              onClick={() => (useUIStore.getState() as any).setSketchpadOpen(true)}
+              className="flex items-center gap-1.5 text-xs text-pink-400 hover:text-pink-300 font-semibold transition-colors"
+            >
+              <Paintbrush className="h-4 w-4" />
+              Sketchpad 🎨
             </button>
             <span className="text-border">·</span>
             <button

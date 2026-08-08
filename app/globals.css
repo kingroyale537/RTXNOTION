@@ -130,6 +130,9 @@
 .ProseMirror {
   outline: none;
   min-height: 300px;
+  transform: translateZ(0);
+  will-change: transform;
+  contain: content;
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {

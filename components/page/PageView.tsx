@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import type { PageWithRelations } from "@/types";
 import { MeetingCapsuleRecorder } from "@/components/desktop/MeetingCapsuleRecorder";
 import { CommandHudModal } from "@/components/modals/CommandHudModal";
+import { SketchpadModal } from "@/components/modals/SketchpadModal";
 import { AgentRunnerModal } from "@/components/modals/AgentRunnerModal";
 import { VoiceKhataModal } from "@/components/vendor/VoiceKhataModal";
 import { UpiBillModal } from "@/components/vendor/UpiBillModal";
@@ -153,6 +154,9 @@ export function PageView({ page, workspaceId, workspaceSlug, currentUserId, canE
 
         {/* Cyber-Terminal Command HUD (⌘K) */}
         <CommandHudModal />
+
+        {/* Apple Pencil Sketchpad Modal */}
+        <SketchpadModal />
 
         {/* Autonomous AI Agent Execution Runner */}
         <AgentRunnerModal workspaceId={workspaceId} />

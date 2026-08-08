@@ -410,20 +410,25 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
 
   useEffect(() => {
     if (!editor) return;
+
+    let timer: NodeJS.Timeout | null = null;
     const handler = () => {
-      setEditorContent(editor.getJSON());
-      
-      const html = editor.getHTML();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const mermaidBlocks = doc.querySelectorAll("pre code.language-mermaid");
-      const charts: string[] = [];
-      mermaidBlocks.forEach((block) => {
-        if (block.textContent) {
-          charts.push(block.textContent);
-        }
-      });
-      setDiagrams(charts);
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        setEditorContent(editor.getJSON());
+
+        const html = editor.getHTML();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const mermaidBlocks = doc.querySelectorAll("pre code.language-mermaid");
+        const charts: string[] = [];
+        mermaidBlocks.forEach((block) => {
+          if (block.textContent) {
+            charts.push(block.textContent);
+          }
+        });
+        setDiagrams(charts);
+      }, 500);
     };
 
     editor.on("update", handler);
@@ -431,6 +436,7 @@ export function Editor({ pageId, workspaceId, initialContent, canEdit, socket }:
       setTimeout(handler, 800);
     }
     return () => {
+      if (timer) clearTimeout(timer);
       editor.off("update", handler);
     };
   }, [editor, isSynced]);
