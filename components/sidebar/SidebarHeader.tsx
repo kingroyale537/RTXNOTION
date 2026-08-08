@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useWorkspaceStore } from "@/store/workspaceStore";
 import { cn, getInitials } from "@/lib/utils";
 import type { WorkspaceWithMembers } from "@/types";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/types";
 import { signOut } from "next-auth/react";
 
 interface Props {

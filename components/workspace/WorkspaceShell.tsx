@@ -14,7 +14,7 @@ import { AiSidebar } from "@/components/workspace/AiSidebar";
 import { CommandPalette } from "@/components/modals/CommandPalette";
 import { ShareModal } from "@/components/modals/ShareModal";
 import type { WorkspaceWithMembers } from "@/types";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/types";
 import { cn } from "@/lib/utils";
 
 import { MobileBottomNav } from "@/components/mobile/MobileBottomNav";

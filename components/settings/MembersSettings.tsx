@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { PageBreadcrumb } from "@/components/page/PageBreadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { getInitials, cn } from "@/lib/utils";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/types";
 import toast from "react-hot-toast";
 
 const ROLE_META: Record<Role, { label: string; icon: React.ElementType; color: string }> = {

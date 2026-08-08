@@ -147,7 +147,7 @@ export function PageHeader({ page, workspaceId, workspaceSlug, readOnly = false 
               <>
                 <span className="text-border">·</span>
                 <button
-                  onClick={() => document.getElementById("cover-upload")?.click()}
+                  onClick={() => saveCover("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80")}
                   disabled={isUploading}
                   className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
                 >

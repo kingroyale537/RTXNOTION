@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { getInitials } from "@/lib/utils";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/types";
 import toast from "react-hot-toast";
 
 const ROLE_LABEL: Record<Role, string> = {

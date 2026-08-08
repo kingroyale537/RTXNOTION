@@ -37,7 +37,7 @@ import { SidebarFooter } from "./SidebarFooter";
 import { TrashModal } from "../modals/TrashModal";
 import { cn } from "@/lib/utils";
 import type { WorkspaceWithMembers } from "@/types";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/types";
 import toast from "react-hot-toast";
 
 interface Props {
